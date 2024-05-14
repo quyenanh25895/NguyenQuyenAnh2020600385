@@ -1,0 +1,13 @@
+<sitemesh>
+    <!-- Map decorators to path patterns. -->
+    <mapping path="/*" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/admin*" decorator="/WEB-INF/decorators/admin.jsp"/>
+    <mapping path="/login" decorator="/WEB-INF/decorators/login.jsp"/>
+    <mapping path="/signup" decorator="/WEB-INF/decorators/signup.jsp"/>
+    <mapping path="/product-detail" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/cart" decorator="/WEB-INF/decorators/detail.jsp"/>
+
+    <!-- Exclude path from decoration. -->
+    <mapping path="/api*" exclude="true"/>
+
+</sitemesh>
