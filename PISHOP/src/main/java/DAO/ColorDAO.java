@@ -78,8 +78,16 @@ public class ColorDAO extends AbstractDAO<ColorModel> implements IColorDAO {
     }
 
     @Override
+    public void deleteColor(Integer id) {
+        String sql = "DELETE FROM colors WHERE colorID = ?";
+        delete(sql, id);
+    }
+
+
+    @Override
     public Integer getTotalItem() {
-        return 0;
+        String sql = "SELECT COUNT(*) FROM colors";
+        return count(sql);
     }
 
     @Override

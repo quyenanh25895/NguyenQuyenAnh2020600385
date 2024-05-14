@@ -4,6 +4,7 @@ import Model.*;
 import Service.IService.*;
 import Sort.Sorter;
 import Utils.FormUtil;
+import Utils.HttpUtil;
 import Utils.SessionUtil;
 import paging.IPageble;
 import paging.PageRequest;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/cart"})
 public class CartController extends HttpServlet {
@@ -50,14 +53,29 @@ public class CartController extends HttpServlet {
         ProductModel productModel = FormUtil.toModel(ProductModel.class, req);
         CartModel cartModel = cartService.findByUserID(user.getId());
         String type = req.getParameter("type");
+
         String view = "";
         if (type.equals("cart")) {
             IPageble pageble = new PageRequest(1, cartProductService.countItem(), new Sorter("createdDate", "DESC"));
             cartProductModel.setListResult(cartProductService.findByCartId(cartModel.getId(), pageble));
+            req.setAttribute("cartProducts", cartProductModel);
             view = "/views/web/Cart.jsp";
         } else if (type.equals("checkout")) {
+            String[] ids = req.getParameter("ids").split(",");
+            List<Integer> IDsList = new ArrayList<>();
+            for (String i : ids) {
+                try {
+                    int id = Integer.parseInt(i.trim());
+                    IDsList.add(id);
+                } catch (NumberFormatException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            Integer[] cartProductIDs = IDsList.toArray(new Integer[0]);
+
             IPageble pageble = new PageRequest(1, cartProductService.countItem(), new Sorter("createdDate", "DESC"));
-            cartProductModel.setListResult(cartProductService.findByCartProductID(cartProductModel.getIds(), pageble));
+            cartProductModel.setListResult(cartProductService.findByCartProductID(cartProductIDs, pageble));
+            req.setAttribute("cartProducts", cartProductModel);
             view = "/views/web/Checkout.jsp";
         }
 
@@ -69,7 +87,7 @@ public class CartController extends HttpServlet {
 
         imageModels.setListResult(imageService.findAll());
 
-        req.setAttribute("cartProducts", cartProductModel);
+
         req.setAttribute("products", productModel);
         req.setAttribute("colors", colorModel);
         req.setAttribute("capacities", capacityModel);

@@ -45,6 +45,12 @@ public class BrandDAO extends AbstractDAO<BrandModel> implements IBrandDAO {
     }
 
     @Override
+    public void deleteBrand(Integer id) {
+        String sql = "delete from brands where brandID = ?";
+        delete(sql, id);
+    }
+
+    @Override
     public Integer getTotalItem() {
         return 0;
     }

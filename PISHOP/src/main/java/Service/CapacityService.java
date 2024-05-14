@@ -41,6 +41,11 @@ public class CapacityService implements ICapacityService {
     }
 
     @Override
+    public void deleteCapacity(Integer id) {
+        capcityDAO.deleteCapacity(id);
+    }
+
+    @Override
     public Integer getTotalItem() {
         return 0;
     }

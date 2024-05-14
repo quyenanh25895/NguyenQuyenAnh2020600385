@@ -69,8 +69,15 @@ public class CapacityDAO extends AbstractDAO<CapacityModel> implements ICapcityD
     }
 
     @Override
+    public void deleteCapacity(Integer capacityID) {
+        String sql = "DELETE FROM capacities WHERE capacityID = ?";
+        delete(sql, capacityID);
+    }
+
+    @Override
     public Integer getTotalItem() {
-        return 0;
+        String sql = "SELECT COUNT(*) FROM capacities";
+        return count(sql);
     }
 
     @Override

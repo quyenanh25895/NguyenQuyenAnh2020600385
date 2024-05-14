@@ -20,7 +20,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="tab-pane-1">
-                    <form id="deleteForm">
+                    <form id="deleteForm" action="${CartUrl}?type=checkout" method="GET">
                         <div class="row">
                             <div class="col-lg-9 table-responsive mb-5">
                                 <table class="table table-bordered text-center mb-0">
@@ -139,16 +139,13 @@
                                             <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
                                         </div>
                                         <button id="btnSubmitCart" class="btn btn-block btn-primary my-3 py-3">
-                                            Proceed To Checkout
+                                            Thanh Toán
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-<<<<<<< HEAD
                         <input type="hidden" name="ids" id="ids" value="">
-=======
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                     </form>
                 </div>
 
@@ -282,10 +279,6 @@
                     </form>
                 </div>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                 <div class="tab-pane fade" id="tab-pane-3">
                     <form id="formViewOrder">
                         <div class="row">
@@ -444,27 +437,49 @@
         if (cnt <= limit) {
             $('#loadMoreBtn').hide();
         }
-    });
 
-</script>
+        // Ẩn nút "Add to Cart" khi trang được tải lần đầu
+        $('#btnSubmitCart').prop('disabled', true);
 
+        var allChecked = false;
 
-<script>
+        $('input[type="checkbox"]').change(function () {
+            allChecked = $('input[name="cartproductID"]:checked').length > 0;
 
-    $('.nav-link').on('shown.bs.tab', function (e) {
-        var target = $(e.target).attr('href'); // Lấy href của tab đang được chọn
-        localStorage.setItem('activeTab', target); // Lưu vào localStorage
-    });
+            updateAddToCartButtonState();
+        });
 
-    $(document).ready(function () {
+        // Hàm kiểm tra và cập nhật trạng thái của nút "Add to Cart"
+        function updateAddToCartButtonState() {
+            if (allChecked) {
+                $('#btnSubmitCart').prop('disabled', false);
+            } else {
+                $('#btnSubmitCart').prop('disabled', true);
+            }
+        }
+
+        $("#btnSubmitCart").click(function (e) {
+            e.preventDefault();
+            let data = {};
+            let ids = $('input[name="cartproductID"]:checked').map(function () {
+                return $(this).val();
+            }).get();
+            data['ids'] = ids;
+            data['status'] = 0
+            console.log(ids)
+            $("#ids").val(ids);
+            window.location.href = "${CartUrl}?type=checkout&ids=" + ids;
+        });
+
+        $('.nav-link').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr('href'); // Lấy href của tab đang được chọn
+            localStorage.setItem('activeTab', target); // Lưu vào localStorage
+        });
+
         var activeTab = localStorage.getItem('activeTab'); // Lấy tab được lưu trong localStorage
         if (activeTab) {
             $('.nav-link[href="' + activeTab + '"]').tab('show'); // Hiển thị tab tương ứng
         }
-    });
-
-
-    $(document).ready(function () {
 
         $('a[data-toggle="tab"]').click(function (e) {
             e.preventDefault();
@@ -499,17 +514,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
-<<<<<<< HEAD
                     window.location.href = "${CartUrl}?type=cart";
                 },
                 error: function (error) {
                     window.location.href = "${CartUrl}?type=cart";
-=======
-                    window.location.href = "${CartUrl}";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}";
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                 }
             });
         }
@@ -526,17 +534,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
-<<<<<<< HEAD
                     window.location.href = "${CartUrl}?type=cart";
                 },
                 error: function (error) {
                     window.location.href = "${CartUrl}?type=cart";
-=======
-                    window.location.href = "${CartUrl}";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}";
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                 }
             });
         }
@@ -558,17 +559,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
-<<<<<<< HEAD
                     window.location.href = "${CartUrl}?type=cart";
                 },
                 error: function (error) {
                     window.location.href = "${CartUrl}?type=cart";
-=======
-                    window.location.href = "${CartUrl}";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}";
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                 }
             });
         }
@@ -591,56 +585,16 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
-<<<<<<< HEAD
                     window.location.href = "${CartUrl}?type=cart";
                 },
                 error: function (error) {
                     window.location.href = "${CartUrl}?type=cart";
-=======
-                    window.location.href = "${CartUrl}";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}";
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                 }
             });
         }
 
-        $("#btnSubmitCart").click(function (e) {
-            e.preventDefault();
-            let data = {};
-            let ids = $('tbody input[type=checkbox]:checked').map(function () {
-                return $(this).val();
-            }).get();
-            data['ids'] = ids;
-            data['status'] = 0
-<<<<<<< HEAD
-            $("#ids").val(JSON.stringify(ids));
-            window.location.href = "${CartUrl}?type=checkout";
-        });
 
-=======
-            submitCart(data);
-        });
-
-        function submitCart(data) {
-            $.ajax({
-                url: '${APIUrl}',
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                success: function (result) {
-                    window.location.href = "${CartUrl}";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}";
-                }
-            });
-        }
-
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
     });
-
 
 </script>
 </body>

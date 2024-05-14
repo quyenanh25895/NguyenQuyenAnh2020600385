@@ -41,6 +41,11 @@ public class ColorService implements IColorService {
     }
 
     @Override
+    public void deleteColor(Integer id) {
+        colorDAO.deleteColor(id);
+    }
+
+    @Override
     public int countItem() {
         return 0;
     }

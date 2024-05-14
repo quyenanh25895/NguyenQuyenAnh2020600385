@@ -17,6 +17,8 @@ public interface ICategoryService {
 
     void delete(Integer[] id);
 
+    void deleteCategory(Integer id);
+
     int countItem();
 
     boolean checkExist(String cateName);

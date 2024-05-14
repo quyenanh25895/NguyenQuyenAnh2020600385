@@ -86,7 +86,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right"> Thêm dung lượng mới: </label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control capacityValue" name="capacityValue" id="capacityValue-new"
+                                <input type="text" class="form-control capacityValue" name="capacityValue"
+                                       id="capacityValue-new"
                                        value="" placeholder="Nhập dung lượng"/>
                             </div>
                             <div class="col-sm-1">
@@ -102,7 +103,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Dung lượng: </label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control capacityValue" name="capacity" id="capacity-${capacity.id}"
+                                    <input type="text" class="form-control capacityValue" name="capacity"
+                                           id="capacity-${capacity.id}"
                                            value="${capacity.capacityValue}"/>
                                 </div>
                                 <div class="col-sm-1">
@@ -141,23 +143,22 @@
     // Lặp qua tất cả các ô input có class là 'numberInput' và gán sự kiện cho mỗi ô input
     var numberInputs = document.getElementsByClassName('capacityValue');
     for (var i = 0; i < numberInputs.length; i++) {
-        numberInputs[i].addEventListener('input', function() {
+        numberInputs[i].addEventListener('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
     }
 
-
     var id;
     var type;
 
-    $('.btn-capacity-delete').click(function (e){
+    $('.btn-capacity-delete').click(function (e) {
         e.preventDefault();
         id = $(this).data("id");
         type = $(this).data("type");
         document.getElementById("confirmationBox").classList.remove("hidden");
 
     });
-    $('.btn-color-delete').click(function (e){
+    $('.btn-color-delete').click(function (e) {
         e.preventDefault();
         id = $(this).data("id");
         type = $(this).data("type");
@@ -165,9 +166,8 @@
     });
 
     document.getElementById("confirmDelete").addEventListener("click", function () {
-        var url = "${APIUrl}?type=capacity";
+        var url = "${APIUrl}?type=" + type;
         Delete(id, type, url);
-        alert("Đã xóa!"); // Ví dụ: Hiển thị thông báo đã xóa
         document.getElementById("confirmationBox").classList.add("hidden");
     });
 
@@ -270,11 +270,13 @@
         var data = {};
         if (type === 'color') {
             data = {
-                id: value
+                id: value,
+                type: type
             }
         } else if (type === 'capacity') {
             data = {
-                id: value
+                id: value,
+                type: type
             }
         }
 

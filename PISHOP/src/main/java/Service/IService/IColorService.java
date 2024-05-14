@@ -17,6 +17,8 @@ public interface IColorService {
 
     void delete(Integer[] id);
 
+    void deleteColor(Integer id);
+
     int countItem();
 
     void insertProductColors(Integer productID, Integer[] colorID);

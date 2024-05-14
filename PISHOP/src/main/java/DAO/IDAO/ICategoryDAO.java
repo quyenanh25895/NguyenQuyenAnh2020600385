@@ -15,6 +15,8 @@ public interface ICategoryDAO extends IGenericDAO<CategoryModel> {
 
     void delete(int id);
 
+    void deleteCategory(Integer id);
+
     Integer getTotalItem();
 
     boolean checkExist(String cateName);

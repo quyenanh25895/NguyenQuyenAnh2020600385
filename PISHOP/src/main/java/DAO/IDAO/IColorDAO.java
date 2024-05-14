@@ -16,6 +16,8 @@ public interface IColorDAO extends IGenericDAO<ColorModel> {
 
     void delete(int id);
 
+    void deleteColor(Integer id);
+
     Integer getTotalItem();
 
     boolean checkProductColor(Integer productId, Integer colorId);

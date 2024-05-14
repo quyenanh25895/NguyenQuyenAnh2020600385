@@ -48,6 +48,11 @@ public class BrandService implements IBrandService {
     }
 
     @Override
+    public void deleteBrand(Integer id) {
+        brandDAO.deleteBrand(id);
+    }
+
+    @Override
     public Integer getTotalItem() {
         return 0;
     }

@@ -16,6 +16,8 @@ public interface ICapacityService {
 
     void delete(Integer[] id);
 
+    void deleteCapacity(Integer id);
+
     Integer getTotalItem();
 
     List<CapacityModel> findByProductID(Integer id);

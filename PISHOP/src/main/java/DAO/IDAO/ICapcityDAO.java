@@ -22,6 +22,8 @@ public interface ICapcityDAO extends IGenericDAO<CapacityModel> {
 
     void delete(int id);
 
+    void deleteCapacity(Integer capacityID);
+
     Integer getTotalItem();
 
     void deleteProductCapacity(Integer productID, Integer capacityID);

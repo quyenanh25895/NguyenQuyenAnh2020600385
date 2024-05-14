@@ -112,11 +112,7 @@
                     <strong>Welcome </strong>${USERMODEL.fullName}
                 </a>
 
-<<<<<<< HEAD
                 <a href="<c:url value="/cart?type=cart" /> " style="color: white; margin-right: 5px"
-=======
-                <a href="<c:url value="/cart" /> " style="color: white; margin-right: 5px"
->>>>>>> d41aab06937fef662f30a43b9d87c5561fd83e72
                    class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
                     <span class="badge">0</span>
@@ -227,7 +223,7 @@
         }
     });
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         const isClickInsideSearchInput = document.getElementById('searchInput').contains(event.target);
         const searchResults = document.getElementById('searchResults');
 

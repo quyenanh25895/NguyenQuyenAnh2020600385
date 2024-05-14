@@ -18,6 +18,8 @@ public interface IBrandService {
 
     void delete(int id);
 
+    void deleteBrand(Integer id);
+
     Integer getTotalItem();
 
     boolean checkExist(String brandName);

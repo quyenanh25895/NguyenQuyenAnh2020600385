@@ -46,6 +46,12 @@ public class CategoryDAO extends AbstractDAO<CategoryModel> implements ICategory
     }
 
     @Override
+    public void deleteCategory(Integer id) {
+        String sql = "DELETE FROM categories WHERE cateID = ?";
+        delete(sql, id);
+    }
+
+    @Override
     public Integer getTotalItem() {
         return null;
     }
