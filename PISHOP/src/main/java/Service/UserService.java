@@ -33,7 +33,7 @@ public class UserService implements IUserService {
 
         if (userDAO.checkUserExist(saveUser.getUserName())) {
             saveUser.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-            saveUser.setCreatedBy(user.getUserName());
+            saveUser.setCreatedBy(saveUser.getUserName());
             int userID = userDAO.save(saveUser);
             return userDAO.findOne(userID);
         } else {

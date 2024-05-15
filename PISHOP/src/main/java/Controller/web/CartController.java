@@ -87,7 +87,6 @@ public class CartController extends HttpServlet {
 
         imageModels.setListResult(imageService.findAll());
 
-
         req.setAttribute("products", productModel);
         req.setAttribute("colors", colorModel);
         req.setAttribute("capacities", capacityModel);

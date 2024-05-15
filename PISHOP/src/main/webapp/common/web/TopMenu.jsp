@@ -144,6 +144,9 @@
                     <a href="<c:url value="/product-shop?type=list&page=1&maxPageItem=8&sortName=productID&sortBy=asc"/>"
                        class="nav-item nav-link">Shop</a>
 
+                    <a href="<c:url value="/news"/>"
+                       class="nav-item nav-link">News</a>
+
                     <a href="" class="nav-item nav-link">Contact</a>
 
                 </div>

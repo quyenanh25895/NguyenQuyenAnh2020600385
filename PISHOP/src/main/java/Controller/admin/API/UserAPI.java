@@ -51,7 +51,6 @@ public class UserAPI extends HttpServlet {
         resp.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
         UserModel userModel = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
-
         UserModel user = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
 
         if (!userService.checkUserExist(userModel.getUserName())) {
@@ -69,8 +68,8 @@ public class UserAPI extends HttpServlet {
                 IPageble pageble = new PageRequest(userModel.getPage(), userModel.getMaxPageItem(),
                         new Sorter(userModel.getSortName(), userModel.getSortBy()));
                 userModel = userService.save(userModel, pageble, userModel);
-                mapper.writeValue(resp.getOutputStream(), userModel);
                 Integer i = cartService.save(userModel);
+                mapper.writeValue(resp.getOutputStream(), userModel);
             }
         }
     }

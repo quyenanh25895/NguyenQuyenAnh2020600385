@@ -75,11 +75,9 @@
                                                                 ${cartProduct.price * cartProduct.quantity}
                                                         </td>
 
-                                                        <td class="align-middle">
-                                                            <input type="hidden" name="cartproductID"
-                                                                   id="checkbox_${cartProduct.id}"
-                                                                   value="${cartProduct.id}">
-                                                        </td>
+                                                        <input type="hidden" name="cartproductID"
+                                                               id="checkbox_${cartProduct.id}"
+                                                               value="${cartProduct.id}">
                                                     </tr>
                                                 </c:if>
                                             </c:forEach>
@@ -93,6 +91,15 @@
 
                             <div class="col-lg-3">
                                 <div class="card border-secondary mb-5">
+                                    <form class="mb-5" action="">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control p-4" placeholder="Coupon Code">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary">Apply Coupon</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <br>
                                     <div class="card-header bg-secondary border-0">
                                         <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
                                     </div>

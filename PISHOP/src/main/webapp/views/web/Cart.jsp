@@ -87,7 +87,7 @@
                                                                 ${cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * 0.9 * cartProduct.quantity}
+                                                                ${cartProduct.price * cartProduct.quantity}
                                                         </td>
 
                                                         <td class="align-middle">
@@ -119,7 +119,7 @@
                                                 <c:forEach items="${products.listResult}" var="product">
                                                     <c:if test="${cartProduct.status == 0 && cartProduct.productID == product.id && product.status == 1}">
                                                         <c:set var="subtotal"
-                                                               value="${cartProduct.quantity * cartProduct.price * 0.9}"/>
+                                                               value="${cartProduct.quantity * cartProduct.price}"/>
                                                         <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                     </c:if>
                                                 </c:forEach>
@@ -164,13 +164,7 @@
                                         <th>Total</th>
                                         <th>Status</th>
                                         <th>
-                                            <button id="btnDenyCart" type="button"
-                                                    class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
-                                                    data-toggle="tooltip" title='Xóa sản phẩm khỏi giỏ hàng'>
-												<span>
-													<i class="fa fa-arrow-circle-o-left bigger-110 pink"></i>
-												</span>
-                                            </button>
+
                                         </th>
                                     </tr>
                                     </thead>
@@ -219,7 +213,7 @@
                                                                 ${cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * 0.9 * cartProduct.quantity}
+                                                                ${cartProduct.price * cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
                                                             <div style="background-color: yellow; color: black; padding: 5px; border-radius: 5px; text-align: center;">
@@ -254,7 +248,7 @@
                                             <c:forEach items="${cartProducts.listResult}" var="product">
                                                 <c:if test="${product.status == 1}">
                                                     <c:set var="subtotal"
-                                                           value="${product.quantity * product.price * 0.9}"/>
+                                                           value="${product.quantity * product.price}"/>
                                                     <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                 </c:if>
                                             </c:forEach>
@@ -272,10 +266,20 @@
                                             <h5 class="font-weight-bold">Total</h5>
                                             <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
                                         </div>
+                                        <button id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3">
+                                            Hủy Đặt Hàng
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+<%--                        <button id="btnDenyCart" type="button"--%>
+<%--                                class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"--%>
+<%--                                data-toggle="tooltip" title='Xóa sản phẩm khỏi giỏ hàng'>--%>
+<%--												<span>--%>
+<%--													<i class="fa fa-arrow-circle-o-left bigger-110 pink"></i>--%>
+<%--												</span>--%>
+<%--                        </button>--%>
                     </form>
                 </div>
 
@@ -346,7 +350,7 @@
                                                                 ${cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * 0.9 * cartProduct.quantity}
+                                                                ${cartProduct.price * cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
                                                             <c:if test="${cartProduct.status == 2}">
@@ -412,6 +416,30 @@
     </div>
 </div>
 <script>
+
+    $('.nav-link').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr('href'); // Lấy href của tab đang được chọn
+        localStorage.setItem('activeTab', target); // Lưu vào localStorage
+    });
+
+    $(document).ready(function () {
+        var activeTab = localStorage.getItem('activeTab'); // Lấy tab được lưu trong localStorage
+        if (activeTab) {
+            $('.nav-link[href="' + activeTab + '"]').tab('show'); // Hiển thị tab tương ứng
+        }
+    });
+
+    // Hủy chọn các checkbox trong tab hiện tại khi tab được click
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        var targetTab = $(e.target).attr("href"); // Lấy href của tab được chọn
+        // Hủy chọn các checkbox trong tab mới được chọn
+        $(targetTab).find('input[type="checkbox"]').prop('checked', false);
+    });
+</script>
+
+<script>
+
+
     $(document).ready(function () {
         var limit = 5; // Số lượng dòng ban đầu
         var cnt = $('#cnt').val();
@@ -471,23 +499,6 @@
             window.location.href = "${CartUrl}?type=checkout&ids=" + ids;
         });
 
-        $('.nav-link').on('shown.bs.tab', function (e) {
-            var target = $(e.target).attr('href'); // Lấy href của tab đang được chọn
-            localStorage.setItem('activeTab', target); // Lưu vào localStorage
-        });
-
-        var activeTab = localStorage.getItem('activeTab'); // Lấy tab được lưu trong localStorage
-        if (activeTab) {
-            $('.nav-link[href="' + activeTab + '"]').tab('show'); // Hiển thị tab tương ứng
-        }
-
-        $('a[data-toggle="tab"]').click(function (e) {
-            e.preventDefault();
-            // Lấy href của tab được chọn
-            var targetTab = $(this).attr("href");
-            // Hủy chọn các checkbox trong tab hiện tại
-            $(targetTab).find('input[type="checkbox"]').prop('checked', false);
-        });
 
         $(".userSubmitOrderBtn").click(function (e) {
             e.preventDefault();
