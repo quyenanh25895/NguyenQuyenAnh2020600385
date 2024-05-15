@@ -70,15 +70,15 @@
 <div class="container-fluid fixed-top"
      style="background-color: #c17a74 !important; padding-right: 0px; padding-left: 0px">
     <div class="row align-items-center py-3 px-xl-5">
-        <div class="col-lg-3 d-none d-lg-block" style=" padding: 0 0 0 0">
+        <div class="col-lg-2 d-none d-lg-block" style=" padding: 0 0 0 0">
             <a href="<c:url value="/home" /> " class="text-decoration-none">
-                <h1 class="m-0 display-5 font-weight-semi-bold"><span
-                        class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#"
+                     style="max-height: 70px; width: auto">
+
             </a>
         </div>
 
-        <div class="col-lg-4 col-4 text-left" style="margin-left: 20px">
-
+        <div class="col-lg-5 col-5 text-left" style="margin-left: 20px">
             <form action="">
                 <div class="input-group" style="position: relative">
 
@@ -94,7 +94,7 @@
 
         </div>
 
-        <div class="col-lg-4 col-7 text-right" style="padding-right: 0">
+        <div class="col-lg-4 col-5 text-right" style="padding-right: 0">
 
             <c:if test="${empty USERMODEL}">
                 <a href="<c:url value="/login?action=login" />" style="color: white; margin-right: 5px "
@@ -128,8 +128,8 @@
     <div class="col-lg-12" style="padding: 0 0 0 0">
         <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0" style="padding-left: 15px">
             <a href="" class="text-decoration-none d-block d-lg-none">
-                <h1 class="m-0 display-5 font-weight-semi-bold"><span
-                        class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#"
+                     style="max-height: 70px; width: auto">
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse"
                     data-target="#navbarCollapse">
