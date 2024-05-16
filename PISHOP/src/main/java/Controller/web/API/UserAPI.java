@@ -1,11 +1,10 @@
-package Controller.admin.API;
+package Controller.web.API;
 
 import Constants.SystemConstant;
 import Model.UserModel;
 import Service.IService.ICartService;
 import Service.IService.IUserService;
 import Sort.Sorter;
-import Utils.FormUtil;
 import Utils.HttpUtil;
 import Utils.SessionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/api-admin-user"})
+@WebServlet(urlPatterns = {"/api-user"})
 public class UserAPI extends HttpServlet {
 
     @Inject
@@ -28,22 +27,6 @@ public class UserAPI extends HttpServlet {
 
     @Inject
     private ICartService cartService;
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("application/json");
-        ObjectMapper mapper = new ObjectMapper();
-
-        UserModel userModel = FormUtil.toModel(UserModel.class, req);
-        IPageble pageble = new PageRequest();
-        userModel.setListResult(userService.findAll(pageble));
-
-        String jsonUserList = mapper.writeValueAsString(userModel.getListResult());
-        resp.getWriter().write(jsonUserList);
-
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -78,10 +61,9 @@ public class UserAPI extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-
         UserModel user = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-
         ObjectMapper mapper = new ObjectMapper();
+
         UserModel updateUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
         if (updateUser.getId() != null && updateUser.getType().equals(SystemConstant.LIST)) {
             if (updateUser.getStatus() == 1) {
@@ -97,11 +79,6 @@ public class UserAPI extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("application/json");
-        ObjectMapper mapper = new ObjectMapper();
-        UserModel deleteUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
-        userService.delete(deleteUser.getIds());
-        mapper.writeValue(resp.getOutputStream(), deleteUser);
+        super.doDelete(req, resp);
     }
 }
