@@ -29,4 +29,8 @@ public interface IUserService {
     boolean checkUserExist(String userName);
 
     Integer saveCode(UserModel user, String code);
+
+    boolean checkCode(String email);
+
+
 }

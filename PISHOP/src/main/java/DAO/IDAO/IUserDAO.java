@@ -30,4 +30,6 @@ public interface IUserDAO extends IGenericDAO<UserModel> {
     boolean checkUserExist(String userName);
 
     Integer saveCode(UserModel user, String code);
+
+    UserModel checkCode(String code);
 }

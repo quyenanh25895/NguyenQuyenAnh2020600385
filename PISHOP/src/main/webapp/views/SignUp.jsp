@@ -23,7 +23,7 @@
                 <div class="signup-form">
                     <h2 class="form-title">Sign up</h2>
 
-                    <form class="register-form" id="formSubmit">
+                    <form class="register-form" id="formSubmit" novalidate>
                         <div class="form-group">
                             <input type="text" class="form-control" id="fullName" name="fullName" value=""
                                    placeholder="Tên người dùng">
@@ -101,7 +101,7 @@
                 || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value);
         }, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt");
 
-        $("#formSubmit").validate({
+        var validation = $("#formSubmit").validate({
             rules: {
                 fullName: {
                     required: true,
@@ -161,6 +161,7 @@
         });
     });
 
+
     $(document).ready(function () {
         $("#LoginLink").click(function (event) {
             // Ngăn chặn hành vi mặc định của thẻ <a> (tải lại trang)
@@ -171,17 +172,19 @@
         $('#btnAddOrUpdateUser').click(function (e) {
             e.preventDefault();
             // Nếu không có lỗi, tiếp tục xử lý đăng ký người dùng
-            var data = {};
-            var formData = $('#formSubmit').serializeArray();
-            $.each(formData, function (i, v) {
-                data["" + v.name + ""] = v.value;
-            });
+            if ($("#formSubmit").valid()) {
+                var data = {};
+                var formData = $('#formSubmit').serializeArray();
+                $.each(formData, function (i, v) {
+                    data["" + v.name + ""] = v.value;
+                });
 
-            var id = $('#id').val();
-            if (id === "") {
-                addUser(data);
-            } else {
-                updateUser(data);
+                var id = $('#id').val();
+                if (id === "") {
+                    addUser(data);
+                } else {
+                    updateUser(data);
+                }
             }
         });
 

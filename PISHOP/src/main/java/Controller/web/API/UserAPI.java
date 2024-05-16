@@ -65,14 +65,9 @@ public class UserAPI extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
 
         UserModel updateUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
-        if (updateUser.getId() != null && updateUser.getType().equals(SystemConstant.LIST)) {
-            if (updateUser.getStatus() == 1) {
-                userService.disableUser(updateUser.getId());
-            } else if(updateUser.getStatus() == 0){
-                userService.enableUser(updateUser.getId());
-            }
-        } else if(updateUser.getId() != null && updateUser.getType().equals(SystemConstant.EDIT)) {
-            updateUser = userService.update(updateUser, user);
+
+        if (updateUser.getId() != null ) {
+            updateUser = userService.update(updateUser, updateUser);
         }
         mapper.writeValue(resp.getOutputStream(), updateUser);
     }

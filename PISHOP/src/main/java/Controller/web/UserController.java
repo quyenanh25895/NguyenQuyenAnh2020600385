@@ -33,10 +33,20 @@ public class UserController extends HttpServlet {
 
         if (type.equals("getcode")) {
             view = "/views/web/ForgotPassword.jsp";
-        }
+        } else if (type.equals("submitcode")) {
+            String code = req.getParameter("code");
+            if (userService.checkCode(code)){
+                String userName = req.getParameter("userName");
+                String email = req.getParameter("email");
+                model = userService.findByUserNameAndEmail(userName, email);
+                req.setAttribute("model", model);
+                view = "/views/web/changePassword.jsp";
+            }else if(!userService.checkCode(code)){
+                view = "/views/web/ForgotPassword.jsp";
+                req.setAttribute("message", "Đã quá thời gian sử dụng");
+                req.setAttribute("alert", "danger");
+            }
 
-        if (model.getType().equals(SystemConstant.EDIT)) {
-            view = "/views/SignUp.jsp";
         }
 
         MessageUtil.showMessage(req);
@@ -71,6 +81,9 @@ public class UserController extends HttpServlet {
                     sb.append("Dear ").append(model.getUserName()).append(",<br><br>");
                     sb.append("You have requested to reset your password.<br><br>");
                     sb.append("<strong style=\"color: #009688;\">Your password is: ").append(code).append("</strong><br><br>");
+                    String path = "http://localhost:1409/PISHOP_war_exploded/user?type=submitcode&userName="
+                            + model.getUserName() + "&email=" + model.getEmail() + "&code=" + code;
+                    sb.append("<a href='" + path + "'>" + "Click" + "<a/>" + "<br>");
                     sb.append("Regards,<br>");
                     sb.append("Administrator");
                     sb.append("</div>");
@@ -83,6 +96,12 @@ public class UserController extends HttpServlet {
                 }
                 req.getRequestDispatcher("/views/web/ForgotPassword.jsp").forward(req, resp);
             }
+        } else if (type.equals("submitcode")) {
+            String userName = req.getParameter("userName");
+            String email = req.getParameter("email");
+            model = userService.findByUserNameAndEmail(userName, email);
+            req.setAttribute("model", model);
+            req.getRequestDispatcher("/views/web/changePassword.jsp").forward(req, resp);
         }
 
 

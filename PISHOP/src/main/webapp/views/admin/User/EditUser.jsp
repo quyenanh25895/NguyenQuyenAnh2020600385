@@ -205,7 +205,6 @@
 
     $('#btnAddOrUpdateNew').click(function (e) {
         e.preventDefault();
-        // Nếu không có lỗi, tiếp tục xử lý đăng ký người dùng
         var data = {};
         var formData = $('#formSubmit').serializeArray();
         $.each(formData, function (i, v) {

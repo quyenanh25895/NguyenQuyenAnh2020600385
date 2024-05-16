@@ -36,8 +36,8 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO {
     public UserModel findByUserNameAndEmail(String userName, String email) {
         StringBuilder sql = new StringBuilder("SELECT * FROM users AS u");
         sql.append(" INNER JOIN roles AS r ON r.roleID = u.roleID");
-        sql.append(" Inner Join forgots AS f ON u.userID = f.userID");
-        sql.append(" WHERE BINARY username = ? AND BINARY email = ?");
+        sql.append(" INNER JOIN forgots AS f ON u.userID = f.userID");
+        sql.append(" WHERE BINARY u.username = ? AND BINARY u.email = ?");
         List<UserModel> users = query(sql.toString(), new UserMapper(), userName, email);
         return users.isEmpty() ? null : users.get(0);
     }
@@ -120,10 +120,22 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO {
         return insert(sql, user.getId(), code);
     }
 
-    public static void main(String[] args) {
-        IUserDAO uDao = new UserDAO();
-        int a = uDao.countItem();
-        System.out.println(a);
+    @Override
+    public UserModel checkCode(String code) {
+        StringBuilder sql = new StringBuilder("SELECT u.username, u.password, f.code, f.createdDate,");
+        sql.append(" u.userID, u.userFullname, u.email, u.userPhonenumer, u.userAddress,");
+        sql.append(" u.userGender, u.username, u.password, u.roleID, u.status, u.createBy, u.modifiedBy, u.modifiedDate");
+        sql.append(" FROM users AS u");
+        sql.append(" INNER JOIN roles AS r ON r.roleID = u.roleID");
+        sql.append(" INNER JOIN forgots AS f ON u.userID = f.userID");
+        sql.append(" WHERE f.code = ? AND f.createdDate >= NOW() - INTERVAL 5 MINUTE ");
+        List<UserModel> users = query(sql.toString(), new UserMapper(), code);
+        if (users.isEmpty()) {
+            return null;
+        } else {
+            return users.get(0);
+        }
     }
+
 }
 

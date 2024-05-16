@@ -88,5 +88,15 @@ public class UserService implements IUserService {
     public Integer saveCode(UserModel user, String code) {
         return userDAO.saveCode(user, code);
     }
+
+    @Override
+    public boolean checkCode(String code) {
+        UserModel user = userDAO.checkCode(code);
+        if (user == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
