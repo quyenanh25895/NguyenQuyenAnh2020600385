@@ -11,6 +11,8 @@ public interface IUserDAO extends IGenericDAO<UserModel> {
 
     UserModel findByUserNameAndPasswordAndStatus(String userName, String password);
 
+    UserModel findByUserNameAndEmail(String userName, String email);
+
     UserModel findOne(int id);
 
     Integer save(UserModel saveUser);
@@ -26,4 +28,6 @@ public interface IUserDAO extends IGenericDAO<UserModel> {
     Integer countItem();
 
     boolean checkUserExist(String userName);
+
+    Integer saveCode(UserModel user, String code);
 }

@@ -8,6 +8,8 @@ import java.util.List;
 public interface IUserService {
     UserModel findByUserNameAndPasswordAndStatus(String userName, String password);
 
+    UserModel findByUserNameAndEmail(String userName, String email);
+
     List<UserModel> findAll(IPageble pageble);
 
     UserModel findOne(int id);
@@ -25,4 +27,6 @@ public interface IUserService {
     int countItem();
 
     boolean checkUserExist(String userName);
+
+    Integer saveCode(UserModel user, String code);
 }

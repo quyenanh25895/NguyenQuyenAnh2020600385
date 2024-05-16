@@ -28,6 +28,11 @@ public class UserMapper implements ROWMapper<UserModel> {
             } catch (Exception e) {
                 System.out.print(e.getMessage());
             }
+            try {
+                user.setCode(resultSet.getString("code"));
+            } catch (Exception e) {
+                System.out.print(e.getMessage());
+            }
             if (resultSet.getTimestamp("modifiedDate") != null) {
                 user.setModifiedDate(resultSet.getTimestamp("modifiedDate"));
             }

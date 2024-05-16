@@ -19,6 +19,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UserModel findByUserNameAndEmail(String userName, String email) {
+        return userDAO.findByUserNameAndEmail(userName, email);
+    }
+
+    @Override
     public List<UserModel> findAll(IPageble pageble) {
         return userDAO.findAll(pageble);
     }
@@ -77,6 +82,11 @@ public class UserService implements IUserService {
     @Override
     public boolean checkUserExist(String userName) {
         return userDAO.checkUserExist(userName);
+    }
+
+    @Override
+    public Integer saveCode(UserModel user, String code) {
+        return userDAO.saveCode(user, code);
     }
 }
 

@@ -7,6 +7,7 @@
     <mapping path="/product-detail" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/cart" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/news" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/user" decorator="/WEB-INF/decorators/signup.jsp"/>
 
     <!-- Exclude path from decoration. -->
     <mapping path="/api*" exclude="true"/>

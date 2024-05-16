@@ -12,6 +12,7 @@ public class UserModel extends AbstractsModel<UserModel> {
     private int roleId;
     private String roleName;
     private Integer status;
+    private String code;
 
     public String getUserName() {
         return userName;
@@ -91,5 +92,13 @@ public class UserModel extends AbstractsModel<UserModel> {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

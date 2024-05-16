@@ -168,27 +168,8 @@
             window.location.href = $(this).attr("href");
         });
 
-
         $('#btnAddOrUpdateUser').click(function (e) {
             e.preventDefault();
-
-            // Kiểm tra tên người dùng
-            var username = $('#userName').val();
-            if (username.length < 6) {
-                document.getElementById('userName').setCustomValidity("Tên người dùng phải có ít nhất 6 ký tự.");
-                return;
-            } else {
-                document.getElementById('userName').setCustomValidity("");
-            }
-
-            // Kiểm tra mật khẩu
-            var password = $('#password').val();
-            var strength = checkPasswordStrength(password);
-            if (strength < 3) {
-                alert("Mật khẩu không đủ mạnh.");
-                return;
-            }
-
             // Nếu không có lỗi, tiếp tục xử lý đăng ký người dùng
             var data = {};
             var formData = $('#formSubmit').serializeArray();
@@ -203,27 +184,6 @@
                 updateUser(data);
             }
         });
-
-        function checkPasswordStrength(password) {
-            var strength = 0;
-
-            // If password contains both lower and uppercase characters, increase strength value.
-            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
-
-            // If it has numbers and characters, increase strength value.
-            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1;
-
-            // If it has one special character, increase strength value.
-            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
-
-            // If it has two special characters, increase strength value.
-            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
-
-            // If password is longer than 8, increase strength value.
-            if (password.length > 8) strength += 1;
-
-            return strength;
-        }
 
         function addUser(data) {
             $.ajax({

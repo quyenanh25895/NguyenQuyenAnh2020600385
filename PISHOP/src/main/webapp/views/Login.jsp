@@ -66,7 +66,7 @@
                                     </label>
                                 </div>
                                 <div class="w-50 text-md-right">
-                                    <a href="#">Forgot Password</a>
+                                    <a href="<c:url value="/user?type=getcode"/> ">Forgot Password</a>
                                 </div>
                             </div>
                             <p>Not a member?

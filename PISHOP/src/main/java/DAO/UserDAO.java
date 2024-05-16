@@ -33,6 +33,16 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO {
     }
 
     @Override
+    public UserModel findByUserNameAndEmail(String userName, String email) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM users AS u");
+        sql.append(" INNER JOIN roles AS r ON r.roleID = u.roleID");
+        sql.append(" Inner Join forgots AS f ON u.userID = f.userID");
+        sql.append(" WHERE BINARY username = ? AND BINARY email = ?");
+        List<UserModel> users = query(sql.toString(), new UserMapper(), userName, email);
+        return users.isEmpty() ? null : users.get(0);
+    }
+
+    @Override
     public UserModel findOne(int id) {
         String sql = "SELECT * FROM users WHERE userID = ?";
         List<UserModel> userModels = query(sql, new UserMapper(), id);
@@ -102,6 +112,12 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Integer saveCode(UserModel user, String code) {
+        String sql = "insert into forgots(userID, code) values(?, ?)";
+        return insert(sql, user.getId(), code);
     }
 
     public static void main(String[] args) {
