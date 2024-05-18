@@ -98,9 +98,9 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public void submitProductToCart(Integer[] ids) {
+    public void submitProductToCart(Integer[] ids, Integer status) {
         for(Integer id : ids) {
-            cartProductDAO.submitCartProduct(id);
+            cartProductDAO.submitCartProduct(id, status);
         }
     }
 

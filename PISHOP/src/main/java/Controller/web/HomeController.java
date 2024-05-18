@@ -2,6 +2,7 @@ package Controller.web;
 
 import Model.*;
 import Service.IService.*;
+import Sort.Sorter;
 import Utils.FormUtil;
 import Utils.SessionUtil;
 import paging.IPageble;
@@ -79,7 +80,7 @@ public class HomeController extends HttpServlet {
             IPageble pageble = new PageRequest();
 
             cateModels.setListResult(categoryService.findAll());
-            productModels.setListResult(productService.findAll(pageble));
+            productModels.setListResult(productService.findAll(new PageRequest(1, productService.countItem(), new Sorter("cateID", "ASC"))));
             imageModels.setListResult(imageService.findAll());
             bannerModel.setListResult(bannerService.findAll(pageble));
 

@@ -22,7 +22,7 @@ public interface ICartProductService {
 
     void deleteProductFromCart(Integer[] id);
 
-    void submitProductToCart(Integer[] ids);
+    void submitProductToCart(Integer[] ids, Integer status);
 
     void denyProductFromCart(Integer[] ids);
 

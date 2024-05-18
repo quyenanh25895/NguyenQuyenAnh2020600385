@@ -6,7 +6,7 @@
 <c:url var="SignupUrl" value="/signup"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Đăng Ký</title>
 
 </head>
 

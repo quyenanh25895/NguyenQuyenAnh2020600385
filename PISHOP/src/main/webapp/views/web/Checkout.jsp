@@ -2,9 +2,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:url var="APIUrl" value="/api-cart"/>
 <c:url var="CartUrl" value="/cart"/>
+<c:url var="vnpayUrl" value="/vnpay"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Mua Hàng</title>
 </head>
 
 <body>
@@ -73,6 +74,7 @@
                                                         </td>
                                                         <td class="align-middle">
                                                                 ${cartProduct.price * cartProduct.quantity}
+
                                                         </td>
 
                                                         <input type="hidden" name="cartproductID"
@@ -123,12 +125,19 @@
                                             <h6 class="font-weight-medium">Shipping</h6>
                                             <c:set var="shipping" value="${totalPrice * 0.1}"/>
                                             <h6 class="font-weight-medium">$ ${shipping}</h6>
+                                            <select class="form-control" id="role" name="role">
+                                                <option value="">Chọn Role</option>
+                                                <option value="off">Thanh toán khi nhận hàng</option>
+                                                <option value="onl">Thanh toán online</option>
+                                            </select>
+
                                         </div>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
                                             <h5 class="font-weight-bold">Total</h5>
                                             <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
+                                            <input type="hidden" name="price" value="${totalPrice + shipping}">
                                         </div>
                                         <button id="btnSubmitCart" class="btn btn-block btn-primary my-3 py-3">
                                             Xác nhận thanh toán
@@ -185,12 +194,20 @@
             $.each(formData, function (i, v) {
                     if (v.name === "cartproductID") {
                         ids.push(v.value);
+                    } else if (v.name === "price") {
+                        data["price"] = v.value;
+                    } else if (v.name === "role") {
+                        data["type"] = v.value;
                     }
                 }
             );
             data["ids"] = ids;
             data['status'] = 0
-            submitCart(data);
+            if (data["type"] === "onl") {
+                vnpay(data)
+            } else if (data["type"] === "off") {
+                submitCart(data);
+            }
         });
 
         function submitCart(data) {
@@ -206,6 +223,36 @@
                     window.location.href = "${CartUrl}?type=checkout";
                 }
             });
+        }
+
+        function vnpay(data) {
+            data2 = {
+                price: data["price"],
+                type: data["type"]
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '${vnpayUrl}',
+                contentType: 'application/json',
+                dataType: 'JSON',
+                data: JSON.stringify(data2),
+                success: function (x) {
+                    if (x.code === '00') {
+                        if (window.vnpay) {
+                            vnpay.open({width: 768, height: 600, url: x.data});
+
+                        } else {
+                            location.href = x.data;
+                        }
+                        submitCart(data);
+                        return false;
+                    } else {
+                        alert(x.Message);
+                    }
+                },
+            });
+            return false;
         }
 
     });

@@ -67,10 +67,10 @@
 <body>
 <div class="fixed-top-margin" style="height: 160px"></div>
 <!-- Topbar Start -->
-<div class="container-fluid fixed-top"
-     style="background-color: #c17a74 !important; padding-right: 0px; padding-left: 0px">
+<div class="container-fluid fixed-top text-center"
+     style="background-color: #c17a74 !important; padding-right: 0; padding-left: 0">
     <div class="row align-items-center py-3 px-xl-5">
-        <div class="col-lg-2 d-none d-lg-block" style=" padding: 0 0 0 0">
+        <div class="col-lg-1 col-sm-1 d-none d-lg-block" style=" padding: 0 0 0 0">
             <a href="<c:url value="/home" /> " class="text-decoration-none">
                 <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#"
                      style="max-height: 70px; width: auto">
@@ -78,7 +78,7 @@
             </a>
         </div>
 
-        <div class="col-lg-5 col-5 text-left" style="margin-left: 20px">
+        <div class="col-lg-5 col-md-5 col-sm-5 text-center" style="margin-left: 20px">
             <form action="">
                 <div class="input-group" style="position: relative">
 
@@ -94,7 +94,7 @@
 
         </div>
 
-        <div class="col-lg-4 col-5 text-right" style="padding-right: 0">
+        <div class="col-lg-5 col-md-6 col-sm-6 text-right" style="padding: 0 0 0 0">
 
             <c:if test="${empty USERMODEL}">
                 <a href="<c:url value="/login?action=login" />" style="color: white; margin-right: 5px "

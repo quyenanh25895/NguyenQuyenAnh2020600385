@@ -5,6 +5,7 @@ import Service.IService.*;
 import Sort.Sorter;
 import Utils.FormUtil;
 import Utils.HttpUtil;
+import Utils.MessageUtil;
 import Utils.SessionUtil;
 import paging.IPageble;
 import paging.PageRequest;
@@ -72,7 +73,6 @@ public class CartController extends HttpServlet {
                 }
             }
             Integer[] cartProductIDs = IDsList.toArray(new Integer[0]);
-
             IPageble pageble = new PageRequest(1, cartProductService.countItem(), new Sorter("createdDate", "DESC"));
             cartProductModel.setListResult(cartProductService.findByCartProductID(cartProductIDs, pageble));
             req.setAttribute("cartProducts", cartProductModel);
@@ -87,6 +87,7 @@ public class CartController extends HttpServlet {
 
         imageModels.setListResult(imageService.findAll());
 
+        MessageUtil.showMessage(req);
         req.setAttribute("products", productModel);
         req.setAttribute("colors", colorModel);
         req.setAttribute("capacities", capacityModel);

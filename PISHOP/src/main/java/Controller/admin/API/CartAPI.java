@@ -63,7 +63,7 @@ public class CartAPI extends HttpServlet {
         Integer status = submitProductModel.getStatus();
         if (user.getRoleId() == 1) {
             if (status != null ) {
-                if (status == 1) {
+                if (status == 1 || status == 6) {
                     cartProductService.submitOrder(submitProductModel.getId());
                 } else if (status == 4) {
                     cartProductService.confirmBackOrder(submitProductModel.getId());
@@ -72,7 +72,11 @@ public class CartAPI extends HttpServlet {
         }else{
             if (status != null ) {
                 if (status == 0) {
-                    cartProductService.submitProductToCart(submitProductModel.getIds());
+                    if (submitProductModel.getType().equals("off")) {
+                        cartProductService.submitProductToCart(submitProductModel.getIds(), 1);
+                    }else if (submitProductModel.getType().equals("onl")) {
+                        cartProductService.submitProductToCart(submitProductModel.getIds(), 6);
+                    }
                 } else if (status == 1) {
                     cartProductService.denyProductFromCart(submitProductModel.getIds());
                 }else if(status == 2){

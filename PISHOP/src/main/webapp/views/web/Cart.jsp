@@ -2,15 +2,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:url var="APIUrl" value="/api-cart"/>
 <c:url var="CartUrl" value="/cart"/>
+<c:url var="vnpayUrl" value="/vnpay"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Giỏ Hàng</title>
 </head>
 
 <body>
 <!-- Cart Start -->
 <div class="container-fluid pt-5">
     <div class="row px-xl-5">
+        <c:if test="${not empty message}">
+            <div class="alert alert-${alert}">
+                    ${message}
+            </div>
+        </c:if>
         <div class="col">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
                 <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Giỏ hàng</a>
@@ -171,7 +177,7 @@
 
                                     <tbody class="align-middle">
                                     <c:forEach items="${cartProducts.listResult}" var="cartProduct">
-                                        <c:if test="${cartProduct.status == 1}">
+                                        <c:if test="${cartProduct.status == 1 || cartProduct.status == 6}">
                                             <c:forEach items="${products.listResult}" var="product">
                                                 <c:if test="${product.status == 1 && cartProduct.productID == product.id}">
                                                     <tr>
@@ -216,10 +222,16 @@
                                                                 ${cartProduct.price * cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                            <div style="background-color: yellow; color: black; padding: 5px; border-radius: 5px; text-align: center;">
-                                                                Chờ xác nhận
-                                                            </div>
-
+                                                            <c:if test="${ cartProduct.status == 1 }">
+                                                                <div style="background-color: yellow; color: black; padding: 5px; border-radius: 5px; text-align: center;">
+                                                                    Chờ xác nhận
+                                                                </div>
+                                                            </c:if>
+                                                            <c:if test="${ cartProduct.status == 6 }">
+                                                                <div style="background-color: yellow; color: black; padding: 5px; border-radius: 5px; text-align: center;">
+                                                                    Đã thanh toán, chờ xác nhận
+                                                                </div>
+                                                            </c:if>
                                                         </td>
                                                         <td class="align-middle">
                                                             <input type="checkbox" name="cartproductID"
@@ -266,20 +278,11 @@
                                             <h5 class="font-weight-bold">Total</h5>
                                             <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
                                         </div>
-                                        <button id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3">
-                                            Hủy Đặt Hàng
-                                        </button>
+                                        <input type="button" id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3" value="Hủy Đặt Hàng"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-<%--                        <button id="btnDenyCart" type="button"--%>
-<%--                                class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"--%>
-<%--                                data-toggle="tooltip" title='Xóa sản phẩm khỏi giỏ hàng'>--%>
-<%--												<span>--%>
-<%--													<i class="fa fa-arrow-circle-o-left bigger-110 pink"></i>--%>
-<%--												</span>--%>
-<%--                        </button>--%>
                     </form>
                 </div>
 
@@ -434,6 +437,8 @@
         var targetTab = $(e.target).attr("href"); // Lấy href của tab được chọn
         // Hủy chọn các checkbox trong tab mới được chọn
         $(targetTab).find('input[type="checkbox"]').prop('checked', false);
+        $('#btnSubmitCart').prop('disabled', true);
+        $('#btnDenyCart').prop('disabled', true);
     });
 </script>
 
@@ -468,20 +473,22 @@
 
         // Ẩn nút "Add to Cart" khi trang được tải lần đầu
         $('#btnSubmitCart').prop('disabled', true);
+        $('#btnDenyCart').prop('disabled', true);
 
         var allChecked = false;
 
         $('input[type="checkbox"]').change(function () {
             allChecked = $('input[name="cartproductID"]:checked').length > 0;
-
             updateAddToCartButtonState();
         });
 
         // Hàm kiểm tra và cập nhật trạng thái của nút "Add to Cart"
         function updateAddToCartButtonState() {
             if (allChecked) {
+                $('#btnDenyCart').prop('disabled', false);
                 $('#btnSubmitCart').prop('disabled', false);
             } else {
+                $('#btnDenyCart').prop('disabled', true);
                 $('#btnSubmitCart').prop('disabled', true);
             }
         }

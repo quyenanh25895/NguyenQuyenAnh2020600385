@@ -2700,7 +2700,7 @@ textarea.form-control.is-invalid {
 }
 
 .btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 a.btn.disabled,

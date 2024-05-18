@@ -21,7 +21,7 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void update(CartProductModel updateCartProduct);
 
-    void submitCartProduct(Integer id);
+    void submitCartProduct(Integer id, Integer status) ;
 
     void denyCartProduct(Integer id);
 

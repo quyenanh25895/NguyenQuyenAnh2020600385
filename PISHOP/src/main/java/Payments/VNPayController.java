@@ -1,30 +1,45 @@
+
 package Payments;
 
+import Model.OrderModel;
+import Model.ProductModel;
+import Utils.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-@WebServlet(urlPatterns = {"/api-vnpay"})
+/**
+ * @author CTT VNPAY
+ */
+@WebServlet(urlPatterns = {"/vnpay"})
 public class VNPayController extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private long amount;
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        OrderModel order = HttpUtil.Of(req.getReader()).toModel(OrderModel.class);
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-//        long amount = Integer.parseInt(req.getParameter("amount")) * 100L;;
-        long amount = 1000L;
+        long amount = (long)order.getPrice() * 100L;
         String vnp_TxnRef = Configs.getRandomNumber(8);
         String vnp_IpAddr = Configs.getIpAddress(req);
 
@@ -37,7 +52,6 @@ public class VNPayController extends HttpServlet {
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_BankCode", "NCB");
-
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
@@ -62,7 +76,7 @@ public class VNPayController extends HttpServlet {
         while (itr.hasNext()) {
             String fieldName = (String) itr.next();
             String fieldValue = (String) vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (!fieldValue.isEmpty())) {
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 //Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
@@ -81,7 +95,7 @@ public class VNPayController extends HttpServlet {
         String vnp_SecureHash = Configs.hmacSHA512(Configs.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Configs.vnp_PayUrl + "?" + queryUrl;
-        com.google.gson.JsonObject job = new JsonObject();
+        JsonObject job = new JsonObject();
         job.addProperty("code", "00");
         job.addProperty("message", "success");
         job.addProperty("data", paymentUrl);

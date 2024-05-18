@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <title>Title</title>
+    <title>Sản Phẩm</title>
 
 </head>
 
@@ -18,7 +18,6 @@
 
             <form id="submitCateIDAndBrandID"
                   action="<c:url value="/product-shop?type=list&page=1&maxPageItem=8"/>" method="GET">
-
                 <!-- Price Start -->
                 <div class="border-bottom mb-4 pb-4">
                     <h5 class="font-weight-semi-bold mb-4">Filter By Brand</h5>
@@ -38,7 +37,6 @@
 
                             <label class="custom-control-label"
                                    for="brand-${brands.id}">${brands.brandName}</label>
-                            <span class="badge border font-weight-normal">1000</span>
                         </div>
 
                     </c:forEach>
@@ -60,7 +58,6 @@
                                    name="cateID" id="category-${categories.id}" value="${categories.id}">
                             <label class="custom-control-label"
                                    for="category-${categories.id}">${categories.cateName}</label>
-                            <span class="badge border font-weight-normal">1000</span>
                         </div>
 
                     </c:forEach>
@@ -92,14 +89,13 @@
                             </div>
                         </form>
 
-                        <div class="dropdown ml-4">
-                            <button class="btn border dropdown-toggle" type="button" id="triggerId"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown ml-4" id="sortDropdown">
+                            <button class="btn border" type="button" id="triggerId">
                                 Sort by
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
+                            <div id="sortMenu" class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
                                 <a id="SortByProductID" class="dropdown-item"
-                                   href="<c:url value="/product-shop?type=list&cateID=${products.cateID}&cateIDs=0&page=1&maxPageItem=8&sortName=productID&sortBy=desc"/>">
+                                   href="<c:url value='/product-shop?type=list&cateID=${products.cateID}&cateIDs=0&page=1&maxPageItem=8&sortName=productID&sortBy=desc'/>">
                                     Latest
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -110,6 +106,8 @@
                                 </a>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
                 <jsp:include page="/common/Products.jsp"/>
@@ -169,6 +167,15 @@
         });
     });
 
+    $('#triggerId').click(function (e) {
+        e.preventDefault();
+        var element = document.getElementById("sortMenu");
+        element.style.display = "block";
+    });
+    $('#SortByProductID').click(function (e) {
+        e.preventDefault();
+        window.location.href = $(this).attr('href');
+    });
 
 
 </script>

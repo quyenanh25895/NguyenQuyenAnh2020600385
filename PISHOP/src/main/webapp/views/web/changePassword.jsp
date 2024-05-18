@@ -4,7 +4,7 @@
 <c:url var="UserUrl" value="/user"/>
 <c:url var="LoginUrl" value="/login"/>
 <head>
-    <title>Title</title>
+    <title>Đổi Mật Khẩu</title>
 </head>
 
 <body>

@@ -165,8 +165,12 @@
                                                                     Đã hoàn tiền
                                                                 </div>
                                                             </c:if>
+                                                            <c:if test="${cartProduct.status == 6}">
+                                                                <div style="background-color: yellow; color: black; padding: 5px; border-radius: 5px; text-align: center;">
+                                                                    Đơn hàng đã thanh toán online
+                                                                </div>
+                                                            </c:if>
                                                         </td>
-
 
                                                         <td class="align-middle">
                                                             <div class="checkbox-wrapper-23">
@@ -183,7 +187,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <c:if test="${cartProduct.status == 1}">
+                                                            <c:if test="${cartProduct.status == 1 || cartProduct.status == 6}">
                                                                 <button class="btn btn-sm btn-primary btn-edit btnSubmit"
                                                                         data-cartid="${cartProduct.id}"
                                                                         data-status="${cartProduct.status}"

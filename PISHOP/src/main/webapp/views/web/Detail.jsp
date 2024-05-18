@@ -7,7 +7,7 @@
 <html>
 
 <head>
-    <title>Title</title>
+    <title>Thông Tin Chi Tiết</title>
 </head>
 
 <body>

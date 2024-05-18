@@ -79,9 +79,10 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public void submitCartProduct(Integer id) {
-        String sql = "UPDATE cart_products SET status = 1 WHERE cartproductID = ?";
-        update(sql, id);
+    public void submitCartProduct(Integer id, Integer status) {
+
+        String sql = "UPDATE cart_products SET status = ? WHERE cartproductID = ?";
+        update(sql, status, id);
     }
 
     @Override

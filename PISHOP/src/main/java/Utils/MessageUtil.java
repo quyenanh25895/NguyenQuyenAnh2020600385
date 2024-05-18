@@ -24,9 +24,14 @@ public class MessageUtil {
             } else if (message.equals("error_conflict")) {
                 messageResponse = "Conflict";
                 alert = "danger";
-            }
-            else if (message.equals("null_element")) {
+            } else if (message.equals("null_element")) {
                 messageResponse = "Null";
+                alert = "danger";
+            } else if (message.equals("order_success")) {
+                messageResponse = "Đặt hàng thành công";
+                alert = "success";
+            } else if (message.equals("order_error")) {
+                messageResponse = "Đặt hàng không thành công";
                 alert = "danger";
             }
             request.setAttribute("messageResponse", messageResponse);
