@@ -33,6 +33,12 @@ public class MessageUtil {
             } else if (message.equals("order_error")) {
                 messageResponse = "Đặt hàng không thành công";
                 alert = "danger";
+            } else if (message.equals("not_permission")) {
+                messageResponse = "Không có quyền sử dụng";
+                alert = "danger";
+            } else if (message.equals("not_login")) {
+                messageResponse = "Chưa đăng nhập";
+                alert = "danger";
             }
             request.setAttribute("messageResponse", messageResponse);
             request.setAttribute("alert", alert);

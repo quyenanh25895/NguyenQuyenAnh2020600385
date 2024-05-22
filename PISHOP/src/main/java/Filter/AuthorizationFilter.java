@@ -2,6 +2,7 @@ package Filter;
 
 import Constants.SystemConstant;
 import Model.UserModel;
+import Utils.MessageUtil;
 import Utils.SessionUtil;
 
 import javax.servlet.*;
@@ -19,24 +20,26 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String url = request.getRequestURI();
+        HttpServletRequest req = (HttpServletRequest) servletRequest;
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        String url = req.getRequestURI();
 
-        if (url.startsWith("/admin")) {
-            UserModel model = (UserModel) SessionUtil.getInstance().getValue(request, "USERMODEL");
+        if (url.contains("/admin")) {
+            UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
             if (model != null) {
                 if (model.getRoleName().equals(SystemConstant.ADMIN)) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else if (model.getRoleName().equals(SystemConstant.USER)) {
-                    response.sendRedirect(request.getContextPath() + "/dang-nhap?action=login&message=not_permission&alert=danger");
+                    resp.sendRedirect(req.getContextPath() + "/login?action=login&message=not_permission&alert=danger");
+                    SessionUtil.getInstance().removeValue(req, "USERMODEL");
                 }
             } else {
-                response.sendRedirect(request.getContextPath() + "/dang-nhap?action=login&message=not_login&alert=danger");
+                resp.sendRedirect(req.getContextPath() + "/login?action=login&message=not_login&alert=danger");
             }
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+
     }
 
     @Override

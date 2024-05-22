@@ -9,11 +9,17 @@
 <body>
 <section class="ftco-section">
     <div class="container">
-        <c:if test="${not empty message}">
-            <div class="alert alert-${alert}">
-                    ${message}
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-${alert}">
+                                ${message}
+                        </div>
+                    </c:if>
             </div>
-        </c:if>
+        </div>
+
 
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
@@ -74,8 +80,6 @@
                                    href="<c:url value="/signup?action=signup" /> ">Sign Up</a>
                             </p>
                         </form>
-
-
                     </div>
                 </div>
             </div>

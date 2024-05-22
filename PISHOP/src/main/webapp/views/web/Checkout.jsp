@@ -125,13 +125,12 @@
                                             <h6 class="font-weight-medium">Shipping</h6>
                                             <c:set var="shipping" value="${totalPrice * 0.1}"/>
                                             <h6 class="font-weight-medium">$ ${shipping}</h6>
-                                            <select class="form-control" id="role" name="role">
-                                                <option value="">Chọn Role</option>
-                                                <option value="off">Thanh toán khi nhận hàng</option>
-                                                <option value="onl">Thanh toán online</option>
-                                            </select>
-
                                         </div>
+                                        <select class="form-control" id="role" name="role">
+                                            <option value="">Chọn Role</option>
+                                            <option value="off">Thanh toán khi nhận hàng</option>
+                                            <option value="onl">Thanh toán online</option>
+                                        </select>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
@@ -167,7 +166,6 @@
             limit += 5;
             // Hiển thị thêm số lượng dòng mới
             $('tbody tr:hidden').slice(0, 5).slideDown();
-
 
             // Ẩn nút "Xem thêm" nếu đã hiển thị hết tất cả các dòng
             if ($('tbody tr:hidden').length === 0) {
@@ -216,12 +214,6 @@
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                success: function (result) {
-                    window.location.href = "${CartUrl}?type=cart";
-                },
-                error: function (error) {
-                    window.location.href = "${CartUrl}?type=checkout";
-                }
             });
         }
 
@@ -238,20 +230,23 @@
                 dataType: 'JSON',
                 data: JSON.stringify(data2),
                 success: function (x) {
+                    submitCart(data);
                     if (x.code === '00') {
                         if (window.vnpay) {
                             vnpay.open({width: 768, height: 600, url: x.data});
-
                         } else {
+
                             location.href = x.data;
                         }
-                        submitCart(data);
+
                         return false;
                     } else {
                         alert(x.Message);
                     }
+
                 },
             });
+
             return false;
         }
 

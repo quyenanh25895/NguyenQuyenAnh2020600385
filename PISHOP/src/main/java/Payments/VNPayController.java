@@ -4,6 +4,7 @@ package Payments;
 import Model.OrderModel;
 import Model.ProductModel;
 import Utils.HttpUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -35,12 +36,16 @@ public class VNPayController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        ObjectMapper mapper = new ObjectMapper();
+
         OrderModel order = HttpUtil.Of(req.getReader()).toModel(OrderModel.class);
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
         long amount = (long)order.getPrice() * 100L;
-        String vnp_TxnRef = Configs.getRandomNumber(8);
+        String vnp_TxnRef = Configs.mdh;
         String vnp_IpAddr = Configs.getIpAddress(req);
 
         String vnp_TmnCode = Configs.vnp_TmnCode;

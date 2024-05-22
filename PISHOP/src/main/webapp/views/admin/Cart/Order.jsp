@@ -198,6 +198,17 @@
                                                                     Xác nhận đặt hàng
                                                                 </button>
                                                             </c:if>
+                                                            <c:if test="${cartProduct.status == 6}">
+                                                                <button class="btn btn-sm btn-primary btn-edit btnBackOrder"
+                                                                        data-cartid="${cartProduct.id}"
+                                                                        data-status="${cartProduct.status}"
+                                                                        data-productid="${cartProduct.productID}"
+                                                                        data-price="${cartProduct.price}"
+                                                                        data-quantity="${cartProduct.quantity}"
+                                                                        data-userid="${cartProduct.userID}">
+                                                                    Hủy đơn hàng do chưa hoàn tất thanh toán
+                                                                </button>
+                                                            </c:if>
 
                                                             <c:if test="${cartProduct.status == 4}">
                                                                 <button class="btn btn-sm btn-primary btn-edit btnBackOrder"
