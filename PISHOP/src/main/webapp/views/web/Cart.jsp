@@ -11,12 +11,15 @@
 <body>
 <!-- Cart Start -->
 <div class="container-fluid pt-5">
-    <div class="row px-xl-5">
+    <div class="row">
         <c:if test="${not empty message}">
             <div class="alert alert-${alert}">
                     ${message}
             </div>
         </c:if>
+    </div>
+    <div class="row px-xl-5">
+
         <div class="col">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
                 <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Giỏ hàng</a>
@@ -278,7 +281,8 @@
                                             <h5 class="font-weight-bold">Total</h5>
                                             <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
                                         </div>
-                                        <input type="button" id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3" value="Hủy Đặt Hàng"/>
+                                        <input type="button" id="btnDenyCart"
+                                               class="btn btn-block btn-primary my-3 py-3" value="Hủy Đặt Hàng"/>
                                     </div>
                                 </div>
                             </div>

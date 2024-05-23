@@ -214,6 +214,12 @@
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
+                success: function (result) {
+                    window.location.href = "${CartUrl}?type=cart&message=order_success";
+                },
+                error: function (error) {
+                    window.location.href = "${CartUrl}?type=cart&message=order_error";
+                }
             });
         }
 
@@ -235,10 +241,8 @@
                         if (window.vnpay) {
                             vnpay.open({width: 768, height: 600, url: x.data});
                         } else {
-
                             location.href = x.data;
                         }
-
                         return false;
                     } else {
                         alert(x.Message);
@@ -246,7 +250,6 @@
 
                 },
             });
-
             return false;
         }
 

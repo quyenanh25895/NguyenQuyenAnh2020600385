@@ -63,27 +63,23 @@
 
     </style>
 </head>
-
 <body>
 <div class="fixed-top-margin" style="height: 160px"></div>
 <!-- Topbar Start -->
-<div class="container-fluid fixed-top text-center"
-     style="background-color: #c17a74 !important; padding-right: 0; padding-left: 0">
+<div class="container-fluid fixed-top text-center p-0" style="background-color: #c17a74">
     <div class="row align-items-center py-3 px-xl-5">
-        <div class="col-lg-1 col-sm-1 d-none d-lg-block" style=" padding: 0 0 0 0">
-            <a href="<c:url value="/home" /> " class="text-decoration-none">
-                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#"
-                     style="max-height: 70px; width: auto">
-
+        <div class="col-lg-2 col-sm-2 col-md-2 d-none d-lg-block p-0">
+            <a href="<c:url value='/home'/>" class="text-decoration-none">
+                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#" class="img-fluid"
+                     style="max-height: 70px;">
             </a>
         </div>
 
-        <div class="col-lg-5 col-md-5 col-sm-5 text-center" style="margin-left: 20px">
+        <div class="col-lg-4 col-md-4 col-sm-4 text-right ml-2">
             <form action="">
-                <div class="input-group" style="position: relative">
-
+                <div class="input-group position-relative">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search for products">
-                    <div style="position: absolute" id="searchResults" class="search-results"></div>
+                    <div class="position-absolute" id="searchResults" class="search-results"></div>
                     <div class="input-group-append">
                         <span class="input-group-text bg-transparent text-primary">
                             <i class="fa fa-search"></i>
@@ -91,69 +87,71 @@
                     </div>
                 </div>
             </form>
-
         </div>
 
-        <div class="col-lg-5 col-md-6 col-sm-6 text-right" style="padding: 0 0 0 0">
 
-            <c:if test="${empty USERMODEL}">
-                <a href="<c:url value="/login?action=login" />" style="color: white; margin-right: 5px "
-                   class=" btn border">
+        <c:if test="${empty USERMODEL}">
+            <div class="col-lg-4 col-md-3 col-sm-4 text-right p-0">
+
+                <a href="<c:url value='/login?action=login'/>" class="btn border text-white mr-2">
                     Đăng Nhập
                 </a>
-                <a href="<c:url value="/signup?action=signup" />" style="color: white; margin-right: 20px"
-                   class=" btn border">
+
+                <a href="<c:url value='/signup?action=signup'/>" class="btn border text-white mr-4">
                     Đăng Ký
                 </a>
+            </div>
+        </c:if>
 
-            </c:if>
-            <c:if test="${not empty USERMODEL}">
-                <a href="#" style="color: white; margin-right: 5px " class=" btn border">
+        <c:if test="${not empty USERMODEL}">
+            <div class="col-lg-5 col-md-7 col-sm-6 text-right p-0">
+                <a href="#" class="btn border text-white">
                     <strong>Welcome </strong>${USERMODEL.fullName}
                 </a>
 
-                <a href="<c:url value="/cart?type=cart" /> " style="color: white; margin-right: 5px"
-                   class="btn border">
+                <a href="<c:url value='/cart?type=cart'/>" class="btn border text-white">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge badge-light">0</span>
                 </a>
-                <a href="<c:url value="/logout?action=logout" />" style="color: white; margin-right: 20px "
-                   class="btn border">
+
+                <a href="<c:url value='/logout?action=logout'/>" class="btn border text-white">
                     Đăng Xuất
                 </a>
-            </c:if>
-        </div>
-
+            </div>
+        </c:if>
     </div>
-    <div class="col-lg-12" style="padding: 0 0 0 0">
-        <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0" style="padding-left: 15px">
-            <a href="" class="text-decoration-none d-block d-lg-none">
-                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#"
-                     style="max-height: 70px; width: auto">
+
+
+    <div class="col-lg-12 text-center align-items-center justify-content-center p-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
+            <a href="#" class="navbar-brand d-block d-lg-none">
+                <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#" class="img-fluid"
+                     style="max-height: 70px;">
             </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse"
-                    data-target="#navbarCollapse">
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse"
-                 style="padding-left: 15px">
-                <div class="navbar-nav mr-auto py-0">
-                    <a href="<c:url value="/home"/>"
-                       class="nav-item nav-link active">Home</a>
-
-                    <a href="<c:url value="/product-shop?type=list&page=1&maxPageItem=8&sortName=productID&sortBy=asc"/>"
-                       class="nav-item nav-link">Shop</a>
-
-                    <a href="<c:url value="/news"/>"
-                       class="nav-item nav-link">News</a>
-
-                    <a href="" class="nav-item nav-link">Contact</a>
-
-                </div>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
+                <ul class="navbar-nav menu-bar">
+                    <li class="nav-item">
+                        <a href="<c:url value='/home'/>" class="nav-link ${type == 'home' ? 'active' : ''}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<c:url value='/product-shop?type=list&page=1&maxPageItem=8&sortName=productID&sortBy=asc'/>"
+                           class="nav-link ${type == 'shop' ? 'active' : ''}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<c:url value='/news'/>" class="nav-link ${type == 'news' ? 'active' : ''}">News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link ${type == 'contact' ? 'active' : ''}">Contact</a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </div>
 </div>
+
 <script>
     var data = [];
 

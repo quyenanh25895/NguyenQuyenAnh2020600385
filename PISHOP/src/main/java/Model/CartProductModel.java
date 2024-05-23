@@ -18,6 +18,8 @@ public class CartProductModel extends AbstractsModel<CartProductModel> {
 
     private Integer userID;
 
+    private Integer cartCode;
+
     public Integer getCartID() {
         return cartID;
     }
@@ -80,5 +82,13 @@ public class CartProductModel extends AbstractsModel<CartProductModel> {
 
     public void setUserID(Integer userID) {
         this.userID = userID;
+    }
+
+    public Integer getCartCode() {
+        return cartCode;
+    }
+
+    public void setCartCode(Integer cartCode) {
+        this.cartCode = cartCode;
     }
 }

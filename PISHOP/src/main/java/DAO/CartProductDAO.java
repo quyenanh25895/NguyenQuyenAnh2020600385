@@ -41,21 +41,21 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
 
     @Override
     public Integer save(CartProductModel saveCartProduct) {
-        String sql = "INSERT INTO cart_products(cartID, productID, quantity, price) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO cart_products(cartID, productID, quantity, price, cartCode) VALUES (?,?,?,?, ?)";
         return insert(sql, saveCartProduct.getCartID(), saveCartProduct.getProductID(),
-                saveCartProduct.getQuantity(), saveCartProduct.getPrice());
+                saveCartProduct.getQuantity(), saveCartProduct.getPrice(), saveCartProduct.getCartCode());
     }
 
     @Override
     public Integer saveProductToCart(Integer cartID, ProductModel productModel) {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into cart_products ");
-        sql.append("(cartID, productID, quantity, price, colorID, capacityID, status) ");
-        sql.append("values (?, ?, ?, ?, ?, ?, ?)");
+        sql.append("(cartID, productID, quantity, price, colorID, capacityID, status, cartCode) ");
+        sql.append("values (?, ?, ?, ?, ?, ?, ?, ?)");
         Integer[] colorID = productModel.getColorIDs();
         Integer[] capacityID = productModel.getCapacityIDs();
         return insert(sql.toString(), cartID, productModel.getId(),
-                productModel.getQuantity(), productModel.getPrice(), colorID[0], capacityID[0], 0);
+                productModel.getQuantity(), productModel.getPrice(), colorID[0], capacityID[0], 0, 0);
     }
 
     @Override
@@ -79,10 +79,9 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public void submitCartProduct(Integer id, Integer status) {
-
-        String sql = "UPDATE cart_products SET status = ? WHERE cartproductID = ?";
-        update(sql, status, id);
+    public void submitCartProduct(Integer id, Integer status, Integer cartCode) {
+        String sql = "UPDATE cart_products SET status = ?, cartCode = ? WHERE cartproductID = ?";
+        update(sql, status, cartCode, id);
     }
 
     @Override
@@ -98,8 +97,15 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
+    public void vnpayDeny(Integer mdh) {
+        String sql = "UPDATE cart_products SET status = 0, cartCode = 0 WHERE cartCode = ?";
+        update(sql, mdh);
+
+    }
+
+    @Override
     public void confirmOrder(Integer id) {
-        String sql = "UPDATE cart_products SET status = 3 WHERE cartproductID = ?";
+        String sql = "UPDATE cart_products SET status = 3, cartCode = 0 WHERE cartproductID = ?";
         update(sql, id);
     }
 

@@ -13,6 +13,7 @@ public class NewsController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("type", "news");
         RequestDispatcher rd = req.getRequestDispatcher("/common/News.jsp");
         rd.forward(req, resp);
     }

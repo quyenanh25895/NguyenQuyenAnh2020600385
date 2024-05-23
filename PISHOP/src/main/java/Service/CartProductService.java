@@ -98,9 +98,9 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public void submitProductToCart(Integer[] ids, Integer status) {
+    public void submitProductToCart(Integer[] ids, Integer status, Integer cartCode) {
         for(Integer id : ids) {
-            cartProductDAO.submitCartProduct(id, status);
+            cartProductDAO.submitCartProduct(id, status, cartCode);
         }
     }
 
@@ -147,6 +147,11 @@ public class CartProductService implements ICartProductService {
     @Override
     public void submitOrder(Integer id) {
         cartProductDAO.submitOrder(id);
+    }
+
+    @Override
+    public void vnpayDeny(Integer mdh) {
+        cartProductDAO.vnpayDeny(mdh);
     }
 
 

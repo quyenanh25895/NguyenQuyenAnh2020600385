@@ -20,6 +20,7 @@ public class CartProductMapper implements ROWMapper<CartProductModel> {
             cartProductModel.setCapacityID(resultSet.getInt("capacityID"));
             cartProductModel.setStatus(resultSet.getInt("status"));
             cartProductModel.setUserID(resultSet.getInt("userID"));
+            cartProductModel.setCartCode(resultSet.getInt("cartCode"));
             return cartProductModel;
         }catch (SQLException e){
             return null;

@@ -12,17 +12,17 @@
 
     <div class="row border-top px-xl-5">
         <div class="col-lg-2 d-none d-lg-block overflow-scroll">
-            <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
+            <a class="btn shadow-none d-flex align-items-center justify-content-center bg-primary text-white w-100"
                data-toggle="collapse" href="#navbar-vertical"
                style="height: 65px; margin-top: -1px; padding: 0 30px;">
-                <h3 style="padding-top: 10px !important;" class="m-0">Categories</h3>
+                <h3 style="padding-top: 10px !important"  class="m-0">Danh mục</h3>
             </a>
             <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"
                  id="navbar-vertical">
                 <div class="navbar-nav w-100 " style="overflow-x: auto; max-height: 500px; height: 410px;">
                     <c:forEach items="${categories.listResult}" var="cate">
                         <a href="<c:url value="/product-shop?type=list&cateID=${cate.id}&cateIDs=${cate.id}&page=1&maxPageItem=3&sortName=productID&sortBy=asc"/>"
-                           class="nav-item nav-link d-flex align-items-center h-100"
+                           class="nav-item nav-link d-flex align-items-center h-100 " style="height: 50px; max-height: 100px"
                            >${cate.cateName}</a>
                     </c:forEach>
 

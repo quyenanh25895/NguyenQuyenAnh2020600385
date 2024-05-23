@@ -144,6 +144,7 @@ public class ProductController extends HttpServlet {
         brandModels.setListResult(brandService.findAll());
         bannerModels.setListResult(bannerService.findAll(new PageRequest()));
 
+        req.setAttribute("type", "shop");
         req.setAttribute("categories", cateModels);
         req.setAttribute("brands", brandModels);
         req.setAttribute("products", productModels);

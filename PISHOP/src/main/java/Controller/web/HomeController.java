@@ -84,6 +84,7 @@ public class HomeController extends HttpServlet {
             imageModels.setListResult(imageService.findAll());
             bannerModel.setListResult(bannerService.findAll(pageble));
 
+            request.setAttribute("type", "home");
             request.setAttribute("products", productModels);
             request.setAttribute("categories", cateModels);
             request.setAttribute("images", imageModels);

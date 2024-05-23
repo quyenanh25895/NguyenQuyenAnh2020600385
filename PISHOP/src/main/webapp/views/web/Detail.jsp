@@ -4,6 +4,7 @@
 <c:url var="APICommentUrl" value="/api-comment"/>
 <c:url var="ProductUrl" value="/product-shop"/>
 <c:url var="DetailUrl" value="/product-detail"/>
+<c:url var="CartUrl" value="/cart"/>
 <html>
 
 <head>
@@ -20,7 +21,8 @@
                     <c:forEach items="${images.listResult}" var="image" varStatus="loop">
                         <c:if test="${loop.first}">
                             <div class="carousel-item active">
-                                <img style="max-height: 400px; width: auto !important;" class="w-100 h-100" src="${image.imageLink}" alt="Image">
+                                <img style="max-height: 400px; width: auto !important;" class="w-100 h-100"
+                                     src="${image.imageLink}" alt="Image">
                             </div>
                         </c:if>
                         <c:if test="${!loop.first}">
@@ -268,7 +270,6 @@
         });
 
         function addToComment(data) {
-
             $.ajax({
                 url: '${APICommentUrl}',
                 type: 'POST',
@@ -291,7 +292,6 @@
     });
 
 </script>
-
 
 <script>
 
@@ -371,14 +371,11 @@
                 data: JSON.stringify(data),
                 dataType: 'json',
                 success: function (result) {
-                    window.location.href = "${DetailUrl}?type=detail&productID=" + result.id + "&message=insert_success&alert=success";
+                    window.location.href = "${CartUrl}?type=cart&message=order_success";
                 },
                 error: function (error) {
-                    if (error.status === 409) {
-                        window.location.href = "${ProductUrl}?type=list&message=error_system&maxPageItem=8";
-                    } else {
-                        window.location.href = "${ProductUrl}?type=list&message=error_system&maxPageItem=8";
-                    }
+                    window.location.href = "${DetailUrl}?type=detail&message=order_error";
+
                 }
             });
         }

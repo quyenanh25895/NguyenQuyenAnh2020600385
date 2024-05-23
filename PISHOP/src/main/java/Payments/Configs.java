@@ -10,15 +10,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-/**
- * @author CTT VNPAY
- */
 public class Configs {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-
-
-    public static String vnp_ReturnUrl = "http://localhost:1409/PISHOP_war_exploded/cart?type=cart";
+    public static String vnp_ReturnUrl = "http://localhost:1409/PISHOP_war_exploded/vnpay_return";
     public static String vnp_TmnCode = "193VYKMD";
     public static String secretKey = "MRQWJYUDYFUVWNSWNTTZTXWWRUGXCEMA";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

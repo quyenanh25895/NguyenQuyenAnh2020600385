@@ -4,6 +4,7 @@ import Model.CartModel;
 import Model.CartProductModel;
 import Model.ProductModel;
 import Model.UserModel;
+import Payments.Configs;
 import Service.IService.ICartProductService;
 import Service.IService.ICartService;
 import Utils.HttpUtil;
@@ -53,7 +54,7 @@ public class CartAPI extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
@@ -62,24 +63,24 @@ public class CartAPI extends HttpServlet {
         CartProductModel submitProductModel = HttpUtil.Of(req.getReader()).toModel(CartProductModel.class);
         Integer status = submitProductModel.getStatus();
         if (user.getRoleId() == 1) {
-            if (status != null ) {
+            if (status != null) {
                 if (status == 1 || status == 6) {
                     cartProductService.submitOrder(submitProductModel.getId());
                 } else if (status == 4) {
                     cartProductService.confirmBackOrder(submitProductModel.getId());
                 }
             }
-        }else{
-            if (status != null ) {
+        } else {
+            if (status != null) {
                 if (status == 0) {
                     if (submitProductModel.getType().equals("off")) {
-                        cartProductService.submitProductToCart(submitProductModel.getIds(), 1);
-                    }else if (submitProductModel.getType().equals("onl")) {
-                        cartProductService.submitProductToCart(submitProductModel.getIds(), 6);
+                        cartProductService.submitProductToCart(submitProductModel.getIds(), 1, Integer.valueOf(Configs.mdh));
+                    } else if (submitProductModel.getType().equals("onl")) {
+                        cartProductService.submitProductToCart(submitProductModel.getIds(), 6, Integer.valueOf(Configs.mdh));
                     }
                 } else if (status == 1) {
                     cartProductService.denyProductFromCart(submitProductModel.getIds());
-                }else if(status == 2){
+                } else if (status == 2) {
                     cartProductService.confirmOrder(submitProductModel.getId());
                 } else if (status == 3) {
                     cartProductService.backOrder(submitProductModel.getId());

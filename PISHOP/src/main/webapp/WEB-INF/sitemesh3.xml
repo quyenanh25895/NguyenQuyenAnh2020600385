@@ -6,6 +6,7 @@
     <mapping path="/signup" decorator="/WEB-INF/decorators/signup.jsp"/>
     <mapping path="/product-detail" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/cart" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/vnpay_return" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/news" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/user" decorator="/WEB-INF/decorators/signup.jsp"/>
 

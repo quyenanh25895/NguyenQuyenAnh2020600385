@@ -21,7 +21,7 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void update(CartProductModel updateCartProduct);
 
-    void submitCartProduct(Integer id, Integer status) ;
+    void submitCartProduct(Integer id, Integer status, Integer cartCode) ;
 
     void denyCartProduct(Integer id);
 
@@ -41,5 +41,6 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void submitOrder(Integer id);
 
+    void vnpayDeny(Integer mdh);
 
 }
