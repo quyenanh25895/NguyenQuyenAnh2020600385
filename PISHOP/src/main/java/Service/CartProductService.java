@@ -40,8 +40,8 @@ public class CartProductService implements ICartProductService {
         List<CartProductModel> cartProductModels = new ArrayList<>();
         for (Integer i : id) {
             CartProductModel c;
-             c = cartProductDAO.findOne(i);
-             cartProductModels.add(c);
+            c = cartProductDAO.findOne(i);
+            cartProductModels.add(c);
         }
         return cartProductModels;
     }
@@ -99,7 +99,7 @@ public class CartProductService implements ICartProductService {
 
     @Override
     public void submitProductToCart(Integer[] ids, Integer status, Integer cartCode) {
-        for(Integer id : ids) {
+        for (Integer id : ids) {
             cartProductDAO.submitCartProduct(id, status, cartCode);
         }
     }
@@ -150,8 +150,15 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public void vnpayDeny(Integer mdh) {
-        cartProductDAO.vnpayDeny(mdh);
+    public void vnpayCode(Integer mdh, Integer[] cartID) {
+        for (Integer id : cartID) {
+            cartProductDAO.vnpayCode(mdh, id);
+        }
+    }
+
+    @Override
+    public List<CartProductModel> findByCartCode(Integer cartCode) {
+        return cartProductDAO.findByCartCode(cartCode);
     }
 
 

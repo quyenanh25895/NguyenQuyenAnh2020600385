@@ -7,7 +7,7 @@
 
 <head>
     <title>Sản Phẩm</title>
-
+    <link rel="stylesheet" href="<c:url value="/assets/css/Home.css"/>">
 </head>
 
 <body>
@@ -20,7 +20,7 @@
                   action="<c:url value="/product-shop?type=list&page=1&maxPageItem=8"/>" method="GET">
                 <!-- Price Start -->
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter By Brand</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Thương hiệu sản phẩm </h5>
                     <c:forEach items="${brands.listResult}" var="brands">
                         <c:set var="checked" value="false"/>
 
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter By Category</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Danh mục sản phẩm</h5>
                     <c:forEach items="${categories.listResult}" var="categories">
 
                         <c:set var="checked" value="false"/>
@@ -68,7 +68,7 @@
 
                 </div>
                 <!-- PropertiesAPI End -->
-                <button id="searchByCateAndBrand" type="submit" class="btn btn-primary">Search</button>
+                <input id="searchByCateAndBrand" type="button" class="btn btn-primary" value="Lọc sản phẩm"></input>
             </form>
 
         </div>
@@ -77,36 +77,34 @@
             <div class="row pb-3">
                 <div class="col-12 pb-1">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-
                         <form action="">
                             <div class="input-group">
-                                <input id="searchProduct" type="text" class="form-control" placeholder="Search by name">
+                                <input id="searchProduct" type="text" class="form-control"
+                                       placeholder="Tìm kiếm sản phẩm">
                                 <div class="input-group-append">
                                     <input type="button" class="input-group-text bg-transparent text-primary"
                                            placeholder="<i class='fa fa-search' />"/>
-
                                 </div>
                             </div>
                         </form>
 
                         <div class="dropdown ml-4" id="sortDropdown">
                             <button class="btn border" type="button" id="triggerId">
-                                Sort by
+                                Sắp xếp
                             </button>
                             <div id="sortMenu" class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
                                 <a id="SortByProductID" class="dropdown-item"
-                                   href="<c:url value='/product-shop?type=list&cateID=${products.cateID}&cateIDs=0&page=1&maxPageItem=8&sortName=productID&sortBy=desc'/>">
-                                    Latest
+                                   href="">
+                                    Sản phẩm mới nhất
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    Popularity
+                                <a id="SortByQuantity" class="dropdown-item" href="">
+                                    Sắp xếp theo số lượng
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     Best Rating
                                 </a>
                             </div>
                         </div>
-
 
                     </div>
                 </div>
@@ -137,18 +135,21 @@
             if (limit >= totalProducts) {
                 $('#loadMoreBtn').hide();
             }
-            console.log('Limit:', limit);
         });
 
         // Xử lý sự kiện khi người dùng nhập vào ô tìm kiếm
         $('#searchProduct').on('input', function () {
+            var limit = 12; // Số lượng sản phẩm ban đầu
+            var totalProducts = ${products.listResult.size()}; // Tổng số sản phẩm
             var searchText = $(this).val().toLowerCase().trim(); // Lấy nội dung của ô tìm kiếm và chuyển thành chữ thường
 
             // Kiểm tra nếu ô tìm kiếm trống
             if (searchText === '') {
                 // Hiển thị lại danh sách sản phẩm ban đầu và ẩn nút "Xem thêm"
                 $('#productList').empty().append(originalProducts.clone()).find('.col-lg-2').slice(limit).hide();
-                $('#loadMoreBtn').show();
+                if (totalProducts > limit) {
+                    $('#loadMoreBtn').show();
+                }
                 return; // Thoát khỏi sự kiện
             }
 
@@ -170,11 +171,59 @@
     $('#triggerId').click(function (e) {
         e.preventDefault();
         var element = document.getElementById("sortMenu");
-        element.style.display = "block";
+        if (element.style.display === "block") {
+            element.style.display = "none";
+        } else {
+            element.style.display = "block";
+        }
     });
+
+    $("#searchByCateAndBrand").click(function (e) {
+        e.preventDefault();
+        var formData = $('#submitCateIDAndBrandID').serializeArray();
+        var brandIDs = [];
+        var cateIDs = [];
+
+        $.each(formData, function (i, v) {
+            if (v.name === "brandID") {
+                brandIDs.push(v.value);
+            } else if (v.name === "cateID") {
+                cateIDs.push(v.value);
+            }
+        });
+        window.location.href = "${ProductShopUrl}?type=list&cateID=" + cateIDs + "&brandID=" + brandIDs + "&page=1";
+    })
+
     $('#SortByProductID').click(function (e) {
         e.preventDefault();
-        window.location.href = $(this).attr('href');
+        var formData = $('#submitCateIDAndBrandID').serializeArray();
+        var brandIDs = [];
+        var cateIDs = [];
+
+        $.each(formData, function (i, v) {
+            if (v.name === "brandID") {
+                brandIDs.push(v.value);
+            } else if (v.name === "cateID") {
+                cateIDs.push(v.value);
+            }
+        });
+        window.location.href = "${ProductShopUrl}?type=list&cateID=" + cateIDs + "&brandID=" + brandIDs + "&page=1&sortName=productID&sortBy=desc";
+    });
+
+    $('#SortByQuantity').click(function (e) {
+        e.preventDefault();
+        var formData = $('#submitCateIDAndBrandID').serializeArray();
+        brandIDs = [];
+        cateIDs = [];
+
+        $.each(formData, function (i, v) {
+            if (v.name === "brandID") {
+                brandIDs.push(v.value);
+            } else if (v.name === "cateID") {
+                cateIDs.push(v.value);
+            }
+        });
+        window.location.href = "${ProductShopUrl}?type=list&cateID=" + cateIDs + "&brandID=" + brandIDs + "&page=1&sortName=productQuantity&sortBy=asc";
     });
 
 

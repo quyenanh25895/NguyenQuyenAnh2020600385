@@ -61,38 +61,38 @@
             border-bottom: none;
         }
 
+        .btn.border.text-white {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;
+        }
     </style>
 </head>
 <body>
 <div class="fixed-top-margin" style="height: 160px"></div>
 <!-- Topbar Start -->
+
 <div class="container-fluid fixed-top text-center p-0" style="background-color: #c17a74">
-    <div class="row align-items-center py-3 px-xl-5">
-        <div class="col-lg-2 col-sm-2 col-md-2 d-none d-lg-block p-0">
+    <div class="row py-3 px-xl-5 justify-content-end align-items-center">
+
+        <div class="col-lg-1 col-sm-1 col-md-1 d-none d-lg-block p-0">
             <a href="<c:url value='/home'/>" class="text-decoration-none">
                 <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#" class="img-fluid"
                      style="max-height: 70px;">
             </a>
         </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-4 text-right ml-2">
-            <form action="">
+        <div class="col-lg-5 col-md-5 col-sm-6 " style="padding-left: 30px; margin: 0 0 0 0!important;">
+            <form action="" style="">
                 <div class="input-group position-relative">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search for products">
-                    <div class="position-absolute" id="searchResults" class="search-results"></div>
-                    <div class="input-group-append">
-                        <span class="input-group-text bg-transparent text-primary">
-                            <i class="fa fa-search"></i>
-                        </span>
-                    </div>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search for products"
+                           style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)">
+                    <div class="position-absolute search-results" id="searchResults"></div>
+
                 </div>
             </form>
         </div>
 
-
         <c:if test="${empty USERMODEL}">
-            <div class="col-lg-4 col-md-3 col-sm-4 text-right p-0">
-
+            <div class="col-lg-6 col-md-6 col-sm-6 text-right p-0">
                 <a href="<c:url value='/login?action=login'/>" class="btn border text-white mr-2">
                     Đăng Nhập
                 </a>
@@ -104,26 +104,47 @@
         </c:if>
 
         <c:if test="${not empty USERMODEL}">
-            <div class="col-lg-5 col-md-7 col-sm-6 text-right p-0">
-                <a href="#" class="btn border text-white">
-                    <strong>Welcome </strong>${USERMODEL.fullName}
-                </a>
+            <div class="col-lg-6 col-md-7 col-sm-6 text-right p-0" style="padding-right:30px!important; ">
+                <div class="row justify-content-end">
 
-                <a href="<c:url value='/cart?type=cart'/>" class="btn border text-white">
-                    <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge badge-light">0</span>
-                </a>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
 
-                <a href="<c:url value='/logout?action=logout'/>" class="btn border text-white">
-                    Đăng Xuất
-                </a>
+                        <div class="dropdown">
+                            <a href="https://maps.app.goo.gl/9BN6S5ixLnyPZTzY6" class="btn border text-white">
+                                Địa chỉ
+                                <i class="fas fa-location-arrow text-primary"></i>
+                            </a>
+                            <a href="<c:url value='/cart?type=cart'/>" class="btn border text-white">
+                                <i class="fas fa-shopping-cart text-primary"></i>
+                                <span class="badge">0</span>
+                            </a>
+                            <button class="btn border text-white dropdown-toggle" type="button" id="user"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <strong>Welcome </strong>${USERMODEL.fullName}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" id="userMenu" aria-labelledby="user">
+                                <a href="<c:url value='/logout?action=logout'/>" class="dropdown-item">
+                                    Đăng Xuất <i class="fas fa-sign-out"></i>
+                                </a>
+                                <a id="SortByQuantity" class="dropdown-item" href="">
+                                    Sắp xếp theo số lượng
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    Best Rating
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
         </c:if>
     </div>
 
 
     <div class="col-lg-12 text-center align-items-center justify-content-center p-0">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-3" style=" padding-top: 0 !important;">
             <a href="#" class="navbar-brand d-block d-lg-none">
                 <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="#" class="img-fluid"
                      style="max-height: 70px;">
@@ -134,17 +155,25 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
                 <ul class="navbar-nav menu-bar">
                     <li class="nav-item">
-                        <a href="<c:url value='/home'/>" class="nav-link ${type == 'home' ? 'active' : ''}">Home</a>
+                            <a href="<c:url value='/home'/>" class="nav-link ${type == 'home' ? 'active' : ''}">
+                                Trang chủ
+                            </a>
                     </li>
                     <li class="nav-item">
                         <a href="<c:url value='/product-shop?type=list&page=1&maxPageItem=8&sortName=productID&sortBy=asc'/>"
-                           class="nav-link ${type == 'shop' ? 'active' : ''}">Shop</a>
+                           class="nav-link ${type == 'shop' ? 'active' : ''}">
+                            Sản phẩm
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<c:url value='/news'/>" class="nav-link ${type == 'news' ? 'active' : ''}">News</a>
+                        <a href="<c:url value='/news'/>" class="nav-link ${type == 'news' ? 'active' : ''}">
+                            Tin tức
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link ${type == 'contact' ? 'active' : ''}">Contact</a>
+                        <a href="#" class="nav-link ${type == 'contact' ? 'active' : ''}">
+                            Liên hệ
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -153,6 +182,16 @@
 </div>
 
 <script>
+
+    $('#user').click(function (e) {
+        e.preventDefault();
+        var element = document.getElementById("userMenu");
+        if (element.style.display === "block") {
+            element.style.display = "none";
+        } else {
+            element.style.display = "block";
+        }
+    });
     var data = [];
 
     <c:forEach items="${products.listResult}" var="product">
@@ -219,17 +258,15 @@
                     searchResults.appendChild(searchResultItem);
                 }
             });
-
-
         }
     });
 
     document.addEventListener('click', function (event) {
+
         const isClickInsideSearchInput = document.getElementById('searchInput').contains(event.target);
         const searchResults = document.getElementById('searchResults');
-
         if (!isClickInsideSearchInput) {
-            // Nếu click không thuộc ô input, đóng bảng tìm kiếm
+            searchInput.value = "";
             searchResults.style.display = 'none';
             searchResults.innerHTML = '';
         }

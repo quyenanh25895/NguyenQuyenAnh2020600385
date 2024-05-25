@@ -194,7 +194,9 @@
                                                                         data-productid="${cartProduct.productID}"
                                                                         data-price="${cartProduct.price}"
                                                                         data-quantity="${cartProduct.quantity}"
-                                                                        data-userid="${cartProduct.userID}">
+                                                                        data-userid="${cartProduct.userID}"
+                                                                        data-code="${cartProduct.cartCode}">
+
                                                                     Xác nhận đặt hàng
                                                                 </button>
                                                             </c:if>
@@ -229,6 +231,8 @@
                                         </c:forEach>
                                         </tbody>
                                     </table>
+
+
                                     <ul class="pagination" id="pagination"></ul>
                                     <input type="hidden" value="" id="page" name="page"/>
                                     <input type="hidden" value="" id="maxPageItem" name="maxPageItem"/>
@@ -281,7 +285,8 @@
         var productID = $(this).data("productid");
         var price = $(this).data("price");
         var quantity = $(this).data("quantity");
-        submitCart(cartID, status, userID, productID, quantity, price);
+        var code = $(this).data("code");
+        submitCart(cartID, status, userID, productID, quantity, price, code);
 
     });
 
@@ -293,11 +298,12 @@
         var productID = $(this).data("productid");
         var price = $(this).data("price");
         var quantity = $(this).data("quantity");
-        submitBackCart(cartID, status, userID, productID, quantity, price);
+        var code = $(this).data("code");
+        submitBackCart(cartID, status, userID, productID, quantity, price, code);
     });
 
 
-    function submitCart(cartID, status, userID, productID, quantity, price) {
+    function submitCart(cartID, status, userID, productID, quantity, price, code) {
         var data = {
             id: cartID,
             status: status,
@@ -310,7 +316,7 @@
             data: JSON.stringify(data),
             success: function (result) {
                 // Thực hiện hàm createOrder sau khi yêu cầu AJAX hoàn thành
-                createOrder(cartID, status, userID, productID, quantity, price);
+                createOrder(cartID, status, userID, productID, quantity, price, code);
                 // Sau đó chuyển hướng trang web
                 window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&message=delete_success";
             },
@@ -320,7 +326,7 @@
         });
     }
 
-    function submitBackCart(cartID, status, userID, productID, quantity, price) {
+    function submitBackCart(cartID, status, userID, productID, quantity, price, code) {
         var data = {
             id: cartID,
             status: status,
@@ -333,7 +339,7 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                submitBackOrder(cartID, status, userID, productID, quantity, price)
+                submitBackOrder(cartID, status, userID, productID, quantity, price, code)
                 window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=1&message=delete_success";
             },
             error: function (error) {
@@ -342,15 +348,15 @@
         });
     }
 
-
-    function createOrder(cartID, status, userID, productID, quantity, price) {
+    function createOrder(cartID, status, userID, productID, quantity, price, code) {
         var data = {
             userID: userID,
             productID: productID,
             quantity: quantity,
             price: price,
             status: status,
-            cartProductID: cartID
+            cartProductID: cartID,
+            orderCode : code
         }
 
         $.ajax({
@@ -367,14 +373,15 @@
         });
     }
 
-    function submitBackOrder(cartID, status, userID, productID, quantity, price) {
+    function submitBackOrder(cartID, status, userID, productID, quantity, price, code) {
         var data = {
             userID: userID,
             productID: productID,
             quantity: quantity,
             price: price,
             status: status,
-            cartProductID: cartID
+            cartProductID: cartID,
+            orderCode: code
         }
 
         $.ajax({

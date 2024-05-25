@@ -4,18 +4,59 @@
 
 <head>
     <title>Title</title>
+    <style>
+        .category-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            overflow: hidden;
+            padding: 0 0 0 0;
+            border-radius: 1rem;
+        }
+
+        .category-container .navbar-nav {
+            overflow-x: auto;
+            max-height: 500px;
+        }
+
+        .category-container .nav-item.nav-link {
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .carousel-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            padding: 0 0 0 0;
+            border-radius: 1rem;
+        }
+        .carousel-inner{
+            padding: 0 0 0 0;
+            border-radius: 1rem;
+        }
+
+        .carousel-item img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+    </style>
+</head>
 </head>
 
 <body>
 <!-- Navbar Start -->
 <div class="container-fluid mb-5">
-
     <div class="row border-top px-xl-5">
-        <div class="col-lg-2 d-none d-lg-block overflow-scroll">
+        <div class="col-lg-2 d-none d-lg-block overflow-scroll category-container" >
             <a class="btn shadow-none d-flex align-items-center justify-content-center bg-primary text-white w-100"
                data-toggle="collapse" href="#navbar-vertical"
-               style="height: 65px; margin-top: -1px; padding: 0 30px;">
-                <h3 style="padding-top: 10px !important"  class="m-0">Danh mục</h3>
+               style="height: 65px; margin-top: -1px; padding: 0 30px; ">
+                <h3 style=""  class="m-0">Danh mục</h3>
             </a>
             <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"
                  id="navbar-vertical">
@@ -25,15 +66,11 @@
                            class="nav-item nav-link d-flex align-items-center h-100 " style="height: 50px; max-height: 100px"
                            >${cate.cateName}</a>
                     </c:forEach>
-
-
-
-
                 </div>
             </nav>
         </div>
 
-        <div class="col-lg-10">
+        <div class="col-lg-9 carousel-container ml-auto">
             <div id="header-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <c:forEach items="${banners.listResult}" var="banner" varStatus="loop">

@@ -1,8 +1,16 @@
 package Payments;
 
 
+import DAO.CartProductDAO;
+import DAO.IDAO.ICartProductDAO;
+import Model.CartProductModel;
+import Service.CartProductService;
+import Service.IService.ICartProductService;
+import paging.PageRequest;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -11,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class Configs {
+
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:1409/PISHOP_war_exploded/vnpay_return";
@@ -108,13 +117,31 @@ public class Configs {
     }
 
     public static String getRandomNumber(int len) {
-        Random rnd = new Random();
-        String chars = "0123456789";
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++) {
-            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        ICartProductDAO cartProductDAO = new CartProductDAO();
+        CartProductModel cartProductModel = new CartProductModel();
+        cartProductModel.setListResult(cartProductDAO.findAll(new PageRequest()));
+        List<Integer> mdh = new ArrayList<>();
+
+        for (CartProductModel c : cartProductModel.getListResult()) {
+            mdh.add(c.getCartCode());
         }
-        return sb.toString();
+        boolean check;
+        String newCode;
+        do {
+            check = false;
+            Random rnd = new Random();
+            String chars = "0123456789";
+            StringBuilder sb = new StringBuilder(len);
+            for (int i = 0; i < len; i++) {
+                sb.append(chars.charAt(rnd.nextInt(chars.length())));
+            }
+            newCode = sb.toString();
+            if (mdh.contains(Integer.parseInt(sb.toString()))) {
+                check = true;
+            }
+        }
+        while (check);
+        return newCode;
     }
 
     public static String mdh = getRandomNumber(8);

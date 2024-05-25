@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/vnpay_return")
 public class vnpayReturn extends HttpServlet {
@@ -41,14 +43,21 @@ public class vnpayReturn extends HttpServlet {
         // Lấy các tham số trả về từ VNPAY
         String vnp_ResponseCode = req.getParameter("vnp_ResponseCode");
         String vnp_TxnRef = req.getParameter("vnp_TxnRef"); // Mã đơn hàng
+        String cartID = req.getParameter("cartID");
 
         if ("00".equals(vnp_ResponseCode)) {
 //            cartProductService.submitProductToCart(submitProductModel.getIds(), 6, Integer.valueOf(Configs.mdh));
+            List<CartProductModel> cartProductModel = cartProductService.findByCartCode(Integer.parseInt(vnp_TxnRef));
+            List<Integer> ids = new ArrayList<>();
+            for (CartProductModel c : cartProductModel) {
+                ids.add(c.getId());
+            }
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 6, Integer.parseInt(vnp_TxnRef));
             req.setAttribute("message", "Giao dịch thành công!");
             req.setAttribute("alert", "success");
 
         } else {
-            cartProductService.vnpayDeny(Integer.valueOf(vnp_TxnRef));
+
             req.setAttribute("message", "Giao dịch bị hủy hoặc thất bại!");
             req.setAttribute("alert", "danger");
         }

@@ -2712,6 +2712,8 @@ fieldset:disabled a.btn {
     color: #212529;
     background-color: #D19C97;
     border-color: #D19C97;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
@@ -10648,14 +10650,19 @@ a.text-dark:focus {
 }
 
 .navbar-light .navbar-nav .nav-link {
-    padding: 20px 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.2rem;
     color: #1C1C1C;
     outline: none;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: #D19C97;
+    font-weight: bold;
+    text-decoration: underline;
+    color: #ee1e2d;
 }
 
 @media (max-width: 991.98px) {

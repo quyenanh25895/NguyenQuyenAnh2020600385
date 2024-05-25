@@ -33,7 +33,7 @@
                                 <c:set var="firstImageDisplayed" value="false"/>
                                 <c:forEach items="${images.listResult}" var="image">
                                     <c:if test="${!firstImageDisplayed && product.id == image.productID}">
-                                        <img class="img-fluid w-100" src="${image.imageLink}" alt="">
+                                        <img class="img-fluid w-100"  src="${image.imageLink}" alt="">
                                         <c:set var="firstImageDisplayed" value="true"/>
                                     </c:if>
                                 </c:forEach>

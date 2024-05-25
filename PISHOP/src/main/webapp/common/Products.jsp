@@ -14,11 +14,11 @@
                     <div class="col-lg-2 col-md-6 col-sm-12 pb-1">
                         <div class="card product-item border-0 mb-4">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
-                                 style="max-height: 200px; width: auto">
+                                 style="max-height: 115px; width: auto">
                                 <c:set var="firstImageDisplayed" value="false" />
                                 <c:forEach items="${images.listResult}" var="image">
                                     <c:if test="${!firstImageDisplayed && product.id == image.productID}">
-                                        <img class="img-fluid w-100" src="${image.imageLink}"
+                                        <img class="img-fluid w-100"  src="${image.imageLink}"
                                              alt="">
                                         <c:set var="firstImageDisplayed" value="true" />
                                     </c:if>
@@ -54,6 +54,10 @@
     $(document).ready(function () {
         var limit = 12; // Số lượng sản phẩm ban đầu
         var totalProducts = ${products.listResult.size()}; // Tổng số sản phẩm
+
+        if (totalProducts <= limit){
+            $('#loadMoreBtn').hide();
+        }
 
         // Ẩn các sản phẩm vượt quá giới hạn hiển thị ban đầu
         $('#productList .col-lg-2').slice(limit).hide();

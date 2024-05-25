@@ -76,7 +76,7 @@ public class CartAPI extends HttpServlet {
                     if (submitProductModel.getType().equals("off")) {
                         cartProductService.submitProductToCart(submitProductModel.getIds(), 1, Integer.valueOf(Configs.mdh));
                     } else if (submitProductModel.getType().equals("onl")) {
-                        cartProductService.submitProductToCart(submitProductModel.getIds(), 6, Integer.valueOf(Configs.mdh));
+                        cartProductService.vnpayCode(Integer.valueOf(Configs.mdh), submitProductModel.getIds());
                     }
                 } else if (status == 1) {
                     cartProductService.denyProductFromCart(submitProductModel.getIds());

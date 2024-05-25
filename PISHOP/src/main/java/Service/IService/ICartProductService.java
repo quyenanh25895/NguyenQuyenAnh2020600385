@@ -38,5 +38,7 @@ public interface ICartProductService {
 
     void submitOrder(Integer id);
 
-    void vnpayDeny(Integer mdh);
+    void vnpayCode(Integer mdh, Integer[] cartID);
+
+    List<CartProductModel> findByCartCode(Integer cartCode);
 }

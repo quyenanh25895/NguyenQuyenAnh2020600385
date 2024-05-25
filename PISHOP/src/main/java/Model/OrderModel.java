@@ -8,6 +8,7 @@ public class OrderModel extends AbstractsModel<OrderModel> {
     private double price;
     private Integer status;
     private Integer cartProductID;
+    private Integer orderCode;
 
     public Integer getUserID() {
         return userID;
@@ -55,5 +56,13 @@ public class OrderModel extends AbstractsModel<OrderModel> {
 
     public void setCartProductID(Integer cartProductID) {
         this.cartProductID = cartProductID;
+    }
+
+    public Integer getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(Integer orderCode) {
+        this.orderCode = orderCode;
     }
 }

@@ -222,6 +222,14 @@
                 }
             });
         }
+        function vnpaySubmit(data) {
+            $.ajax({
+                url: '${APIUrl}',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+            });
+        }
 
         function vnpay(data) {
             data2 = {
@@ -236,8 +244,8 @@
                 dataType: 'JSON',
                 data: JSON.stringify(data2),
                 success: function (x) {
-                    submitCart(data);
                     if (x.code === '00') {
+                        vnpaySubmit(data);
                         if (window.vnpay) {
                             vnpay.open({width: 768, height: 600, url: x.data});
                         } else {

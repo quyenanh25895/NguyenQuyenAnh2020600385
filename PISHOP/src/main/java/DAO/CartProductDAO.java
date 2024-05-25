@@ -13,7 +13,9 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     @Override
     public List<CartProductModel> findAll(IPageble pageble) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from cart_products");
+        sql.append("SELECT c.userID, cp.* ");
+        sql.append(" FROM carts c");
+        sql.append(" INNER JOIN cart_products cp ON c.cartID = cp.cartID");
         if (pageble.getSorter() != null && StringUtils.isNotBlank(pageble.getSorter().getSortName()) && StringUtils.isNotBlank(pageble.getSorter().getSortBy())) {
             sql.append(" ORDER BY " + pageble.getSorter().getSortName() + " " + pageble.getSorter().getSortBy() + "");
         }
@@ -97,15 +99,24 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public void vnpayDeny(Integer mdh) {
-        String sql = "UPDATE cart_products SET status = 0, cartCode = 0 WHERE cartCode = ?";
-        update(sql, mdh);
+    public void vnpayCode(Integer mdh, Integer cartID) {
+        String sql = "UPDATE cart_products SET cartCode = ? WHERE cartproductID = ?";
+        update(sql, mdh, cartID);
+    }
 
+    @Override
+    public List<CartProductModel> findByCartCode(Integer cartCode) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT c.userID, cp.* ");
+        sql.append(" FROM carts c");
+        sql.append(" INNER JOIN cart_products cp ON c.cartID = cp.cartID");
+        sql.append(" WHERE cartCode = ?");
+        return query(sql.toString(), new CartProductMapper(), cartCode);
     }
 
     @Override
     public void confirmOrder(Integer id) {
-        String sql = "UPDATE cart_products SET status = 3, cartCode = 0 WHERE cartproductID = ?";
+        String sql = "UPDATE cart_products SET status = 3 WHERE cartproductID = ?";
         update(sql, id);
     }
 

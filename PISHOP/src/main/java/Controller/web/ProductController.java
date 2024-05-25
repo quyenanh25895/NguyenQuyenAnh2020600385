@@ -17,8 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @WebServlet(urlPatterns = {"/product-shop", "/product-detail"})
 public class ProductController extends HttpServlet {
@@ -60,16 +59,15 @@ public class ProductController extends HttpServlet {
 
         if (type.equals((SystemConstant.LIST))) {
 
-            int maxPageItem = Integer.parseInt(req.getParameter("maxPageItem"));
-            String[] cateIDs = req.getParameterValues("cateID");
-            String[] brandIDs = req.getParameterValues("brandID");
-
+            int maxPageItem = productService.countItem();
+            String cateIDs = req.getParameter("cateID");
+            String brandIDs = req.getParameter("brandID");
             List<Integer> cateIDsList = new ArrayList<>();
-            if (cateIDs != null) {
-                for (String cate : cateIDs) {
+            if (cateIDs != null && !cateIDs.isEmpty() && !cateIDs.isBlank()) {
+                String[] cateID = cateIDs.split(",");
+                for (String cate : cateID) {
                     try {
-                        int id = Integer.parseInt(cate.trim());
-                        cateIDsList.add(id);
+                        cateIDsList.add(Integer.parseInt(cate.trim()));
                     } catch (NumberFormatException e) {
                         System.out.println(e.getMessage());
                     }
@@ -77,12 +75,11 @@ public class ProductController extends HttpServlet {
             }
 
             List<Integer> brandIDsList = new ArrayList<>();
-            if (brandIDs != null) {
-                for (String brand : brandIDs) {
+            if (brandIDs != null && !brandIDs.isEmpty() && !brandIDs.isBlank()) {
+                String[] brandID = brandIDs.split(",");
+                for (String brand : brandID) {
                     try {
-                        int id = Integer.parseInt(brand.trim());
-                        brandIDsList.add(id);
-
+                        brandIDsList.add(Integer.parseInt(brand.trim()));
                     } catch (NumberFormatException e) {
                         System.out.println(e.getMessage());
                     }
@@ -107,10 +104,9 @@ public class ProductController extends HttpServlet {
 
             } else {
                 IPageble pageable = new PageRequest();
-
                 productModels.setListResult(productService.findAll(pageable));
-                productModels.setTotalItem(productService.getTotalItem());
-                productModels.setTotalPage((int) Math.ceil((double) productModels.getTotalItem() / productModels.getMaxPageItem()));
+//                productModels.setTotalItem(productService.getTotalItem());
+//                productModels.setTotalPage((int) Math.ceil((double) productModels.getTotalItem() / productModels.getMaxPageItem()));
 
 
             }
@@ -118,22 +114,34 @@ public class ProductController extends HttpServlet {
             view = "/views/web/ShopProduct.jsp";
 
         } else if (type.equals((SystemConstant.DETAIL))) {
-            ProductModel productModel = FormUtil.toModel(ProductModel.class, req);
+
             ColorModel colorModel = FormUtil.toModel(ColorModel.class, req);
             CapacityModel capacityModel = FormUtil.toModel(CapacityModel.class, req);
             CommentModel commentModel = FormUtil.toModel(CommentModel.class, req);
             int id = Integer.parseInt(req.getParameter("productID"));
 
-            productModel = productService.findOne(id);
+            productModels = productService.findOne(id);
             colorModel.setListResult(colorService.findByProductID(id));
             capacityModel.setListResult(capacityService.findByProductID(id));
             imageModels.setListResult(imageService.findByProductId(id));
             commentModel.setListResult(commentService.findByProductID(id));
 
+            List<ProductModel> otherProduct = new ArrayList<>();
+            otherProduct = productService.findByCateIDAndBrandID(new PageRequest(), Collections.singletonList(productModels.getCateID()), Collections.singletonList(productModels.getBrandID()));
+            Random random = new Random();
+            List<ProductModel> showProduct = new ArrayList<>();
+            for (int i = 0; i < 2; i++) {
+                int randomNumber = random.nextInt(otherProduct.size());
+                ProductModel p = otherProduct.get(randomNumber);
+                showProduct.add(p);
+            }
+            showProduct.get(0).setListResult(showProduct);
+
             req.setAttribute("colors", colorModel);
             req.setAttribute("capacities", capacityModel);
-            req.setAttribute("product", productModel);
+            req.setAttribute("product", productModels);
             req.setAttribute("comments", commentModel);
+            req.setAttribute("otherProduct", showProduct.get(0));
             view = "/views/web/Detail.jsp";
         } else {
             view = "/views/web/ShopProduct.jsp";

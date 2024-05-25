@@ -20,6 +20,7 @@ public class OrderMapper implements ROWMapper<OrderModel> {
             orderModel.setCartProductID(resultSet.getInt("cartProductID"));
             orderModel.setCreatedBy(resultSet.getString("createBy"));
             orderModel.setCreatedDate(resultSet.getTimestamp("createdDate"));
+            orderModel.setOrderCode(resultSet.getInt("orderCode"));
             if (resultSet.getTimestamp("modifiedDate") != null) {
                 orderModel.setModifiedDate(resultSet.getTimestamp("modifiedDate"));
             }

@@ -41,6 +41,8 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void submitOrder(Integer id);
 
-    void vnpayDeny(Integer mdh);
+    void vnpayCode(Integer mdh, Integer id);
+
+    List<CartProductModel> findByCartCode(Integer cartCode);
 
 }

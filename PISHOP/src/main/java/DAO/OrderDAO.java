@@ -18,11 +18,11 @@ public class OrderDAO extends AbstractDAO<OrderModel> implements IOrderDAO {
     public Integer save(OrderModel save) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO orders ");
-        sql.append("(userID, productID, quantity, price, status, cartProductID, ");
+        sql.append("(userID, productID, quantity, price, status, cartProductID, orderCode, ");
         sql.append("createBy, createdDate) ");
-        sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         return insert(sql.toString(), save.getUserID(), save.getProductID(),
-                save.getQuantity(), save.getPrice(), save.getStatus(), save.getCartProductID(),
+                save.getQuantity(), save.getPrice(), save.getStatus(), save.getCartProductID(), save.getOrderCode(),
                 save.getCreatedBy(), save.getCreatedDate());
     }
 
@@ -40,11 +40,11 @@ public class OrderDAO extends AbstractDAO<OrderModel> implements IOrderDAO {
     public void update(OrderModel update) {
         StringBuilder sql = new StringBuilder();
         sql.append("update orders ");
-        sql.append("userID = ?, productID = ?, quantity = ?, price = ?, status = ?, cartProductID = ?, ");
+        sql.append("userID = ?, productID = ?, quantity = ?, price = ?, status = ?, cartProductID = ?, oderCode = ?, ");
         sql.append("createBy = ?, createdDate = ?, modifiedBy = ?, modifiedDate = ? ");
         sql.append("where orderID = ?");
         update(sql.toString(), update.getUserID(), update.getProductID(),
-                update.getQuantity(), update.getPrice(), update.getStatus(), update.getCartProductID(),
+                update.getQuantity(), update.getPrice(), update.getStatus(), update.getCartProductID(), update.getOrderCode(),
                 update.getCreatedBy(), update.getCreatedDate(), update.getModifiedBy(), update.getModifiedDate());
     }
 
