@@ -44,20 +44,18 @@ public class vnpayReturn extends HttpServlet {
         String vnp_ResponseCode = req.getParameter("vnp_ResponseCode");
         String vnp_TxnRef = req.getParameter("vnp_TxnRef"); // Mã đơn hàng
         String cartID = req.getParameter("cartID");
-
+        List<CartProductModel> cartProductModel = cartProductService.findByCartCode(Integer.parseInt(vnp_TxnRef));
+        List<Integer> ids = new ArrayList<>();
+        for (CartProductModel c : cartProductModel) {
+            ids.add(c.getId());
+        }
         if ("00".equals(vnp_ResponseCode)) {
-//            cartProductService.submitProductToCart(submitProductModel.getIds(), 6, Integer.valueOf(Configs.mdh));
-            List<CartProductModel> cartProductModel = cartProductService.findByCartCode(Integer.parseInt(vnp_TxnRef));
-            List<Integer> ids = new ArrayList<>();
-            for (CartProductModel c : cartProductModel) {
-                ids.add(c.getId());
-            }
             cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 6, Integer.parseInt(vnp_TxnRef));
             req.setAttribute("message", "Giao dịch thành công!");
             req.setAttribute("alert", "success");
 
         } else {
-
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 6, 0);
             req.setAttribute("message", "Giao dịch bị hủy hoặc thất bại!");
             req.setAttribute("alert", "danger");
         }
