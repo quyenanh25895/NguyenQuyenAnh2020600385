@@ -93,5 +93,14 @@
                 Thương hiệu &amp; Danh mục
             </a>
         </li>
+
+        <li>
+            <a href="<c:url value="/admin-statical?type=list&page=1&maxPageItem=5&sortName=productID&sortBy=asc"/>">
+                <i class="menu-icon fa fa-product-hunt"></i>
+                <span class="menu-text"></span>
+                Danh sách sản phẩm
+
+            </a>
+        </li>
     </ul>
 </div>

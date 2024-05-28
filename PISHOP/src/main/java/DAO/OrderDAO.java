@@ -2,8 +2,11 @@ package DAO;
 
 import DAO.IDAO.IOrderDAO;
 import Mapper.OrderMapper;
+import Mapper.StaticalMapper;
 import Model.OrderModel;
+import Model.StaticalModel;
 import paging.IPageble;
+import paging.PageRequest;
 
 import java.util.List;
 
@@ -69,4 +72,5 @@ public class OrderDAO extends AbstractDAO<OrderModel> implements IOrderDAO {
     public Integer getTotalItem() {
         return 0;
     }
+
 }

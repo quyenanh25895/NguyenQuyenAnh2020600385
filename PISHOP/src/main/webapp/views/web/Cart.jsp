@@ -71,38 +71,35 @@
                                                             </c:forEach>
                                                         </td>
 
-
                                                         <td class="align-middle">
                                                                 ${product.name}
                                                         </td>
+                                                        <td class="align-middle">
+                                                            <c:forEach items="${colors.listResult}" var="color">
+                                                                <c:if test="${cartProduct.colorID == color.id}">
+                                                                    ${color.colorCode}
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
 
-                                                        <c:forEach items="${colors.listResult}" var="color">
-                                                            <c:if test="${cartProduct.colorID == color.id}">
-                                                                <td class="align-middle">
-                                                                        ${color.colorCode}
-                                                                </td>
-                                                            </c:if>
-                                                        </c:forEach>
-
-                                                        <c:forEach items="${capacities.listResult}" var="capacity">
-                                                            <c:if test="${cartProduct.capacityID == capacity.id}">
-                                                                <td class="align-middle">
-                                                                        ${capacity.capacityValue}
-                                                                </td>
-                                                            </c:if>
-                                                        </c:forEach>
+                                                        <td class="align-middle">
+                                                            <c:forEach items="${capacities.listResult}" var="capacity">
+                                                                <c:if test="${cartProduct.capacityID == capacity.id}">
+                                                                    ${capacity.capacityValue}
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
 
                                                         <td class="align-middle">
                                                                 ${cartProduct.quantity}
                                                         </td>
+
                                                         <td class="align-middle">
                                                                 ${cartProduct.price * cartProduct.quantity}
                                                         </td>
 
                                                         <td class="align-middle">
-                                                            <input type="checkbox" name="cartproductID"
-                                                                   id="checkbox_${cartProduct.id}"
-                                                                   value="${cartProduct.id}">
+                                                            <input type="checkbox" name="cartproductID" id="checkbox_${cartProduct.id}" value="${cartProduct.id}" class="cart-checkbox">
                                                         </td>
                                                     </tr>
                                                 </c:if>
@@ -118,17 +115,17 @@
                             <div class="col-lg-3">
                                 <div class="card border-secondary mb-5">
                                     <div class="card-header bg-secondary border-0">
-                                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                                        <h4 class="font-weight-semi-bold m-0">Tổng giá trị giỏ hàng</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between mb-3 pt-1">
-                                            <h6 class="font-weight-medium">Subtotal</h6>
+                                            <h6 class="font-weight-medium">Giá sản phẩm</h6>
+                                            <p id="totalPrice"></p>
                                             <c:set var="totalPrice" value="0"/>
                                             <c:forEach items="${cartProducts.listResult}" var="cartProduct">
                                                 <c:forEach items="${products.listResult}" var="product">
                                                     <c:if test="${cartProduct.status == 0 && cartProduct.productID == product.id && product.status == 1}">
-                                                        <c:set var="subtotal"
-                                                               value="${cartProduct.quantity * cartProduct.price}"/>
+                                                        <c:set var="subtotal" value="${cartProduct.quantity * cartProduct.price}"/>
                                                         <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                     </c:if>
                                                 </c:forEach>
@@ -136,16 +133,11 @@
 
                                             <h6 class="font-weight-medium">$ ${totalPrice}</h6>
                                         </div>
-                                        <div class="d-flex justify-content-between">
-                                            <h6 class="font-weight-medium">Shipping</h6>
-                                            <c:set var="shipping" value="${totalPrice * 0.1}"/>
-                                            <h6 class="font-weight-medium">$ ${shipping}</h6>
-                                        </div>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
-                                            <h5 class="font-weight-bold">Total</h5>
-                                            <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
+                                            <h5 class="font-weight-bold">Tổng giá trị</h5>
+                                            <h5 class="font-weight-bold">$ ${totalPrice}</h5>
                                         </div>
                                         <button id="btnSubmitCart" class="btn btn-block btn-primary my-3 py-3">
                                             Thanh Toán
@@ -201,26 +193,30 @@
                                                         <td class="align-middle">
                                                                 ${product.name}
                                                         </td>
+                                                        <td class="align-middle">
+                                                            <c:forEach items="${colors.listResult}" var="color">
+                                                                <c:if test="${cartProduct.colorID == color.id}">
 
-                                                        <c:forEach items="${colors.listResult}" var="color">
-                                                            <c:if test="${cartProduct.colorID == color.id}">
-                                                                <td class="align-middle">
-                                                                        ${color.colorCode}
-                                                                </td>
-                                                            </c:if>
-                                                        </c:forEach>
+                                                                    ${color.colorCode}
 
-                                                        <c:forEach items="${capacities.listResult}" var="capacity">
-                                                            <c:if test="${cartProduct.capacityID == capacity.id}">
-                                                                <td class="align-middle">
-                                                                        ${capacity.capacityValue}
-                                                                </td>
-                                                            </c:if>
-                                                        </c:forEach>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
+
+                                                        <td class="align-middle">
+                                                            <c:forEach items="${capacities.listResult}" var="capacity">
+                                                                <c:if test="${cartProduct.capacityID == capacity.id}">
+
+                                                                    ${capacity.capacityValue}
+
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </td>
 
                                                         <td class="align-middle">
                                                                 ${cartProduct.quantity}
                                                         </td>
+
                                                         <td class="align-middle">
                                                                 ${cartProduct.price * cartProduct.quantity}
                                                         </td>
@@ -254,35 +250,33 @@
                             <div class="col-lg-3">
                                 <div class="card border-secondary mb-5">
                                     <div class="card-header bg-secondary border-0">
-                                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                                        <h4 class="font-weight-semi-bold m-0">Tổng giá trị giỏ hàng</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between mb-3 pt-1">
-                                            <h6 class="font-weight-medium">Subtotal</h6>
+                                            <h6 class="font-weight-medium">Giá sản phẩm</h6>
+                                            <p id="totalPrice"></p>
                                             <c:set var="totalPrice" value="0"/>
-                                            <c:forEach items="${cartProducts.listResult}" var="product">
-                                                <c:if test="${product.status == 1}">
-                                                    <c:set var="subtotal"
-                                                           value="${product.quantity * product.price}"/>
-                                                    <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
-                                                </c:if>
+                                            <c:forEach items="${cartProducts.listResult}" var="cartProduct">
+                                                <c:forEach items="${products.listResult}" var="product">
+                                                    <c:if test="${cartProduct.status == 1 && cartProduct.productID == product.id && product.status == 1}">
+                                                        <c:set var="subtotal" value="${cartProduct.quantity * cartProduct.price}"/>
+                                                        <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
+                                                    </c:if>
+                                                </c:forEach>
                                             </c:forEach>
 
                                             <h6 class="font-weight-medium">$ ${totalPrice}</h6>
                                         </div>
-                                        <div class="d-flex justify-content-between">
-                                            <h6 class="font-weight-medium">Shipping</h6>
-                                            <c:set var="shipping" value="${totalPrice * 0.1}"/>
-                                            <h6 class="font-weight-medium">$ ${shipping}</h6>
-                                        </div>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
-                                            <h5 class="font-weight-bold">Total</h5>
-                                            <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
+                                            <h5 class="font-weight-bold">Tổng giá trị</h5>
+                                            <h5 class="font-weight-bold">$ ${totalPrice}</h5>
                                         </div>
-                                        <input type="button" id="btnDenyCart"
-                                               class="btn btn-block btn-primary my-3 py-3" value="Hủy Đặt Hàng"/>
+                                        <button id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3">
+                                            Thanh Toán
+                                        </button>
                                     </div>
                                 </div>
                             </div>

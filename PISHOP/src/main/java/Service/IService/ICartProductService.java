@@ -34,6 +34,8 @@ public interface ICartProductService {
 
     Integer countItem();
 
+    Integer countProduct();
+
     void deleteByProductID(Integer[] productID);
 
     void submitOrder(Integer id);

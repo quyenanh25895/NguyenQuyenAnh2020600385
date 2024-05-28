@@ -138,6 +138,12 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
+    public Integer countProduct() {
+
+        return cartProductDAO.getCartCount();
+    }
+
+    @Override
     public void deleteByProductID(Integer[] productID) {
         for (Integer id : productID) {
             cartProductDAO.deleteByProductID(id);

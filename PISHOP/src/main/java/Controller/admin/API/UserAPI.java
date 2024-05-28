@@ -7,6 +7,7 @@ import Service.IService.IUserService;
 import Sort.Sorter;
 import Utils.FormUtil;
 import Utils.HttpUtil;
+import Utils.PasswordUtil;
 import Utils.SessionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import paging.IPageble;
@@ -61,12 +62,14 @@ public class UserAPI extends HttpServlet {
             if (user != null) {
                 IPageble pageble = new PageRequest(userModel.getPage(), userModel.getMaxPageItem(),
                         new Sorter(userModel.getSortName(), userModel.getSortBy()));
+                userModel.setPassword(PasswordUtil.encryptPassword(userModel.getPassword()));
                 userModel = userService.save(userModel, pageble, user);
                 cartService.save(userModel);
                 mapper.writeValue(resp.getOutputStream(), userModel);
             } else {
                 IPageble pageble = new PageRequest(userModel.getPage(), userModel.getMaxPageItem(),
                         new Sorter(userModel.getSortName(), userModel.getSortBy()));
+                userModel.setPassword(PasswordUtil.encryptPassword(userModel.getPassword()));
                 userModel = userService.save(userModel, pageble, userModel);
                 cartService.save(userModel);
                 mapper.writeValue(resp.getOutputStream(), userModel);
@@ -83,6 +86,7 @@ public class UserAPI extends HttpServlet {
 
         ObjectMapper mapper = new ObjectMapper();
         UserModel updateUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
+        updateUser.setPassword(PasswordUtil.encryptPassword(updateUser.getPassword()));
         if (updateUser.getId() != null && updateUser.getType().equals(SystemConstant.LIST)) {
             if (updateUser.getStatus() == 1) {
                 userService.disableUser(updateUser.getId());

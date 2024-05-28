@@ -12,11 +12,11 @@
         <div class="row justify-content-center">
             <div class="col-md-12 col-lg-10">
 
-                    <c:if test="${not empty message}">
-                        <div class="alert alert-${alert}">
-                                ${message}
-                        </div>
-                    </c:if>
+                <c:if test="${not empty message}">
+                    <div class="alert alert-${alert}">
+                            ${message}
+                    </div>
+                </c:if>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
                                        placeholder="Mật khẩu">
                             </div>
                             <input type="hidden" value="login" name="action"/>
-
+                            <input type="hidden" value="${productID}" name="productID">
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary rounded submit px-3">
                                     Sign In

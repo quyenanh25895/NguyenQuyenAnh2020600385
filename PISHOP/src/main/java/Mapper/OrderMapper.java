@@ -9,7 +9,6 @@ import java.sql.SQLException;
 public class OrderMapper implements ROWMapper<OrderModel> {
     @Override
     public OrderModel mapRow(ResultSet resultSet) {
-
         try {
             OrderModel orderModel = new OrderModel();
             orderModel.setId(resultSet.getInt("orderID"));

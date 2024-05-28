@@ -54,10 +54,12 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
         sql.append("insert into cart_products ");
         sql.append("(cartID, productID, quantity, price, colorID, capacityID, status, cartCode) ");
         sql.append("values (?, ?, ?, ?, ?, ?, ?, ?)");
-        Integer[] colorID = productModel.getColorIDs();
-        Integer[] capacityID = productModel.getCapacityIDs();
+        Integer color = productModel.getColorIDs()[0];
+
+        Integer capacity = productModel.getCapacityIDs()[0];
+
         return insert(sql.toString(), cartID, productModel.getId(),
-                productModel.getQuantity(), productModel.getPrice(), colorID[0], capacityID[0], 0, 0);
+                productModel.getQuantity(), productModel.getPrice(), color, capacity, 0, 0);
     }
 
     @Override
@@ -141,6 +143,12 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     @Override
     public Integer getTotalItem() {
         String sql = "SELECT count(*) from cart_products";
+        return count(sql);
+    }
+
+    @Override
+    public Integer getCartCount() {
+        String sql = "SELECT count(*) from cart_products where status = 0";
         return count(sql);
     }
 

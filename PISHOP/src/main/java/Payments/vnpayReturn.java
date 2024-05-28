@@ -50,12 +50,12 @@ public class vnpayReturn extends HttpServlet {
             ids.add(c.getId());
         }
         if ("00".equals(vnp_ResponseCode)) {
-            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 6, Integer.parseInt(vnp_TxnRef));
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 2, Integer.parseInt(vnp_TxnRef));
             req.setAttribute("message", "Giao dịch thành công!");
             req.setAttribute("alert", "success");
 
         } else {
-            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 6, 0);
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 0, 0);
             req.setAttribute("message", "Giao dịch bị hủy hoặc thất bại!");
             req.setAttribute("alert", "danger");
         }

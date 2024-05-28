@@ -35,6 +35,8 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     Integer getTotalItem();
 
+    Integer getCartCount();
+
     List<CartProductModel> findByCartID(Integer cartID, IPageble pageble);
 
     void deleteByProductID(Integer productID);

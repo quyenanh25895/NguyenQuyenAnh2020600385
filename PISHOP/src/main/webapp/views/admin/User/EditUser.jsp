@@ -178,28 +178,73 @@
 </div>
 <script>
 
-    $("#formSubmit").validate({
-        rules: {
-            userName: {
-                required: true,
-                minlength: 6 // Tối thiểu 6 ký tự
+    $(document).ready(function () {
+        // Custom method for strong password
+        $.validator.addMethod("strongPassword", function(value, element) {
+            return this.optional(element)
+                || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value);
+        }, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt");
+
+        var validation = $("#formSubmit").validate({
+            rules: {
+                fullName: {
+                    required: true,
+                    minlength: 2
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                phoneNumber: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 11
+                },
+                userName: {
+                    required: true,
+                    minlength: 8
+                },
+                password: {
+                    required: true,
+                    strongPassword: true
+                },
+                repassword: {
+                    required: true,
+                    equalTo: "#password" // Sửa đổi giá trị này
+                }
             },
-            password: {
-                required: true,
-                minlength: 6 // Tối thiểu 6 ký tự
-            }
-        },
-        messages: {
-            userName: {
-                required: "Vui lòng nhập tên đăng nhập",
-                minlength: "Tên đăng nhập phải có ít nhất 6 ký tự"
+            messages: {
+                fullName: {
+                    required: "Vui lòng nhập họ tên",
+                    minlength: "Họ tên phải có ít nhất 2 ký tự"
+                },
+                email: {
+                    required: "Vui lòng nhập email",
+                    email: "Vui lòng nhập đúng định dạng email"
+                },
+                phoneNumber: {
+                    required: "Vui lòng nhập số điện thoại",
+                    digits: "Vui lòng nhập đúng định dạng số",
+                    minlength: "Số điện thoại phải có ít nhất 10 số",
+                    maxlength: "Số điện thoại không được quá 11 số"
+                },
+                userName: {
+                    required: "Vui lòng nhập tên đăng nhập",
+                    minlength: "Tên đăng nhập phải có ít nhất 8 ký tự"
+                },
+                password: {
+                    required: "Vui lòng nhập mật khẩu",
+                    strongPassword: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt"
+                },
+                repassword: {
+                    required: "Vui lòng nhập lại mật khẩu",
+                    equalTo: "Mật khẩu nhập lại không khớp"
+                }
             },
-            password: {
-                required: "Vui lòng nhập mật khẩu",
-                minlength: "Mật khẩu phải có ít nhất 6 ký tự"
-            }
-        }
+        });
     });
+
 
     var currentPage = ${model.page};
 

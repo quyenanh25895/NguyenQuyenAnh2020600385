@@ -1,6 +1,7 @@
 package DAO.IDAO;
 
 import Model.OrderModel;
+import Model.StaticalModel;
 import paging.IPageble;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface IOrderDAO extends IGenericDAO<OrderModel> {
     void delete(int id);
 
     Integer getTotalItem();
+
+
 
 }

@@ -9,7 +9,6 @@
     <title>Đăng Ký</title>
 
 </head>
-
 <body>
 <div class="main-div">
     <section class="signup">
@@ -57,7 +56,7 @@
                                    placeholder="Mật khẩu">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" id="repassword"
+                            <input type="password" class="form-control" id="repassword" name="repassword"
                                    placeholder="Nhập lại mật khẩu">
                         </div>
 
@@ -200,7 +199,7 @@
                 },
                 error: function (error) {
                     if (error.status === 409) {
-                        window.location.href = "${SignupUrl}?action=signup&message=error_system&alert=danger";
+                        window.location.href = "${SignupUrl}?action=signup&message=error_conflict&alert=danger";
                     } else {
                         window.location.href = "${SignupUrl}?action=signup&message=error_system&alert=danger";
                     }

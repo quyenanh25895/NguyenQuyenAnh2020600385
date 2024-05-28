@@ -40,7 +40,7 @@
                     <form id="colorForm">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right"> Thêm thương hiệu mới: </label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-5">
                                 <input type="text" class="form-control" name="brandName" id="brandName-new"
                                        value=""/>
                             </div>
@@ -55,7 +55,7 @@
                         <c:forEach items="${brands.listResult}" var="brand">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Thương hiệu: </label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <input type="text" class="form-control" name="brandName" id="brandName-${brand.id}"
                                            value="${brand.brandName}"/>
                                 </div>
@@ -63,6 +63,12 @@
                                     <input type="button" class="btn btn-no-border btn-success btn-brand-edit"
                                            data-id="${brand.id}"
                                            value="Edit"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="button" class="btn btn-no-border btn-success btn-brand-delete"
+                                           data-id="${brand.id}"
+                                           data-type="brand"
+                                           value="Delete"/>
                                 </div>
                             </div>
                             <br/>
@@ -78,7 +84,7 @@
                     <form id="capacityForm">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right"> Thêm danh mục mới: </label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-5">
                                 <input type="text" class="form-control" name="cateName" id="cateName-new"
                                        value="" placeholder="Nhập dung lượng"/>
                             </div>
@@ -93,8 +99,8 @@
 
                         <c:forEach items="${categories.listResult}" var="category">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right">Dung lượng: </label>
-                                <div class="col-sm-8">
+                                <label class="col-sm-3 control-label no-padding-right">Danh mục: </label>
+                                <div class="col-sm-5">
                                     <input type="text" class="form-control" name="cateName" id="cateName-${category.id}"
                                            value="${category.cateName}"/>
                                 </div>
@@ -102,6 +108,12 @@
                                     <input type="button" class="btn btn-no-border btn-success btn-cate-edit"
                                            data-id="${category.id}"
                                            value="Edit"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="button" class="btn btn-no-border btn-success btn-category-delete"
+                                           data-id="${category.id}"
+                                           data-type="category"
+                                           value="Delete"/>
                                 </div>
                             </div>
                             <br/>
@@ -114,6 +126,77 @@
         </div>
     </div>
 </div>
+<div id="confirmationBox" class="hidden">
+    <div class="confirmationContent">
+        <p>Bạn có chắc chắn muốn xóa?</p>
+        <button id="confirmDelete">Xác nhận</button>
+        <button id="cancelDelete">Hủy</button>
+    </div>
+</div>
+
+<script>
+    var numberInputs = document.getElementsByClassName('capacityValue');
+    for (var i = 0; i < numberInputs.length; i++) {
+        numberInputs[i].addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    var id;
+    var type;
+
+    $('.btn-brand-delete').click(function (e) {
+        e.preventDefault();
+        id = $(this).data("id");
+        type = $(this).data("type");
+        document.getElementById("confirmationBox").classList.remove("hidden");
+
+    });
+    $('.btn-category-delete').click(function (e) {
+        e.preventDefault();
+        id = $(this).data("id");
+        type = $(this).data("type");
+        document.getElementById("confirmationBox").classList.remove("hidden");
+    });
+
+    document.getElementById("confirmDelete").addEventListener("click", function () {
+        var url = "${APIUrl}?type=" + type;
+        Delete(id, type, url);
+        document.getElementById("confirmationBox").classList.add("hidden");
+    });
+
+    document.getElementById("cancelDelete").addEventListener("click", function () {
+        document.getElementById("confirmationBox").classList.add("hidden");
+    });
+
+    function Delete(value, type, url) {
+        var data = {};
+        if (type === 'brand') {
+            data = {
+                id: value,
+                type: type
+            }
+        } else if (type === 'category') {
+            data = {
+                id: value,
+                type: type
+            }
+        }
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                window.location.href = "${ColorUrl}?type=brandcategory";
+            },
+            error: function (error) {
+                window.location.href = "${ColorUrl}?type=brandcategory";
+            }
+        });
+    }
+
+</script>
 
 <script>
     <c:forEach items="${brands.listResult}" var="brand">
@@ -149,7 +232,7 @@
     $(".btn-cate-edit").click(function (e) {
         e.preventDefault();
         var id = $(this).data("id");
-        var cateName = $('#capacity-' + id).val();
+        var cateName = $('#cateName-' + id).val();
         var type = "category";
         var url = "${APIUrl}?type=category";
         submitChange(id, cateName, type, url);
@@ -197,7 +280,6 @@
         } else if (type === "category") {
             data = {
                 cateName: value,
-
             }
         }
 

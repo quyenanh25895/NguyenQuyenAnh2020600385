@@ -10,7 +10,7 @@
     <form action="<c:url value='/product-shop'/>" id="formSubmit" method="get">
         <div class="row px-xl-5 pb-3" id="productList">
             <c:forEach items="${products.listResult}" var="product" varStatus="loop">
-                <c:if test="${product.status == 1 && product.quantity > 0}">
+                <c:if test="${product.status == 1}">
                     <div class="col-lg-2 col-md-6 col-sm-12 pb-1">
                         <div class="card product-item border-0 mb-4">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
@@ -32,9 +32,20 @@
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-center bg-light border">
-                                <a href="<c:url value="/product-detail?type=detail&productID=${product.id}" /> "
-                                   class="btn btn-sm text-dark p-0">
-                                    <i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                <c:if test="${product.quantity > 0}">
+                                    <a href="<c:url value='/product-detail?type=detail&productID=${product.id}' />"
+                                       class="btn btn-sm text-dark p-0">
+                                        <i class="fas fa-eye text-primary mr-1"></i>
+                                        Xem chi tiết
+                                    </a>
+                                </c:if>
+                                <c:if test="${product.quantity == 0}">
+                                    <a href="<c:url value='/product-detail?type=detail&productID=${product.id}' />"
+                                       class="btn btn-sm text-dark p-0">
+                                        <i class="fas fa-eye text-primary mr-1"></i>
+                                        Hết hàng
+                                    </a>
+                                </c:if>
                             </div>
                         </div>
                     </div>

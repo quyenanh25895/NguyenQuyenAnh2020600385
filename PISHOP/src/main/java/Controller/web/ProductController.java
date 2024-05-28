@@ -58,7 +58,6 @@ public class ProductController extends HttpServlet {
         String type = req.getParameter("type");
 
         if (type.equals((SystemConstant.LIST))) {
-
             int maxPageItem = productService.countItem();
             String cateIDs = req.getParameter("cateID");
             String brandIDs = req.getParameter("brandID");
@@ -73,7 +72,6 @@ public class ProductController extends HttpServlet {
                     }
                 }
             }
-
             List<Integer> brandIDsList = new ArrayList<>();
             if (brandIDs != null && !brandIDs.isEmpty() && !brandIDs.isBlank()) {
                 String[] brandID = brandIDs.split(",");
@@ -111,10 +109,11 @@ public class ProductController extends HttpServlet {
 
             }
             imageModels.setListResult(imageService.findAll());
+            req.setAttribute("products", productModels);
+            req.setAttribute("images", imageModels);
             view = "/views/web/ShopProduct.jsp";
 
         } else if (type.equals((SystemConstant.DETAIL))) {
-
             ColorModel colorModel = FormUtil.toModel(ColorModel.class, req);
             CapacityModel capacityModel = FormUtil.toModel(CapacityModel.class, req);
             CommentModel commentModel = FormUtil.toModel(CommentModel.class, req);
@@ -127,23 +126,42 @@ public class ProductController extends HttpServlet {
             commentModel.setListResult(commentService.findByProductID(id));
 
             List<ProductModel> otherProduct = new ArrayList<>();
-            otherProduct = productService.findByCateIDAndBrandID(new PageRequest(), Collections.singletonList(productModels.getCateID()), Collections.singletonList(productModels.getBrandID()));
+            otherProduct = productService.findByCateIDAndBrandID(new PageRequest(), Collections.singletonList(productModels.getCateID()), Collections.singletonList(null));
+            List<ImageModel> otherImage = imageService.findAll();
             Random random = new Random();
             List<ProductModel> showProduct = new ArrayList<>();
-            for (int i = 0; i < 2; i++) {
-                int randomNumber = random.nextInt(otherProduct.size());
-                ProductModel p = otherProduct.get(randomNumber);
-                showProduct.add(p);
-            }
+
+            ProductModel productModel = FormUtil.toModel(ProductModel.class, req);
+            productModel.setListResult(productService.findAll(new PageRequest()));
+
+            ImageModel imageModel = FormUtil.toModel(ImageModel.class, req);
+            imageModel.setListResult(imageService.findAll());
+            int firstRandomIndex;
+            int secondRandomIndex;
+            do{
+                firstRandomIndex = random.nextInt(otherProduct.size());
+                do {
+                    secondRandomIndex = random.nextInt(otherProduct.size());
+                } while (secondRandomIndex == firstRandomIndex);
+            }while (id == firstRandomIndex || id == secondRandomIndex);
+
+            showProduct.add(otherProduct.get(firstRandomIndex));
+            showProduct.add(otherProduct.get(secondRandomIndex));
             showProduct.get(0).setListResult(showProduct);
 
+            req.setAttribute("image", imageModels);
+            req.setAttribute("images", imageModel);
             req.setAttribute("colors", colorModel);
             req.setAttribute("capacities", capacityModel);
             req.setAttribute("product", productModels);
+            req.setAttribute("products", productModel);
             req.setAttribute("comments", commentModel);
             req.setAttribute("otherProduct", showProduct.get(0));
+            req.setAttribute("otherImage", otherImage);
             view = "/views/web/Detail.jsp";
         } else {
+            req.setAttribute("products", productModels);
+            req.setAttribute("images", imageModels);
             view = "/views/web/ShopProduct.jsp";
         }
 
@@ -155,9 +173,9 @@ public class ProductController extends HttpServlet {
         req.setAttribute("type", "shop");
         req.setAttribute("categories", cateModels);
         req.setAttribute("brands", brandModels);
-        req.setAttribute("products", productModels);
-        req.setAttribute("images", imageModels);
+
         req.setAttribute("banners", bannerModels);
+
         RequestDispatcher rd = req.getRequestDispatcher(view);
         rd.forward(req, resp);
     }

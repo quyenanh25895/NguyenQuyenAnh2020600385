@@ -6,6 +6,7 @@ import Service.IService.ICartService;
 import Service.IService.IUserService;
 import Sort.Sorter;
 import Utils.HttpUtil;
+import Utils.PasswordUtil;
 import Utils.SessionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import paging.IPageble;
@@ -35,7 +36,7 @@ public class UserAPI extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         UserModel userModel = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
         UserModel user = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-
+        userModel.setPassword(PasswordUtil.encryptPassword(userModel.getPassword()));
         if (!userService.checkUserExist(userModel.getUserName())) {
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
             mapper.writeValue(resp.getOutputStream(), "User already exists");
@@ -65,6 +66,7 @@ public class UserAPI extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
 
         UserModel updateUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
+        updateUser.setPassword(PasswordUtil.encryptPassword(updateUser.getPassword()));
 
         if (updateUser.getId() != null ) {
             updateUser = userService.update(updateUser, updateUser);

@@ -17,108 +17,167 @@
 <!-- Shop Detail Start -->
 <div class="container-fluid py-5" style="">
     <div class="row px-xl-5">
-        <div class="col-lg-12 col-md-12 col-sm-12" style="max-height: 400px">
+        <div class="col-lg-12 col-md-12 col-sm-12" style="">
             <div class="row">
-                <div class="col-lg-5 col-md-5 col-sm-5" >
+                <div class="col-lg-5 col-md-5 col-sm-5">
                     <div id="product-carousel" class="carousel slide" data-ride="carousel" style="">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 justify-content-center">
-                                <div class="carousel-inner border" style="max-width: 400px">
-                                    <c:forEach items="${images.listResult}" var="image" varStatus="loop">
-                                        <c:if test="${loop.first}">
-                                            <div class="carousel-item active " >
-                                                <img style="height: auto!important;max-height: 400px; width: auto; !important;"
-                                                     class="h-100 w-100"
-                                                     src="${image.imageLink}" alt="Image">
-                                            </div>
-                                        </c:if>
-                                        <c:if test="${!loop.first}">
-                                            <div class="carousel-item">
-                                                <img class="h-100 w-100"
-                                                     style="height: auto!important;max-height: 400px; width: auto; !important;"
-                                                     src="${image.imageLink}" alt="Image">
-                                            </div>
-                                        </c:if>
-                                    </c:forEach>
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-lg-2 col-md-2 col-sm-2">
+                                        <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                                            <i class="fa fa-2x fa-angle-left text-dark"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+                                        <div class="carousel-inner border" style="max-width: 400px">
+                                            <c:forEach items="${image.listResult}" var="image" varStatus="loop">
+                                                <c:if test="${product.id == image.productID}">
+                                                    <c:if test="${loop.first}">
+                                                        <div class="carousel-item active ">
+                                                            <img style="height: auto!important;max-height: 400px; width: auto; !important;"
+                                                                 class="h-100 w-100"
+                                                                 src="${image.imageLink}" alt="Image">
+                                                        </div>
+                                                    </c:if>
+                                                    <c:if test="${!loop.first}">
+                                                        <div class="carousel-item">
+                                                            <img class="h-100 w-100"
+                                                                 style="height: auto!important;max-height: 400px; width: auto; !important;"
+                                                                 src="${image.imageLink}" alt="Image">
+                                                        </div>
+                                                    </c:if>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2">
+                                        <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                                            <i class="fa fa-2x fa-angle-right text-dark"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                                <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                                    <i class="fa fa-2x fa-angle-left text-dark"></i>
-                                </a>
-                                <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                                    <i class="fa fa-2x fa-angle-right text-dark"></i>
-                                </a>
+
+
                             </div>
-
-
                         </div>
-
                     </div>
                 </div>
 
-
-                <div class="col-lg-5 col-md-5 col-sm-5" >
+                <div class="col-lg-5 col-md-5 col-sm-5">
                     <form id="formSubmit">
                         <h3 class="font-weight-semi-bold">${product.name}</h3>
                         <input type="hidden" name="id" value="${product.id}">
-                        <h3 class="font-weight-semi-bold mb-4">$ ${product.price * 0.9}</h3>
-                        <input type="hidden" name="price" value="${product.price * 0.9}">
+                        <h3 class="font-weight-semi-bold mb-4">$ ${product.price}</h3>
+                        <input type="hidden" name="price" value="${product.price}">
                         <div class="d-flex mb-3">
                             <p class="text-dark font-weight-medium mb-0 mr-3">Số lượng:</p>
                             <p class="">${product.quantity}</p>
                         </div>
 
-                        <div class="d-flex mb-3">
-                            <p class="text-dark font-weight-medium mb-0 mr-3">Dung lượng:</p>
-                            <c:forEach items="${capacities.listResult}" var="capacity">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="capacity-${capacity.id}"
-                                           name="capacityID" value="${capacity.id}">
-                                    <label class="custom-control-label"
-                                           for="capacity-${capacity.id}">${capacity.capacityValue}</label>
-                                </div>
-                            </c:forEach>
-                        </div>
+                        <c:if test="${product.cateID == 4 || product.cateID == 5}">
+                            <div class="d-flex mb-3">
+                                <p class="text-dark font-weight-medium mb-0 mr-3">Dung lượng:</p>
+                                <c:forEach items="${capacities.listResult}" var="capacity">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="capacity-${capacity.id}"
+                                               name="capacityID" value="${capacity.id}">
+                                        <label class="custom-control-label"
+                                               for="capacity-${capacity.id}">${capacity.capacityValue}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
 
-                        <div class="d-flex mb-4">
-                            <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                            <c:forEach items="${colors.listResult}" var="color">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="color-${color.id}"
-                                           name="colorID"
-                                           value="${color.id}">
-                                    <label class="custom-control-label"
-                                           for="color-${color.id}">${color.colorCode}</label>
-                                </div>
-                            </c:forEach>
-                        </div>
+                            <div class="d-flex mb-4">
+                                <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
+                                <c:forEach items="${colors.listResult}" var="color">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="color-${color.id}"
+                                               name="colorID"
+                                               value="${color.id}">
+                                        <label class="custom-control-label"
+                                               for="color-${color.id}">${color.colorCode}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </c:if>
 
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
-                                <label for="quantity-input">Nhập số lượng: </label>
+                                <label id="quantityInput" for="quantity-input">Nhập số lượng: </label>
                                 <input type="text" class="form-control bg-secondary text-center" id="quantity-input"
                                        name="quantity">
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <c:if test="${not empty USERMODEL}">
-                                <button id="btnAddToCart" class="btn btn-primary px-3">
-                                    <i class="fa fa-shopping-cart mr-1"></i>
-                                    Add To Cart
-                                </button>
+
+                                <c:if test="${product.quantity > 0}">
+                                    <button id="btnAddToCart" class="btn btn-primary px-3">
+                                        <i class="fa fa-shopping-cart mr-1"></i>
+                                        Thêm vào giỏ hàng
+                                    </button>
+                                </c:if>
+                                <c:if test="${product.quantity == 0}">
+                                    <button id="soldOut" class="btn btn-primary px-3">
+                                        <i class="fa fa-shopping-cart mr-1"></i>
+                                        Hết hàng
+                                    </button>
+                                </c:if>
                             </c:if>
+
                             <c:if test="${empty USERMODEL}">
                                 <input type="button" id="btnLogin" class="btn btn-primary px-3" value="Đăng nhập ngay"
                                        onclick="redirectToLogin()"/>
-
                             </c:if>
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-2 col-md-2 col-sm-2 ">
-                    <c:forEach items="${otherProduct.listResult}" var="otherProduct">
-                        <h2>${otherProduct.name}</h2>
+
+                <div class="col-lg-2 col-md-2 col-sm-2 justify-content-center align-items-center">
+                    <div class="row">
+                        <c:forEach items="${otherProduct.listResult}" var="otherProduct">
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 pb-1">
+                            <div class="card product-item border-0 mb-4"
+                                 style="max-height: 200px; max-width: 200px">
+                                <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
+                                     style="max-height: 115px; width: auto">
+                                    <c:set var="firstImageDisplayed" value="false"/>
+                                    <c:forEach items="${otherImage}" var="image">
+                                        <c:if test="${!firstImageDisplayed && otherProduct.id == image.productID}">
+                                            <img class="img-fluid" src="${image.imageLink}"
+                                                 alt="">
+                                            <c:set var="firstImageDisplayed" value="true"/>
+                                        </c:if>
+                                    </c:forEach>
+
+                                </div>
+                                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                    <h6 class="text-truncate mb-3">${otherProduct.name}</h6
+                                </div>
+                                <div class="card-footer d-flex justify-content-center bg-light border">
+                                    <c:if test="${otherProduct.quantity > 0}">
+                                        <a href="<c:url value='/product-detail?type=detail&productID=${otherProduct.id}' />"
+                                           class="btn btn-sm text-dark p-0">
+                                            <i class="fas fa-eye text-primary mr-1"></i>
+                                            Xem chi tiết
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${otherProduct.quantity == 0}">
+                                        <a href="<c:url value='/product-detail?type=detail&productID=${otherProduct.id}' />"
+                                           class="btn btn-sm text-dark p-0">
+                                            <i class="fas fa-eye text-primary mr-1"></i>
+                                            Hết hàng
+                                        </a>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </c:forEach>
                 </div>
+
             </div>
 
         </div>
@@ -319,12 +378,21 @@
 
 <script>
 
+    var numberInputs = document.getElementById("quantity-input");
+    numberInputs.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    $("#soldOut").click(function (e) {
+        e.preventDefault();
+    })
+
     function redirectToLogin() {
-        window.location.href = "<c:url value='/login?action=login' />";
+        window.location.href = "<c:url value='/login?action=login&productID=${product.id}' />";
     }
 
     $(document).ready(function () {
-        // Ẩn nút "Add to Cart" khi trang được tải lần đầu
+
         $('#btnAddToCart').prop('disabled', true);
 
         var allChecked = false;
@@ -332,33 +400,31 @@
 
         // Bắt sự kiện khi có thay đổi trạng thái của ô radio color hoặc capacity
         $('input[type="radio"]').change(function () {
-            // Kiểm tra xem tất cả các ô radio color hoặc capacity đã được chọn chưa
             allChecked = $('input[name="colorID"]:checked').length > 0 && $('input[name="capacityID"]:checked').length > 0;
-
-            // Gọi hàm kiểm tra và cập nhật trạng thái của nút "Add to Cart"
             updateAddToCartButtonState();
         });
 
-        // Bắt sự kiện khi có thay đổi số lượng nhập vào
         $('#quantity-input').on('input', function () {
             var quantity = parseInt($('#quantity-input').val(), 10);
-
-            // Lấy số lượng sản phẩm sẵn có từ dữ liệu trên trang
             var availableQuantity = parseInt('${product.quantity}', 10);
-
-            // Kiểm tra xem số lượng nhập vào có hợp lệ không
             quantityChecked = availableQuantity >= quantity && quantity > 0;
-
-            // Gọi hàm kiểm tra và cập nhật trạng thái của nút "Add to Cart"
             updateAddToCartButtonState();
         });
 
         // Hàm kiểm tra và cập nhật trạng thái của nút "Add to Cart"
         function updateAddToCartButtonState() {
-            if (allChecked && quantityChecked) {
-                $('#btnAddToCart').prop('disabled', false);
+            if (${product.cateID == 4 || product.cateID == 5}) {
+                if (allChecked && quantityChecked) {
+                    $('#btnAddToCart').prop('disabled', false);
+                } else {
+                    $('#btnAddToCart').prop('disabled', true);
+                }
             } else {
-                $('#btnAddToCart').prop('disabled', true);
+                if (quantityChecked) {
+                    $('#btnAddToCart').prop('disabled', false);
+                } else {
+                    $('#btnAddToCart').prop('disabled', true);
+                }
             }
         }
 
@@ -380,7 +446,12 @@
                 }
             });
 
-            // Gán các danh sách đã lấy vào đối tượng data
+            if(selectedColors.length === 0){
+                selectedColors.push(0);
+            }
+            if (selectedCapacities.length === 0){
+                selectedCapacities.push(0);
+            }
             data["colorIDs"] = selectedColors;
             data["capacityIDs"] = selectedCapacities;
             addToCart(data);

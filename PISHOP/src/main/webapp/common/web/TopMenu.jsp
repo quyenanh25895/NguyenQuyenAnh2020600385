@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<c:url var="ProductUrl" value="/product-shop"/>
+
 <!DOCTYPE html>
 <html>
 
@@ -81,12 +83,12 @@
             </a>
         </div>
         <div class="col-lg-5 col-md-5 col-sm-6 " style="padding-left: 30px; margin: 0 0 0 0!important;">
-            <form action="" style="">
+            <form action="${ProductUrl}" style="">
                 <div class="input-group position-relative">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search for products"
                            style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)">
                     <div class="position-absolute search-results" id="searchResults"></div>
-
+                    <input type="hidden" name="type" value="list">
                 </div>
             </form>
         </div>
@@ -116,7 +118,7 @@
                             </a>
                             <a href="<c:url value='/cart?type=cart'/>" class="btn border text-white">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge">0</span>
+                                <span class="badge">${cartItem}</span>
                             </a>
                             <button class="btn border text-white dropdown-toggle" type="button" id="user"
                                     aria-haspopup="true" aria-expanded="false">
@@ -155,9 +157,9 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
                 <ul class="navbar-nav menu-bar">
                     <li class="nav-item">
-                            <a href="<c:url value='/home'/>" class="nav-link ${type == 'home' ? 'active' : ''}">
-                                Trang chủ
-                            </a>
+                        <a href="<c:url value='/home'/>" class="nav-link ${type == 'home' ? 'active' : ''}">
+                            Trang chủ
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="<c:url value='/product-shop?type=list&page=1&maxPageItem=8&sortName=productID&sortBy=asc'/>"
@@ -221,13 +223,28 @@
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
 
+
     searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
+        const searchWords = searchTerm.split(/\s+/).filter(word => word.length > 0);
+
+        // Lọc các sản phẩm chỉ cần chứa ít nhất một từ từ từ khóa tìm kiếm
         let filteredData = data.filter(item =>
-            Array.from(searchTerm.toLowerCase()).every(char =>
-                item.name.toLowerCase().includes(char) || item.brandName.toLowerCase().includes(char)
+            searchWords.some(word =>
+                item.name.toLowerCase().includes(word) || item.brandName.toLowerCase().includes(word)
             )
         );
+
+        // Tính toán số từ trùng khớp
+        filteredData = filteredData.map(item => {
+            const nameMatches = searchWords.filter(word => item.name.toLowerCase().includes(word)).length;
+            const brandNameMatches = searchWords.filter(word => item.brandName.toLowerCase().includes(word)).length;
+            const totalMatches = nameMatches + brandNameMatches;
+            return {...item, matches: totalMatches};
+        });
+
+        // Sắp xếp theo số từ trùng khớp
+        filteredData.sort((a, b) => b.matches - a.matches);
 
         if (searchTerm === '') {
             searchResults.style.display = 'none';
@@ -237,9 +254,10 @@
             searchResults.innerHTML = '';
 
             filteredData.forEach(item => {
-                var productDetailUrl = '<c:url value="/product-detail" />';
-                const searchResultItem = document.createElement('div');
-                searchResultItem.setAttribute('class', 'product')
+                var productDetailUrl = '<c:url value="/product-detail?type=detail&productID=" />' + item.id;
+                const searchResultItem = document.createElement('a');
+                searchResultItem.setAttribute("href", productDetailUrl);
+                searchResultItem.setAttribute('class', 'product');
 
                 if (item.quantity > 0) {
                     // Tạo chuỗi HTML với đường link
@@ -252,14 +270,14 @@
                         '</a>' +
                         '</h4>' +
                         '<p>$ ' + item.price + '</p>' +
-                        '</div>'
-                    ;
+                        '</div>';
                     searchResultItem.innerHTML = htmlString;
                     searchResults.appendChild(searchResultItem);
                 }
             });
         }
     });
+
 
     document.addEventListener('click', function (event) {
 

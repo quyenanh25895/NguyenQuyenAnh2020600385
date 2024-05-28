@@ -140,7 +140,6 @@
 
 <script>
 
-    // Lặp qua tất cả các ô input có class là 'numberInput' và gán sự kiện cho mỗi ô input
     var numberInputs = document.getElementsByClassName('capacityValue');
     for (var i = 0; i < numberInputs.length; i++) {
         numberInputs[i].addEventListener('input', function () {
