@@ -8,6 +8,7 @@ import Service.IService.IUserService;
 import Sort.Sorter;
 import Utils.FormUtil;
 import Utils.MessageUtil;
+import Utils.PasswordUtil;
 import paging.IPageble;
 import paging.PageRequest;
 
@@ -40,17 +41,19 @@ public class UserController extends HttpServlet {
             roles.setListResult(roleService.findAll());
             if (model.getId() != null) {
                 Integer page = 1;
-                if (model.getPage() !=null){
+                if (model.getPage() != null) {
                     page = model.getPage();
                 }
                 model = userService.findOne(model.getId());
+                model.setPassword(PasswordUtil.decryptPassword(model.getPassword()));
                 model.setPage(page);
 
             }
+            model.setPage(1);
             req.setAttribute("roles", roles);
             view = "/views/admin/User/EditUser.jsp";
 
-        }else if(model.getType().equals(SystemConstant.LIST)) {
+        } else if (model.getType().equals(SystemConstant.LIST)) {
             IPageble pageble = new PageRequest(model.getPage(), model.getMaxPageItem(),
                     new Sorter(model.getSortName(), model.getSortBy()));
 

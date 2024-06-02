@@ -28,6 +28,7 @@ public class StaticalDAO extends AbstractDAO<StaticalModel> implements IStatical
         sql.append("FROM users as u ");
         sql.append("LEFT JOIN orders AS o ON u.userID = o.userID ");
         sql.append("GROUP BY o.userID, u.userID ");
+        sql.append("ORDER BY price DESC");
         return query(sql.toString(), new StaticalMapper());
     }
 

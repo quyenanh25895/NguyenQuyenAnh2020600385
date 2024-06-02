@@ -26,9 +26,16 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <c:if test="${not empty messageResponse}">
-                            <div class="alert alert-${alert}">
-                                    ${messageResponse}
-                            </div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    Swal.fire({
+                                        title: 'Thông báo',
+                                        text: "${messageResponse}",
+                                        icon: '${alert}',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                            </script>
                         </c:if>
 
                         <%--                        <div class="widget-box table-filter">--%>

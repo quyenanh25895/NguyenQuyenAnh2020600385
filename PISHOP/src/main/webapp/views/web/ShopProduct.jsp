@@ -100,9 +100,6 @@
                                 <a id="SortByQuantity" class="dropdown-item" href="">
                                     Sắp xếp theo số lượng
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    Best Rating
-                                </a>
                             </div>
                         </div>
 

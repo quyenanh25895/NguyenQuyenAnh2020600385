@@ -4,7 +4,7 @@
 <c:url var="ColorUrl" value="/admin-properties"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Thuộc tính</title>
 
     <link href="<c:url value='/assets/css/style2.css' />" rel="stylesheet" type="text/css" media="all"/>
 </head>
@@ -31,9 +31,16 @@
 
         <div class="page-content">
             <c:if test="${not empty messageResponse}">
-                <div class="alert alert-${alert}">
-                        ${messageResponse}
-                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: "${messageResponse}",
+                            icon: '${alert}',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                </script>
             </c:if>
             <div class="row">
                 <div class="col-lg-6 col-sm-6 col-xs-6">
@@ -45,7 +52,7 @@
                                        value=""/>
                             </div>
                             <div class="col-sm-1">
-                                <input type="button" class="btn btn-no-border btn-success btn-brand-add" value="Add"/>
+                                <input type="button" class="btn btn-no-border btn-success btn-brand-add" value="Thêm"/>
                             </div>
                         </div>
                         <br/>
@@ -62,13 +69,13 @@
                                 <div class="col-sm-1">
                                     <input type="button" class="btn btn-no-border btn-success btn-brand-edit"
                                            data-id="${brand.id}"
-                                           value="Edit"/>
+                                           value="Sửa"/>
                                 </div>
                                 <div class="col-sm-1">
                                     <input type="button" class="btn btn-no-border btn-success btn-brand-delete"
                                            data-id="${brand.id}"
                                            data-type="brand"
-                                           value="Delete"/>
+                                           value="Xóa"/>
                                 </div>
                             </div>
                             <br/>

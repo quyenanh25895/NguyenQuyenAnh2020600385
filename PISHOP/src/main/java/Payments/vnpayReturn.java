@@ -50,17 +50,13 @@ public class vnpayReturn extends HttpServlet {
             ids.add(c.getId());
         }
         if ("00".equals(vnp_ResponseCode)) {
-            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 2, Integer.parseInt(vnp_TxnRef));
-            req.setAttribute("message", "Giao dịch thành công!");
-            req.setAttribute("alert", "success");
+
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 2, Integer.parseInt(vnp_TxnRef), cartProductModel.get(0).getDiscount());
+            req.getRequestDispatcher("/cart?type=cart&message=insert_success&alert=success").forward(req, resp);
 
         } else {
-            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 0, 0);
-            req.setAttribute("message", "Giao dịch bị hủy hoặc thất bại!");
-            req.setAttribute("alert", "danger");
+            cartProductService.submitProductToCart(ids.toArray(new Integer[0]), 0, 0, 0);
+            req.getRequestDispatcher("/cart?type=cart&message=insert_error&alert=danger").forward(req, resp);
         }
-
-        // Chuyển hướng đến trang kết quả thanh toán
-        resp.sendRedirect(req.getContextPath() + "/cart?type=cart");
     }
 }

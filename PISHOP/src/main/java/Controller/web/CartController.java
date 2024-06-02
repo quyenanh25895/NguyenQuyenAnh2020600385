@@ -53,12 +53,30 @@ public class CartController extends HttpServlet {
         ColorModel colorModel = new ColorModel();
         ProductModel productModel = FormUtil.toModel(ProductModel.class, req);
         CartModel cartModel = cartService.findByUserID(user.getId());
+        String r = req.getRequestURI();
         String type = req.getParameter("type");
-
+        String massage = req.getParameter("message");
         String view = "";
+
         if (type.equals("cart")) {
             IPageble pageble = new PageRequest(1, cartProductService.countItem(), new Sorter("createdDate", "DESC"));
             cartProductModel.setListResult(cartProductService.findByCartId(cartModel.getId(), pageble));
+
+            String alert = "";
+            if(massage != null) {
+                if (massage.contains("order_success")) {
+                    massage = "Đặt hàng thành công";
+                    alert = "success";
+                } else if (massage.contains("error")) {
+                    massage = "Đặt hàng thất bại";
+                    alert = "error";
+                }else if (massage.contains("pay_success")) {
+                    massage = "Thanh toánt hành công";
+                    alert = "success";
+                }
+            }
+            req.setAttribute("message", massage);
+            req.setAttribute("alert", alert);
             req.setAttribute("cartProducts", cartProductModel);
             view = "/views/web/Cart.jsp";
         } else if (type.equals("checkout")) {
@@ -87,7 +105,10 @@ public class CartController extends HttpServlet {
 
         imageModels.setListResult(imageService.findAll());
 
-        MessageUtil.showMessage(req);
+        Integer cartItem = cartProductService.countProduct(cartModel.getId());
+        req.setAttribute("cartItem", cartItem);
+
+
         req.setAttribute("products", productModel);
         req.setAttribute("colors", colorModel);
         req.setAttribute("capacities", capacityModel);

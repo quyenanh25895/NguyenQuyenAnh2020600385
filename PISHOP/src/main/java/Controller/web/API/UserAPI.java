@@ -64,7 +64,6 @@ public class UserAPI extends HttpServlet {
         resp.setContentType("application/json");
         UserModel user = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
         ObjectMapper mapper = new ObjectMapper();
-
         UserModel updateUser = HttpUtil.Of(req.getReader()).toModel(UserModel.class);
         updateUser.setPassword(PasswordUtil.encryptPassword(updateUser.getPassword()));
 

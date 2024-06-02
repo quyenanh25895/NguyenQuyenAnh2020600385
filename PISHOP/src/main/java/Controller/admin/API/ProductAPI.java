@@ -36,6 +36,9 @@ public class ProductAPI extends HttpServlet {
     @Inject
     private IImageService imageService;
 
+    @Inject
+    private IProductInformationService productInformationService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -61,7 +64,7 @@ public class ProductAPI extends HttpServlet {
         Integer[] capacityID = productModel.getCapacityIDs();
 
         productModel = productService.save(productModel, pageble, user);
-
+        productInformationService.save(productModel.getId());
         colorService.insertProductColors(productModel.getId(), colorID);
         capacityService.insertProductCapacity(productModel.getId(), capacityID);
 

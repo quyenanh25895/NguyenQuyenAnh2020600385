@@ -11,9 +11,16 @@
     <section class="signup">
         <div class="container">
             <c:if test="${not empty message}">
-                <div class="alert alert-${alert}">
-                        ${message}
-                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: "${message}",
+                            icon: '${alert}',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                </script>
             </c:if>
             <div class="signup-content" style="margin-top: 20px">
                 <div class="signup-form">

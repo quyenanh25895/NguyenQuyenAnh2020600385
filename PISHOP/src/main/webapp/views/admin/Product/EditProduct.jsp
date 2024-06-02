@@ -4,7 +4,7 @@
 <c:url var="ProductUrl" value="/admin-product"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Chi tiết sản phẩm</title>
 
     <link href="<c:url value='/assets/css/style2.css' />" rel="stylesheet" type="text/css" media="all"/>
 </head>
@@ -34,9 +34,16 @@
             <div class="row">
                 <div class="col-xs-12">
                     <c:if test="${not empty messageResponse}">
-                        <div class="alert alert-${alert}">
-                                ${messageResponse}
-                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                Swal.fire({
+                                    title: 'Thông báo',
+                                    text: "${messageResponse}",
+                                    icon: '${alert}',
+                                    confirmButtonText: 'OK'
+                                });
+                            });
+                        </script>
                     </c:if>
 
                     <form id="formSubmit">
@@ -255,11 +262,11 @@
                             <div class="col-sm-12">
                                 <c:if test="${not empty model.id}">
                                     <input type="button" class="btn btn-white btn-warning btn-bold"
-                                           value="Cập nhật bài viết" id="btnAddOrUpdateNew"/>
+                                           value="Cập nhật" id="btnAddOrUpdateNew"/>
                                 </c:if>
                                 <c:if test="${empty model.id}">
                                     <input type="button" class="btn btn-white btn-warning btn-bold"
-                                           value="Thêm bài viết" id="btnAddOrUpdateNew"/>
+                                           value="Thêm mới" id="btnAddOrUpdateNew"/>
                                 </c:if>
 
                                 <input type="button" class="btn btn-white btn-warning btn-bold"
@@ -329,7 +336,7 @@
             data: JSON.stringify(data),
             dataType: 'json',
             success: function (result) {
-                window.location.href = "${ProductUrl}?type=edit&id=" + result.id + "&message=insert_success";
+                window.location.href = "${ProductUrl}?type=information&id=" + result.id + "&message=insert_success";
             },
             error: function (error) {
                 window.location.href = "${ProductUrl}?type=list&maxPageItem=2&page=" + currentPage + "&message=error_system";
@@ -345,7 +352,7 @@
             data: JSON.stringify(data),
             dataType: 'json',
             success: function (result) {
-                window.location.href = "${ProductUrl}?type=edit&id=" + result.id + "&message=update_success";
+                window.location.href = "${ProductUrl}?type=information&id=" + result.id + "&message=update_success";
             },
             error: function (error) {
                 window.location.href = "${ProductUrl}?type=list&maxPageItem=2&page=" + currentPage + "&message=error_system";

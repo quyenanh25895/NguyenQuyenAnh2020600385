@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:url var="APIUrl" value="/api-cart"/>
 <c:url var="CartUrl" value="/cart"/>
@@ -73,7 +74,9 @@
                                                                 ${cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * cartProduct.quantity}
+                                                            <fmt:formatNumber
+                                                                    value="${cartProduct.price * cartProduct.quantity}"
+                                                                    type="number"/> VND
 
                                                         </td>
 
@@ -93,14 +96,10 @@
 
                             <div class="col-lg-3">
                                 <div class="card border-secondary mb-5">
-                                    <form class="mb-5" action="">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control p-4" placeholder="Coupon Code">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary">Apply Coupon</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control p-4" name="couponCode" id="couponCode"
+                                               placeholder="Coupon Code">
+                                    </div>
                                     <br>
                                     <div class="card-header bg-secondary border-0">
                                         <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
@@ -113,21 +112,23 @@
                                                 <c:forEach items="${products.listResult}" var="product">
                                                     <c:if test="${cartProduct.status == 0 && cartProduct.productID == product.id && product.status == 1}">
                                                         <c:set var="subtotal"
-                                                               value="${cartProduct.quantity * cartProduct.price}"/>
+                                                               value="${cartProduct.quantity * cartProduct.price - (cartProduct.quantity * cartProduct.price * (cartProduct.discount/100))}"/>
                                                         <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:forEach>
 
-                                            <h6 class="font-weight-medium">$ ${totalPrice}</h6>
+                                            <h6 class="font-weight-medium"><fmt:formatNumber value="${totalPrice}"
+                                                                                             type="number"/> VND</h6>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <h6 class="font-weight-medium">Shipping</h6>
                                             <c:set var="shipping" value="${totalPrice * 0.1}"/>
-                                            <h6 class="font-weight-medium">$ ${shipping}</h6>
+                                            <h6 class="font-weight-medium"><fmt:formatNumber value="${shipping}"
+                                                                                             type="number"/> VND</h6>
                                         </div>
                                         <select class="form-control" id="role" name="role">
-                                            <option value="">Chọn Role</option>
+                                            <option value="">Chọn phuơng thức thanh toán</option>
                                             <option value="off">Thanh toán khi nhận hàng</option>
                                             <option value="onl">Thanh toán online</option>
                                         </select>
@@ -135,7 +136,8 @@
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
                                             <h5 class="font-weight-bold">Total</h5>
-                                            <h5 class="font-weight-bold">$ ${totalPrice + shipping}</h5>
+                                            <h5 class="font-weight-bold"> <fmt:formatNumber value="${totalPrice + shipping}"
+                                                                                            type="number"/> VND </h5>
                                             <input type="hidden" name="price" value="${totalPrice + shipping}">
                                         </div>
                                         <button id="btnSubmitCart" class="btn btn-block btn-primary my-3 py-3">
@@ -151,35 +153,6 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        var limit = 5; // Số lượng dòng ban đầu
-        var cnt = $('#cnt').val();
-        var totalRows = $('#formViewOrder tbody tr').length;
-
-        // Ẩn các dòng sau số lượng dòng ban đầu
-        $('tbody .hide').slice(limit).hide();
-
-        // Xử lý sự kiện khi nhấn nút "Xem thêm"
-        $('#loadMoreBtn').click(function (e) {
-            e.preventDefault();
-            limit += 5;
-            // Hiển thị thêm số lượng dòng mới
-            $('tbody tr:hidden').slice(0, 5).slideDown();
-
-            // Ẩn nút "Xem thêm" nếu đã hiển thị hết tất cả các dòng
-            if ($('tbody tr:hidden').length === 0) {
-                $('#loadMoreBtn').hide();
-            }
-        });
-
-        if (cnt <= limit) {
-            $('#loadMoreBtn').hide();
-        }
-    });
-
-</script>
-
 
 <script>
     $(document).ready(function () {
@@ -196,13 +169,15 @@
                         data["price"] = v.value;
                     } else if (v.name === "role") {
                         data["type"] = v.value;
+                    } else if (v.name === "couponCode") {
+                        data["couponCode"] = v.value;
                     }
                 }
             );
             data["ids"] = ids;
             data['status'] = 0
             if (data["type"] === "onl") {
-                vnpay(data)
+                vnpaySubmit(data);
             } else if (data["type"] === "off") {
                 submitCart(data);
             }
@@ -215,37 +190,44 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
-                    window.location.href = "${CartUrl}?type=cart&message=order_success";
+                    console.log(result);
+                    window.location.href = "${CartUrl}?type=cart&message=pay_success";
                 },
                 error: function (error) {
                     window.location.href = "${CartUrl}?type=cart&message=order_error";
                 }
             });
         }
+
         function vnpaySubmit(data) {
             $.ajax({
                 url: '${APIUrl}',
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
+                success: function (result) {
+                    var data2 = {
+                        price: data["price"],
+                        type: data["type"],
+                        orderCode: result.cartCode,
+                        discount: result.discount
+                    }
+                    vnpay(data2)
+                    console.log(result);
+                },
             });
         }
 
         function vnpay(data) {
-            data2 = {
-                price: data["price"],
-                type: data["type"]
-            }
 
             $.ajax({
                 type: "POST",
                 url: '${vnpayUrl}',
                 contentType: 'application/json',
                 dataType: 'JSON',
-                data: JSON.stringify(data2),
+                data: JSON.stringify(data),
                 success: function (x) {
                     if (x.code === '00') {
-                        vnpaySubmit(data);
                         if (window.vnpay) {
                             vnpay.open({width: 768, height: 600, url: x.data});
                         } else {

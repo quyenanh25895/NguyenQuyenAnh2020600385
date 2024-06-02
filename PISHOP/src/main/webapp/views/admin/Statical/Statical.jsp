@@ -4,7 +4,7 @@
 <c:url var="ColorUrl" value="/admin-properties"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Thống kê</title>
     <link href="<c:url value='/assets/css/style2.css' />" rel="stylesheet" type="text/css" media="all"/>
 </head>
 
@@ -29,9 +29,16 @@
 
         <div class="page-content">
             <c:if test="${not empty messageResponse}">
-                <div class="alert alert-${alert}">
-                        ${messageResponse}
-                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: "${messageResponse}",
+                            icon: '${alert}',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                </script>
             </c:if>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 justify-content-center align-items-center">
@@ -47,14 +54,14 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 justify-content-center align-items-center">
                     <h3>Top 10 sản phẩm bán chạy nhất</h3>
                     <canvas id="top10Product"></canvas>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 justify-content-center align-items-center">
-                    <h3>Chi tiêu của mỗi người dùng</h3>
-                    <canvas id="Chart"></canvas>
-                </div>
+<%--                </div>--%>
+<%--                <div class="col-lg-6 col-md-6 col-sm-12 justify-content-center align-items-center">--%>
+<%--                    <h3>Chi tiêu của mỗi người dùng</h3>--%>
+
+<%--                </div>--%>
             </div>
         </div>
-
+        </div>
 
     </div>
 </div>
@@ -86,7 +93,7 @@
     dataTop10Product.push('${statical.quantity}');
     </c:forEach>
 
-    createChart(ctx, labelsOrder, orderData, 'Số lượng sản phẩm bán ra');
+    createChart(ctx, labelsOrder, orderData, 'Số lượng đơn hàng');
     createChart(ctx1, labelsUser, userData, 'Chi tiêu của mỗi người dùng');
     createChart(ctx2, labelsTop10Product, dataTop10Product, 'Top 10 sản phẩm bán chạy nhất');
 

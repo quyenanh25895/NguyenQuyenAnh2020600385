@@ -21,11 +21,11 @@ public class OrderDAO extends AbstractDAO<OrderModel> implements IOrderDAO {
     public Integer save(OrderModel save) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO orders ");
-        sql.append("(userID, productID, quantity, price, status, cartProductID, orderCode, ");
+        sql.append("(userID, productID, quantity, price, status, cartProductID, orderCode, discount, ");
         sql.append("createBy, createdDate) ");
-        sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         return insert(sql.toString(), save.getUserID(), save.getProductID(),
-                save.getQuantity(), save.getPrice(), save.getStatus(), save.getCartProductID(), save.getOrderCode(),
+                save.getQuantity(), save.getPrice(), save.getStatus(), save.getCartProductID(), save.getOrderCode(), save.getDiscount(),
                 save.getCreatedBy(), save.getCreatedDate());
     }
 

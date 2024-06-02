@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:url var="APICartUrl" value="/api-cart"/>
 <c:url var="APICommentUrl" value="/api-comment"/>
@@ -10,14 +11,13 @@
 
 <head>
     <title>Thông Tin Chi Tiết</title>
-
 </head>
 
 <body>
 <!-- Shop Detail Start -->
 <div class="container-fluid py-5" style="">
     <div class="row px-xl-5">
-        <div class="col-lg-12 col-md-12 col-sm-12" style="">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="row">
                 <div class="col-lg-5 col-md-5 col-sm-5">
                     <div id="product-carousel" class="carousel slide" data-ride="carousel" style="">
@@ -64,11 +64,11 @@
                     </div>
                 </div>
 
-                <div class="col-lg-5 col-md-5 col-sm-5">
+                <div class="col-lg-4 col-md-4 col-sm-4">
                     <form id="formSubmit">
                         <h3 class="font-weight-semi-bold">${product.name}</h3>
                         <input type="hidden" name="id" value="${product.id}">
-                        <h3 class="font-weight-semi-bold mb-4">$ ${product.price}</h3>
+                        <h3><fmt:formatNumber value="${product.price}" type="number" /> VND</h3>
                         <input type="hidden" name="price" value="${product.price}">
                         <div class="d-flex mb-3">
                             <p class="text-dark font-weight-medium mb-0 mr-3">Số lượng:</p>
@@ -87,20 +87,20 @@
                                     </div>
                                 </c:forEach>
                             </div>
-
-                            <div class="d-flex mb-4">
-                                <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                                <c:forEach items="${colors.listResult}" var="color">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" class="custom-control-input" id="color-${color.id}"
-                                               name="colorID"
-                                               value="${color.id}">
-                                        <label class="custom-control-label"
-                                               for="color-${color.id}">${color.colorCode}</label>
-                                    </div>
-                                </c:forEach>
-                            </div>
                         </c:if>
+                        <div class="d-flex mb-4">
+                            <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
+                            <c:forEach items="${colors.listResult}" var="color">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" id="color-${color.id}"
+                                           name="colorID"
+                                           value="${color.id}">
+                                    <label class="custom-control-label"
+                                           for="color-${color.id}">${color.colorCode}</label>
+                                </div>
+                            </c:forEach>
+                        </div>
+
 
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
@@ -133,190 +133,207 @@
                         </div>
                     </form>
                 </div>
-
-                <div class="col-lg-2 col-md-2 col-sm-2 justify-content-center align-items-center">
-                    <div class="row">
-                        <c:forEach items="${otherProduct.listResult}" var="otherProduct">
-
-                        <div class="col-lg-12 col-md-12 col-sm-12 pb-1">
-                            <div class="card product-item border-0 mb-4"
-                                 style="max-height: 200px; max-width: 200px">
-                                <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
-                                     style="max-height: 115px; width: auto">
-                                    <c:set var="firstImageDisplayed" value="false"/>
-                                    <c:forEach items="${otherImage}" var="image">
-                                        <c:if test="${!firstImageDisplayed && otherProduct.id == image.productID}">
-                                            <img class="img-fluid" src="${image.imageLink}"
-                                                 alt="">
-                                            <c:set var="firstImageDisplayed" value="true"/>
-                                        </c:if>
-                                    </c:forEach>
-
-                                </div>
-                                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                    <h6 class="text-truncate mb-3">${otherProduct.name}</h6
-                                </div>
-                                <div class="card-footer d-flex justify-content-center bg-light border">
-                                    <c:if test="${otherProduct.quantity > 0}">
-                                        <a href="<c:url value='/product-detail?type=detail&productID=${otherProduct.id}' />"
-                                           class="btn btn-sm text-dark p-0">
-                                            <i class="fas fa-eye text-primary mr-1"></i>
-                                            Xem chi tiết
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${otherProduct.quantity == 0}">
-                                        <a href="<c:url value='/product-detail?type=detail&productID=${otherProduct.id}' />"
-                                           class="btn btn-sm text-dark p-0">
-                                            <i class="fas fa-eye text-primary mr-1"></i>
-                                            Hết hàng
-                                        </a>
-                                    </c:if>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </c:forEach>
+                <div class="col-lg-3 col-md-3 col-sm-3 justify-content-center align-items-center">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Tên sản phẩm</th>
+                            <td>${product.name}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Năm sản xuất</th>
+                            <td>${productInformation.timeManufacture}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Xuất sứ</th>
+                            <td>${productInformation.country}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Dung lượng pin</th>
+                            <td>
+                                <c:if test="${productInformation.pinValue != 0}">
+                                    ${productInformation.pinValue}
+                                </c:if>
+                                <c:if test="${empty productInformation.pinValue || productInformation.pinValue == 0 }">
+                                    Không có
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Kích thước màn hình</th>
+                            <td>
+                                <c:if test="${productInformation.display != 0}">
+                                    ${productInformation.display} inches
+                                </c:if>
+                                <c:if test="${empty productInformation.display || productInformation.display == 0}">
+                                    Không có
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Độ phâm giải</th>
+                            <td>
+                                <c:if test="${not empty productInformation.resolution}">
+                                    ${productInformation.resolution}
+                                </c:if>
+                                <c:if test="${empty productInformation.resolution}">
+                                    Không có
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Bộ xử lý</th>
+                            <td>
+                                <c:if test="${not empty productInformation.chipset}">
+                                    ${productInformation.chipset}
+                                </c:if>
+                                <c:if test="${empty productInformation.chipset}">
+                                    Không có
+                                </c:if>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
 
         </div>
+    </div>
 
+    <div class="row px-xl-5" style="margin-top: 30px">
+        <c:forEach items="${categories.listResult}" var="cate">
+            <c:if test="${cate.id == product.cateID}">
+                <c:set var="cateID" value="${cate.id}"/>
+                <div class="col-lg-2 col-sm-2 col-md-2 text-center">
+
+                </div>
+                <div class="text-center mb-4 col-lg-8 col-sm-8 col-md-8">
+                    <h2 class="section-title px-5">
+                            <span class="px-2">
+                                    Sản phẩm khác
+                            </span>
+                    </h2>
+                </div>
+                <div class="col-lg-2 col-sm-2 col-md-2 text-center">
+                    <h5>
+                        <a href="<c:url value="/product-shop?type=list&cateID=${cateID}&cateIDs=${cateID}&page=1&maxPageItem=3&sortName=productID&sortBy=asc"/>">Xem
+                            thêm</a>
+                    </h5>
+                </div>
+                <div class="row px-xl-5 pb-3" id="productList">
+                    <c:set var="productCount" value="0"/>
+                    <c:forEach items="${products.listResult}" var="product">
+                        <c:if test="${cateID == product.cateID && product.status == 1 && productCount < 6}">
+                            <div class="col-lg-2 col-md-4 col-sm-6" style=" max-width: 300px">
+                                <div class="card product-item mb-4"
+                                     style="border: solid black 1px; border-radius: 30px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);">
+                                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
+                                         style="max-height: 200px; width: auto; border-top-left-radius: 30px; border-top-right-radius: 30px">
+                                        <c:set var="firstImageDisplayed" value="false"/>
+                                        <c:forEach items="${images.listResult}" var="image">
+                                            <c:if test="${!firstImageDisplayed && product.id == image.productID}">
+                                                <img class="img-fluid w-100" src="${image.imageLink}" alt="">
+                                                <c:set var="firstImageDisplayed" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                        <h6 class="text-truncate mb-3">${product.name}</h6>
+                                        <div class="d-flex justify-content-center">
+                                            <h6>${product.price} VND</h6>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-center bg-light border"
+                                         style="border-bottom-left-radius: 30px; border-bottom-right-radius: 30px">
+                                        <c:if test="${product.quantity > 0}">
+                                            <a href="<c:url value='/product-detail?type=detail&productID=${product.id}' />"
+                                               class="btn btn-sm text-dark p-0">
+                                                <i class="fas fa-eye text-primary mr-1"></i>
+                                                Xem chi tiết
+                                            </a>
+                                        </c:if>
+                                        <c:if test="${product.quantity == 0}">
+                                            <a href="<c:url value='/product-detail?type=detail&productID=${product.id}' />"
+                                               class="btn btn-sm text-dark p-0">
+                                                <i class="fas fa-eye text-primary mr-1"></i>
+                                                Hết hàng
+                                            </a>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </div>
+                            <c:set var="productCount" value="${productCount + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </div>
+            </c:if>
+        </c:forEach>
     </div>
 </div>
 
 <div class="container-fluid py-5">
     <div class="row px-xl-5">
-        <div class="col">
-            <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Mô tả</a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Thông tin sản phẩm</a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Bình luận</a>
-            </div>
-
-            <div class="tab-content" style="padding-left: 15px; padding-right: 15px">
-                <div class="tab-pane fade show active" id="tab-pane-1">
-                    <h4 class="mb-3">Product Description</h4>
-                    <p>${product.description}</p>
-                </div>
-
-
-                <div class="tab-pane fade" id="tab-pane-2">
-                    <h4 class="mb-3">Additional Information</h4>
-                    <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam
-                        invidunt
-                        duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur
-                        invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore
-                        diam stet
-                        rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no
-                        ut diam
-                        consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor
-                        accusam,
-                        ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem
-                        elitr
-                        sanctus eirmod takimata dolor ea invidunt.</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
+        <div class="col-md-6">
+            <h4 class="mb-4">Bình luận</h4>
+            <c:forEach items="${comments.listResult}" var="comment">
+                <c:if test="${comment.status == 1}">
+                    <div class="media mb-4">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
+                             alt="Image" class="img-fluid mr-3 mt-1"
+                             style="width: 45px;">
+                        <div class="media-body">
+                                <c:forEach items="${userModels.listResult}" var="user">
+                                    <c:if test="${user.id == comment.userID}">
+                                        <h6>${user.fullName}
+                                            <small>
+                                                - <i>${comment.createdDate}</i>
+                                            </small>
+                                        </h6>
+                                    </c:if>
+                                </c:forEach>
+                            <p>${comment.content}</p>
                         </div>
                     </div>
-                </div>
+                </c:if>
 
-                <div class="tab-pane fade" id="tab-pane-3">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="mb-4">Bình luận</h4>
-                            <c:forEach items="${comments.listResult}" var="comment">
-                                <c:if test="${comment.status == 1}">
-                                    <div class="media mb-4">
-                                        <img src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
-                                             alt="Image" class="img-fluid mr-3 mt-1"
-                                             style="width: 45px;">
-                                        <div class="media-body">
-                                            <h6>John Doe
-                                                <small>
-                                                    - <i>${comment.createdDate}</i>
-                                                </small>
-                                            </h6>
-                                            <p>${comment.content}</p>
-                                        </div>
-                                    </div>
-                                </c:if>
-
-                                <c:if test="${comment.status == 0 && comment.userID == USERMODEL.id}">
-                                    <div class="media mb-4 " style="opacity: 50%">
-                                        <img src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
-                                             alt="Image" class="img-fluid mr-3 mt-1"
-                                             style="width: 45px;">
-                                        <div class="media-body">
-                                            <h6>John Doe
-                                                <small>
-                                                    - <i>${comment.createdDate}</i>
-                                                </small>
-                                            </h6>
-                                            <p>${comment.content}</p>
-                                        </div>
-                                    </div>
-                                </c:if>
-                            </c:forEach>
+                <c:if test="${comment.status == 0 && comment.userID == USERMODEL.id}">
+                    <div class="media mb-4 " style="opacity: 50%">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
+                             alt="Image" class="img-fluid mr-3 mt-1"
+                             style="width: 45px;">
+                        <div class="media-body">
+                            <h6>John Doe
+                                <small>
+                                    - <i>${comment.createdDate}</i>
+                                </small>
+                            </h6>
+                            <p>${comment.content}</p>
                         </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
 
-                        <div class="col-md-6">
-                            <h4 class="mb-4">Bình Luận</h4>
-                            <small>Để lại bình luận của bạn để giúp chúng tôi cải thiện hơn</small>
-                            <form id="commentForm">
-                                <div class="form-group">
-                                    <label for="message">Your Review *</label>
-                                    <textarea id="message" name="content" cols="30" rows="5"
-                                              class="form-control">
+        <div class="col-md-6">
+            <h4 class="mb-4">Bình Luận</h4>
+            <small>Để lại bình luận của bạn để giúp chúng tôi cải thiện hơn</small>
+            <form id="commentForm">
+                <div class="form-group">
+                    <label for="message">Your Review *</label>
+                    <textarea id="message" name="content" cols="30" rows="5"
+                              class="form-control">
                                 </textarea>
-                                </div>
-                                <input type="hidden" name="userID" value="${USERMODEL.id}">
-                                <input type="hidden" name="productID" value="${product.id}">
-
-                                <c:if test="${not empty USERMODEL}">
-                                    <div class="form-group mb-0">
-                                        <input type="button" id="btnComment" value="Đăng bình luận"
-                                               class="btn btn-primary px-3">
-                                    </div>
-                                </c:if>
-                            </form>
-                        </div>
-                    </div>
-
-
                 </div>
-            </div>
+                <input type="hidden" name="userID" value="${USERMODEL.id}">
+                <input type="hidden" name="productID" value="${product.id}">
+
+                <c:if test="${not empty USERMODEL}">
+                    <div class="form-group mb-0">
+                        <input type="button" id="btnComment" value="Đăng bình luận"
+                               class="btn btn-primary px-3">
+                    </div>
+                </c:if>
+            </form>
         </div>
     </div>
 </div>
@@ -446,10 +463,10 @@
                 }
             });
 
-            if(selectedColors.length === 0){
+            if (selectedColors.length === 0) {
                 selectedColors.push(0);
             }
-            if (selectedCapacities.length === 0){
+            if (selectedCapacities.length === 0) {
                 selectedCapacities.push(0);
             }
             data["colorIDs"] = selectedColors;

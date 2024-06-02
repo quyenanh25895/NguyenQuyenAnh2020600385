@@ -38,6 +38,9 @@ public class ProductController extends HttpServlet {
     @Inject
     private IImageService imageService;
 
+    @Inject
+    private IProductInformationService productInformationService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductModel model = FormUtil.toModel(ProductModel.class, req);
@@ -82,6 +85,14 @@ public class ProductController extends HttpServlet {
             model.setTotalItem(productService.countItem());
             model.setTotalPage((int) Math.ceil((double) model.getTotalItem() / model.getMaxPageItem()));
             view = "/views/admin/Product/ListProduct.jsp";
+
+        }else if(model.getType().equals("information")){
+            String id = req.getParameter("id");
+            model = productService.findOne(Integer.parseInt(id));
+            model.setPage(1);
+            ProductInformationModel productInformationModel= productInformationService.findOne(Integer.parseInt(id));
+            req.setAttribute("productInformation", productInformationModel);
+            view = "/views/admin/Product/ProductInformation.jsp";
         }
 
         MessageUtil.showMessage(req);

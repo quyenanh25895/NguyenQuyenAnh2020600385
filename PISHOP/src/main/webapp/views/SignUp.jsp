@@ -14,9 +14,16 @@
     <section class="signup">
         <div class="container">
             <c:if test="${not empty message}">
-                <div class="alert alert-${alert}">
-                        ${message}
-                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: 'Thông báo',
+                            text: "${message}",
+                            icon: '${alert}',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                </script>
             </c:if>
             <div class="signup-content" style="margin-top: 20px">
                 <div class="signup-form">
@@ -175,7 +182,10 @@
                 var data = {};
                 var formData = $('#formSubmit').serializeArray();
                 $.each(formData, function (i, v) {
-                    data["" + v.name + ""] = v.value;
+                    if (v.name === "repassword") {
+                        return true;
+                    }
+                    data[v.name] = v.value;
                 });
 
                 var id = $('#id').val();
@@ -184,7 +194,9 @@
                 } else {
                     updateUser(data);
                 }
+            console.log(data);
             }
+
         });
 
         function addUser(data) {

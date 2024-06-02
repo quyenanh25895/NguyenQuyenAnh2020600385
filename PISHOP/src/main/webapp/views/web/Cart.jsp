@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:url var="APIUrl" value="/api-cart"/>
 <c:url var="CartUrl" value="/cart"/>
 <c:url var="vnpayUrl" value="/vnpay"/>
@@ -13,9 +14,16 @@
 <div class="container-fluid pt-5">
     <div class="row">
         <c:if test="${not empty message}">
-            <div class="alert alert-${alert}">
-                    ${message}
-            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                        title: 'Thông báo',
+                        text: "${message}",
+                        icon: '${alert}',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
         </c:if>
     </div>
     <div class="row px-xl-5">
@@ -72,7 +80,8 @@
                                                         </td>
 
                                                         <td class="align-middle">
-                                                                ${product.name}
+                                                            <a href="<c:url value="/order-detail?cartproductID=${cartProduct.id}" />">${product.name}</a>
+
                                                         </td>
                                                         <td class="align-middle">
                                                             <c:forEach items="${colors.listResult}" var="color">
@@ -95,11 +104,16 @@
                                                         </td>
 
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * cartProduct.quantity}
+                                                            <fmt:formatNumber
+                                                                    value="${cartProduct.price * cartProduct.quantity}"
+                                                                    type="number"/> VND
+
                                                         </td>
 
                                                         <td class="align-middle">
-                                                            <input type="checkbox" name="cartproductID" id="checkbox_${cartProduct.id}" value="${cartProduct.id}" class="cart-checkbox">
+                                                            <input type="checkbox" name="cartproductID"
+                                                                   id="checkbox_${cartProduct.id}"
+                                                                   value="${cartProduct.id}" class="cart-checkbox">
                                                         </td>
                                                     </tr>
                                                 </c:if>
@@ -125,19 +139,22 @@
                                             <c:forEach items="${cartProducts.listResult}" var="cartProduct">
                                                 <c:forEach items="${products.listResult}" var="product">
                                                     <c:if test="${cartProduct.status == 0 && cartProduct.productID == product.id && product.status == 1}">
-                                                        <c:set var="subtotal" value="${cartProduct.quantity * cartProduct.price}"/>
+                                                        <c:set var="subtotal"
+                                                               value="${cartProduct.quantity * cartProduct.price}"/>
                                                         <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:forEach>
 
-                                            <h6 class="font-weight-medium">$ ${totalPrice}</h6>
+                                            <h6 class="font-weight-medium"><fmt:formatNumber value="${totalPrice}"
+                                                                                             type="number"/> VND</h6>
                                         </div>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
                                             <h5 class="font-weight-bold">Tổng giá trị</h5>
-                                            <h5 class="font-weight-bold">$ ${totalPrice}</h5>
+                                            <h5 class="font-weight-bold"><fmt:formatNumber value="${totalPrice}"
+                                                                                           type="number"/> VND</h5>
                                         </div>
                                         <button id="btnSubmitCart" class="btn btn-block btn-primary my-3 py-3">
                                             Thanh Toán
@@ -196,9 +213,7 @@
                                                         <td class="align-middle">
                                                             <c:forEach items="${colors.listResult}" var="color">
                                                                 <c:if test="${cartProduct.colorID == color.id}">
-
                                                                     ${color.colorCode}
-
                                                                 </c:if>
                                                             </c:forEach>
                                                         </td>
@@ -206,9 +221,7 @@
                                                         <td class="align-middle">
                                                             <c:forEach items="${capacities.listResult}" var="capacity">
                                                                 <c:if test="${cartProduct.capacityID == capacity.id}">
-
                                                                     ${capacity.capacityValue}
-
                                                                 </c:if>
                                                             </c:forEach>
                                                         </td>
@@ -218,7 +231,10 @@
                                                         </td>
 
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * cartProduct.quantity}
+                                                            <fmt:formatNumber
+                                                                    value="${cartProduct.price * cartProduct.quantity - (cartProduct.price * cartProduct.quantity * (cartProduct.discount/100))
+                                                                    + ((cartProduct.price * cartProduct.quantity - (cartProduct.price * cartProduct.quantity * (cartProduct.discount/100))) * 0.1)}"
+                                                                    type="number"/> VND
                                                         </td>
                                                         <td class="align-middle">
                                                             <c:if test="${ cartProduct.status == 1 }">
@@ -233,9 +249,11 @@
                                                             </c:if>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <input type="checkbox" name="cartproductID"
-                                                                   id="checkbox_${cartProduct.id}"
-                                                                   value="${cartProduct.id}">
+
+                                                            <input type="button"
+                                                                   class="btn btn-sm btn-primary btnDenyCart"
+                                                                   name="denyCart"
+                                                                   data-ids="${cartProduct.id}" value="Hủy">
                                                         </td>
                                                     </tr>
                                                 </c:if>
@@ -260,23 +278,24 @@
                                             <c:forEach items="${cartProducts.listResult}" var="cartProduct">
                                                 <c:forEach items="${products.listResult}" var="product">
                                                     <c:if test="${cartProduct.status == 1 && cartProduct.productID == product.id && product.status == 1}">
-                                                        <c:set var="subtotal" value="${cartProduct.quantity * cartProduct.price}"/>
+                                                        <c:set var="subtotal"
+                                                               value="${cartProduct.quantity * cartProduct.price - (cartProduct.price * cartProduct.quantity * (cartProduct.discount/100))}"/>
                                                         <c:set var="totalPrice" value="${totalPrice + subtotal}"/>
                                                     </c:if>
                                                 </c:forEach>
                                             </c:forEach>
 
-                                            <h6 class="font-weight-medium">$ ${totalPrice}</h6>
+                                            <h6 class="font-weight-medium"><fmt:formatNumber value="${totalPrice}"
+                                                                                             type="number"/> VND</h6>
                                         </div>
                                     </div>
                                     <div class="card-footer border-secondary bg-transparent">
                                         <div class="d-flex justify-content-between mt-2">
                                             <h5 class="font-weight-bold">Tổng giá trị</h5>
-                                            <h5 class="font-weight-bold">$ ${totalPrice}</h5>
+                                            <h5 class="font-weight-bold"><fmt:formatNumber value="${totalPrice}"
+                                                                                           type="number"/> VND</h5>
                                         </div>
-                                        <button id="btnDenyCart" class="btn btn-block btn-primary my-3 py-3">
-                                            Thanh Toán
-                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +370,11 @@
                                                                 ${cartProduct.quantity}
                                                         </td>
                                                         <td class="align-middle">
-                                                                ${cartProduct.price * cartProduct.quantity}
+                                                            <fmt:formatNumber
+                                                                    value="${cartProduct.price * cartProduct.quantity - (cartProduct.price * cartProduct.quantity * (cartProduct.discount/100))
+                                                                    + ((cartProduct.price * cartProduct.quantity - (cartProduct.price * cartProduct.quantity * (cartProduct.discount/100))) * 0.1)}"
+                                                                    type="number"/> VND
+
                                                         </td>
                                                         <td class="align-middle">
                                                             <c:if test="${cartProduct.status == 2}">
@@ -404,9 +427,6 @@
                             </div>
                         </div>
                     </form>
-                    <div class="text-center">
-                        <button id="loadMoreBtn" class="btn btn-primary">Xem thêm sản phẩm</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -438,39 +458,15 @@
         $('#btnSubmitCart').prop('disabled', true);
         $('#btnDenyCart').prop('disabled', true);
     });
+
+
 </script>
 
 <script>
-
-
     $(document).ready(function () {
-        var limit = 5; // Số lượng dòng ban đầu
-        var cnt = $('#cnt').val();
-        var totalRows = $('#formViewOrder tbody tr').length;
 
-        // Ẩn các dòng sau số lượng dòng ban đầu
-        $('tbody .hide').slice(limit).hide();
-
-        // Xử lý sự kiện khi nhấn nút "Xem thêm"
-        $('#loadMoreBtn').click(function (e) {
-            e.preventDefault();
-            limit += 5;
-            // Hiển thị thêm số lượng dòng mới
-            $('tbody tr:hidden').slice(0, 5).slideDown();
-
-
-            // Ẩn nút "Xem thêm" nếu đã hiển thị hết tất cả các dòng
-            if ($('tbody tr:hidden').length === 0) {
-                $('#loadMoreBtn').hide();
-            }
-        });
-
-        if (cnt <= limit) {
-            $('#loadMoreBtn').hide();
-        }
-
-        // Ẩn nút "Add to Cart" khi trang được tải lần đầu
         $('#btnSubmitCart').prop('disabled', true);
+
         $('#btnDenyCart').prop('disabled', true);
 
         var allChecked = false;
@@ -583,14 +579,11 @@
             });
         }
 
-        $("#btnDenyCart").click(function () {
+        $(".btnDenyCart").click(function (e) {
+            e.preventDefault();
             let data = {};
-            let ids = $('tbody input[type=checkbox]:checked').map(function () {
-                return $(this).val();
-            }).get();
-            data['ids'] = ids;
+            data['ids'] = [$(this).data("ids")];
             data['status'] = 1
-            console.log(data);
             denyCart(data);
         });
 

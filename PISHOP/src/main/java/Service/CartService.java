@@ -20,8 +20,6 @@ public class CartService implements ICartService {
         return cartDAO.findAll();
     }
 
-
-
     @Override
     public CartModel findByUserID(Integer id) {
         return cartDAO.findByUserID(id);

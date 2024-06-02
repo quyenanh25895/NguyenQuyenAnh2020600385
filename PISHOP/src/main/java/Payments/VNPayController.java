@@ -1,6 +1,7 @@
 
 package Payments;
 
+import Controller.admin.API.CartAPI;
 import Model.OrderModel;
 import Model.ProductModel;
 import Utils.HttpUtil;
@@ -44,8 +45,8 @@ public class VNPayController extends HttpServlet {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = (long)order.getPrice() * 100L;
-        String vnp_TxnRef = Configs.mdh;
+        long amount = (long) order.getPrice() * 100L - (long) order.getPrice() * 100L * (order.getDiscount() / 100);
+        String vnp_TxnRef = String.valueOf(order.getOrderCode());
         String vnp_IpAddr = Configs.getIpAddress(req);
 
         String vnp_TmnCode = Configs.vnp_TmnCode;

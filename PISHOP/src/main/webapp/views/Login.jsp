@@ -13,9 +13,16 @@
             <div class="col-md-12 col-lg-10">
 
                 <c:if test="${not empty message}">
-                    <div class="alert alert-${alert}">
-                            ${message}
-                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: 'Thông báo',
+                                text: "${message}",
+                                icon: '${alert}',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    </script>
                 </c:if>
             </div>
         </div>

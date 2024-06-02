@@ -1,10 +1,10 @@
-package DAO.IDAO;
+package Service.IService;
 
 import Model.ProductInformationModel;
 
 import java.util.List;
 
-public interface IProductInformationDAO extends IGenericDAO<ProductInformationModel> {
+public interface IProductInformationService {
 
     List<ProductInformationModel> findAll();
 

@@ -16,13 +16,30 @@ public class ProductInformationDAO extends AbstractDAO<ProductInformationModel> 
 
     @Override
     public ProductInformationModel findOne(int id) {
-        String sql = "select * from productinfo where infoID = ?";
+        String sql = "select * from productinfo where productID = ?";
         List<ProductInformationModel> productInformationModels = query(sql, new ProductInformationMapper(), id);
         if (productInformationModels != null) {
             return productInformationModels.get(0);
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Integer save(Integer productID) {
+        String sql = "insert into productInfo (productID) values (?)";
+        return insert(sql, productID);
+    }
+
+    @Override
+    public void update(ProductInformationModel productInformationModel) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("update productInfo set timeManufacture = ?, country = ?, pinValue = ?, display = ?,  ");
+        sql.append("resolution = ?, chipset = ? ");
+        sql.append("where productID = ?");
+        update(sql.toString(), productInformationModel.getTimeManufacture(), productInformationModel.getCountry(),
+                productInformationModel.getPinValue(), productInformationModel.getDisplay(), productInformationModel.getResolution(),
+                productInformationModel.getChipset(), productInformationModel.getProductID());
     }
 
     public static void main(String[] args) {

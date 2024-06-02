@@ -1,6 +1,7 @@
 package Controller.web;
 
 import Model.*;
+import Service.CartService;
 import Service.IService.*;
 import Sort.Sorter;
 import Utils.FormUtil;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-@WebServlet(urlPatterns = {"/home", "/login", "/logout", "/signup"})
+@WebServlet(urlPatterns = {"/home", "/login", "/logout", "/signup", "/contact"})
 public class HomeController extends HttpServlet {
 
     @Inject
@@ -39,6 +40,9 @@ public class HomeController extends HttpServlet {
 
     @Inject
     private IBannerService bannerService;
+
+    @Inject
+    private ICartService cartService;
 
     ResourceBundle resourceBundle = ResourceBundle.getBundle("message");
 
@@ -76,6 +80,9 @@ public class HomeController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/views/SignUp.jsp");
             rd.forward(request, response);
 
+        } else if (action != null && action.equals("contact")) {
+            RequestDispatcher rd = request.getRequestDispatcher("/views/web/Contact.jsp");
+            rd.forward(request, response);
         } else {
             CategoryModel cateModels = FormUtil.toModel(CategoryModel.class, request);
             ProductModel productModels = FormUtil.toModel(ProductModel.class, request);
@@ -83,19 +90,24 @@ public class HomeController extends HttpServlet {
             BannerModel bannerModel = FormUtil.toModel(BannerModel.class, request);
             IPageble pageble = new PageRequest();
 
+
             cateModels.setListResult(categoryService.findAll());
             productModels.setListResult(productService.findAll(new PageRequest(1, productService.countItem(), new Sorter("cateID", "ASC"))));
             imageModels.setListResult(imageService.findAll());
             bannerModel.setListResult(bannerService.findAll(pageble));
-            Integer cartItem = cartProductService.countProduct();
+            UserModel user = (UserModel) SessionUtil.getInstance().getValue(request, "USERMODEL");
+            if (user != null) {
+                CartModel cartModel = cartService.findByUserID(user.getId());
+                Integer cartItem = cartProductService.countProduct(cartModel.getId());
+                request.setAttribute("cartItem", cartItem);
+            }
 
             request.setAttribute("type", "home");
             request.setAttribute("products", productModels);
             request.setAttribute("categories", cateModels);
             request.setAttribute("images", imageModels);
             request.setAttribute("banners", bannerModel);
-//            request.setAttribute("cartItem", cartItem);
-            SessionUtil.getInstance().putValue(request, "cartItem", cartItem);
+
             RequestDispatcher rd = request.getRequestDispatcher("/views/web/Home.jsp");
             rd.forward(request, response);
         }
@@ -114,6 +126,8 @@ public class HomeController extends HttpServlet {
 
             if (model != null && model.getStatus() == 1) {
                 SessionUtil.getInstance().putValue(request, "USERMODEL", model);
+
+
                 if (model.getRoleName().equals("USER")) {
                     String productID = request.getParameter("productID");
                     if (!productID.isBlank() && !productID.isEmpty()) {

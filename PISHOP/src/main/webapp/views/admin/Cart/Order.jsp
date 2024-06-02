@@ -6,7 +6,7 @@
 <!DOCTYPE>
 <html>
 <head>
-    <title>Danh sách bài viết</title>
+    <title>Danh sách đơn hàng</title>
 
 </head>
 
@@ -28,9 +28,16 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <c:if test="${not empty messageResponse}">
-                            <div class="alert alert-${alert}">
-                                    ${messageResponse}
-                            </div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    Swal.fire({
+                                        title: 'Thông báo',
+                                        text: "${messageResponse}",
+                                        icon: '${alert}',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                            </script>
                         </c:if>
 
                         <div class="widget-box table-filter">
@@ -195,7 +202,8 @@
                                                                         data-price="${cartProduct.price}"
                                                                         data-quantity="${cartProduct.quantity}"
                                                                         data-userid="${cartProduct.userID}"
-                                                                        data-code="${cartProduct.cartCode}">
+                                                                        data-code="${cartProduct.cartCode}"
+                                                                        data-discount="${cartProduct.discount}">
 
                                                                     Xác nhận đặt hàng
                                                                 </button>
@@ -268,8 +276,8 @@
                 if (currentPage !== page) {
                     $('#maxPageItem').val(limit);
                     $('#page').val(page);
-                    // $('#sortName').val('productID');
-                    $('#sortBy').val('asc');
+                    $('#sortName').val('createdDate');
+                    $('#sortBy').val('desc');
                     $('#type').val('list');
                     $('#formSubmit').submit();
                 }
@@ -286,7 +294,9 @@
         var price = $(this).data("price");
         var quantity = $(this).data("quantity");
         var code = $(this).data("code");
-        submitCart(cartID, status, userID, productID, quantity, price, code);
+        var discount = $(this).data("discount");
+
+        submitCart(cartID, status, userID, productID, quantity, price, code, discount);
 
     });
 
@@ -303,7 +313,7 @@
     });
 
 
-    function submitCart(cartID, status, userID, productID, quantity, price, code) {
+    function submitCart(cartID, status, userID, productID, quantity, price, code, discount) {
         var data = {
             id: cartID,
             status: status,
@@ -315,8 +325,7 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                // Thực hiện hàm createOrder sau khi yêu cầu AJAX hoàn thành
-                createOrder(cartID, status, userID, productID, quantity, price, code);
+                createOrder(cartID, status, userID, productID, quantity, price, code, discount);
                 // Sau đó chuyển hướng trang web
                 window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&message=delete_success";
             },
@@ -340,15 +349,15 @@
             data: JSON.stringify(data),
             success: function (result) {
                 submitBackOrder(cartID, status, userID, productID, quantity, price, code)
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=1&message=delete_success";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=delete_success";
             },
             error: function (error) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=1&message=error_system";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=error_system";
             }
         });
     }
 
-    function createOrder(cartID, status, userID, productID, quantity, price, code) {
+    function createOrder(cartID, status, userID, productID, quantity, price, code, discount) {
         var data = {
             userID: userID,
             productID: productID,
@@ -356,7 +365,8 @@
             price: price,
             status: status,
             cartProductID: cartID,
-            orderCode : code
+            orderCode: code,
+            discount: discount
         }
 
         $.ajax({
@@ -365,10 +375,10 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&message=delete_success";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=insert_success";
             },
             error: function (error) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=1&message=error_system";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=error_system";
             }
         });
     }
@@ -390,10 +400,10 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&message=delete_success";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=delete_success";
             },
             error: function (error) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=1&message=error_system";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=error_system";
             }
         });
     }
@@ -415,10 +425,10 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=6&page=1&message=delete_success";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=delete_success";
             },
             error: function (error) {
-                window.location.href = "${CartUrl}?type=list&maxPageItem=6&page=1&message=error_system";
+                window.location.href = "${CartUrl}?type=list&maxPageItem=5&page=" + currentPage + "&sortName=createdDate&sortBy=desc&message=error_system";
             }
         });
     }

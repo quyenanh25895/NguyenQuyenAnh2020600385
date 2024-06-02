@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!-- ProductModel Start -->
 <div class="container-fluid pt-5">
     <div class="text-center mb-4">
-        <h2 class="section-title px-5"><span class="px-2">Trendy Products</span></h2>
+        <h2 class="section-title px-5"><span class="px-2">Sản phẩm</span></h2>
     </div>
 
     <form action="<c:url value='/product-shop'/>" id="formSubmit" method="get">
@@ -28,7 +29,8 @@
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3">${product.name}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>$ ${product.price}</h6>
+                                    <h6><fmt:formatNumber value="${product.price}" type="number" /> VND</h6>
+
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-center bg-light border">

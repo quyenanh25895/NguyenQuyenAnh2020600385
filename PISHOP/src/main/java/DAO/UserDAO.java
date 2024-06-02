@@ -60,7 +60,7 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO {
         sql.append("username, password, roleID, status, createBy, createdDate)");
         sql.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         return insert(sql.toString(), saveUser.getFullName(), saveUser.getEmail(), saveUser.getPhoneNumber(), saveUser.getAddress(),
-                saveUser.getGender(), saveUser.getUserName(), saveUser.getPassword(), saveUser.getRoleId(), saveUser.getStatus(),
+                saveUser.getGender(), saveUser.getUserName(), saveUser.getPassword(), saveUser.getRoleId(), 1,
                 saveUser.getCreatedBy(), saveUser.getCreatedDate());
     }
 

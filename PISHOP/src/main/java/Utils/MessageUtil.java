@@ -39,7 +39,11 @@ public class MessageUtil {
             } else if (message.equals("not_login")) {
                 messageResponse = "Chưa đăng nhập";
                 alert = "danger";
+            } else if (message.equals("pay_success")) {
+                messageResponse = "Thanh toán thành công";
+                alert = "danger";
             }
+
             request.setAttribute("messageResponse", messageResponse);
             request.setAttribute("alert", alert);
         }

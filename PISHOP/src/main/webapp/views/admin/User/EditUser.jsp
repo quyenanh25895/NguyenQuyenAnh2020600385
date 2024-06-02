@@ -4,7 +4,7 @@
 <c:url var="UserUrl" value="/admin-user"/>
 <html>
 <head>
-    <title>Title</title>
+    <title>Thông tin người dùng</title>
 
     <link href="<c:url value='/assets/css/style2.css' />" rel="stylesheet" type="text/css" media="all"/>
 </head>
@@ -34,9 +34,16 @@
             <div class="row">
                 <div class="col-xs-12">
                     <c:if test="${not empty messageResponse}">
-                        <div class="alert alert-${alert}">
-                                ${messageResponse}
-                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                Swal.fire({
+                                    title: 'Thông báo',
+                                    text: "${messageResponse}",
+                                    icon: '${alert}',
+                                    confirmButtonText: 'OK'
+                                });
+                            });
+                        </script>
                     </c:if>
 
                     <form id="formSubmit">
@@ -123,7 +130,6 @@
                         <br/>
                         <br>
 
-
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right">Role</label>
                             <div class="col-sm-9">
@@ -155,11 +161,11 @@
                             <div class="col-sm-12">
                                 <c:if test="${not empty model.id}">
                                     <input type="button" class="btn btn-white btn-warning btn-bold"
-                                           value="Cập nhật bài viết" id="btnAddOrUpdateNew"/>
+                                           value="Cập nhật " id="btnAddOrUpdateNew"/>
                                 </c:if>
                                 <c:if test="${empty model.id}">
                                     <input type="button" class="btn btn-white btn-warning btn-bold"
-                                           value="Thêm bài viết" id="btnAddOrUpdateNew"/>
+                                           value="Thêm mới" id="btnAddOrUpdateNew"/>
                                 </c:if>
 
                                 <input type="button" class="btn btn-white btn-warning btn-bold"
@@ -266,7 +272,7 @@
 
     $("#btnBack").click(function (e) {
         e.preventDefault();
-        window.location.href = "${UserUrl}?type=list&maxPageItem=5&page=" + currentPage;
+        window.location.href = "${UserUrl}?type=list&maxPageItem=4&page=" + currentPage;
     })
 
     function addUser(data) {
@@ -280,7 +286,7 @@
                 window.location.href = "${UserUrl}?type=edit&id=" + result.id + "&message=insert_success";
             },
             error: function (error) {
-                window.location.href = "${UserUrl}?type=list&maxPageItem=2&page=" + currentPage + "&message=error_system";
+                window.location.href = "${UserUrl}?type=list&maxPageItem=4&page=" + currentPage + "&message=error_system";
             }
         });
     }
@@ -296,7 +302,7 @@
                 window.location.href = "${UserUrl}?type=edit&id=" + result.id + "&message=update_success";
             },
             error: function (error) {
-                window.location.href = "${UserUrl}?type=list&maxPageItem=2&page=" + currentPage + "&message=error_system";
+                window.location.href = "${UserUrl}?type=list&maxPageItem=4&page=" + currentPage + "&message=error_system";
             }
         });
     }

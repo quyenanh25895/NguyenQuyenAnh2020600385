@@ -83,14 +83,14 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public void submitCartProduct(Integer id, Integer status, Integer cartCode) {
-        String sql = "UPDATE cart_products SET status = ?, cartCode = ? WHERE cartproductID = ?";
-        update(sql, status, cartCode, id);
+    public void submitCartProduct(Integer id, Integer status, Integer cartCode, Integer discount) {
+        String sql = "UPDATE cart_products SET status = ?, cartCode = ?, discount = ? WHERE cartproductID = ?";
+        update(sql, status, cartCode, discount, id);
     }
 
     @Override
     public void denyCartProduct(Integer id) {
-        String sql = "UPDATE cart_products SET status = 0 WHERE cartproductID = ?";
+        String sql = "UPDATE cart_products SET status = 0, discount = 0 WHERE cartproductID = ?";
         update(sql, id);
     }
 
@@ -101,9 +101,10 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public void vnpayCode(Integer mdh, Integer cartID) {
-        String sql = "UPDATE cart_products SET cartCode = ? WHERE cartproductID = ?";
-        update(sql, mdh, cartID);
+    public CartProductModel vnpayCode(Integer mdh, Integer cartID, Integer discount) {
+        String sql = "UPDATE cart_products SET cartCode = ?, discount = ? WHERE cartproductID = ?";
+        update(sql, mdh, discount, cartID);
+        return findOne(cartID);
     }
 
     @Override
@@ -147,9 +148,9 @@ public class CartProductDAO extends AbstractDAO<CartProductModel> implements ICa
     }
 
     @Override
-    public Integer getCartCount() {
-        String sql = "SELECT count(*) from cart_products where status = 0";
-        return count(sql);
+    public Integer getCartCount(Integer id) {
+        String sql = "SELECT count(*) from cart_products where cartID = ? and status = 0";
+        return count(sql, id);
     }
 
     @Override

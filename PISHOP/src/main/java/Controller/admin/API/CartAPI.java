@@ -1,12 +1,10 @@
 package Controller.admin.API;
 
-import Model.CartModel;
-import Model.CartProductModel;
-import Model.ProductModel;
-import Model.UserModel;
+import Model.*;
 import Payments.Configs;
 import Service.IService.ICartProductService;
 import Service.IService.ICartService;
+import Service.IService.ICouponService;
 import Utils.HttpUtil;
 import Utils.SessionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +26,9 @@ public class CartAPI extends HttpServlet {
 
     @Inject
     private ICartProductService cartProductService;
+
+    @Inject
+    private ICouponService couponService;
 
 
     @Override
@@ -66,28 +67,53 @@ public class CartAPI extends HttpServlet {
             if (status != null) {
                 if (status == 1 || status == 6) {
                     cartProductService.submitOrder(submitProductModel.getId());
+                    mapper.writeValue(resp.getOutputStream(), submitProductModel);
                 } else if (status == 4) {
                     cartProductService.confirmBackOrder(submitProductModel.getId());
+                    mapper.writeValue(resp.getOutputStream(), submitProductModel);
                 }
             }
+
         } else {
             if (status != null) {
                 if (status == 0) {
                     if (submitProductModel.getType().equals("off")) {
-                        cartProductService.submitProductToCart(submitProductModel.getIds(), 1, Integer.valueOf(Configs.mdh));
+                        String code = submitProductModel.getCouponCode();
+                        CouponModel couponModel = couponService.findByCode(code);
+                        if (couponModel != null && couponModel.getQuantity() > 0) {
+                            cartProductService.submitProductToCart(submitProductModel.getIds(), 1, Integer.valueOf(Configs.getRandomNumber(8)), couponModel.getDiscount());
+
+                        } else if (couponModel == null) {
+                            cartProductService.submitProductToCart(submitProductModel.getIds(), 1, Integer.valueOf(Configs.getRandomNumber(8)), 0);
+                        }
+                        mapper.writeValue(resp.getOutputStream(), submitProductModel);
                     } else if (submitProductModel.getType().equals("onl")) {
-                        cartProductService.vnpayCode(Integer.valueOf(Configs.mdh), submitProductModel.getIds());
+                        String code = submitProductModel.getCouponCode();
+                        CouponModel couponModel = couponService.findByCode(code);
+                        if (couponModel != null && couponModel.getQuantity() > 0) {
+                            submitProductModel.setListResult(cartProductService.vnpayCode(Integer.valueOf(Configs.getRandomNumber(8)), submitProductModel.getIds(), couponModel.getDiscount()));
+                            mapper.writeValue(resp.getOutputStream(), submitProductModel.getListResult().get(0));
+                        }else if (couponModel == null) {
+                            submitProductModel.setListResult(cartProductService.vnpayCode(Integer.valueOf(Configs.getRandomNumber(8)), submitProductModel.getIds(), 0));
+                            mapper.writeValue(resp.getOutputStream(), submitProductModel.getListResult().get(0));
+                        }
+
                     }
                 } else if (status == 1) {
                     cartProductService.denyProductFromCart(submitProductModel.getIds());
+                    submitProductModel.setListResult(cartProductService.findByCartProductID(submitProductModel.getIds(), new PageRequest()));
+                    mapper.writeValue(resp.getOutputStream(), submitProductModel.getListResult().get(0));
                 } else if (status == 2) {
                     cartProductService.confirmOrder(submitProductModel.getId());
+                    mapper.writeValue(resp.getOutputStream(), submitProductModel);
                 } else if (status == 3) {
                     cartProductService.backOrder(submitProductModel.getId());
+                    mapper.writeValue(resp.getOutputStream(), submitProductModel);
                 }
+
             }
         }
-        mapper.writeValue(resp.getOutputStream(), submitProductModel);
+
     }
 
     @Override
@@ -96,7 +122,6 @@ public class CartAPI extends HttpServlet {
         resp.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
         CartProductModel deleteProductModel = HttpUtil.Of(req.getReader()).toModel(CartProductModel.class);
-
         cartProductService.deleteProductFromCart(deleteProductModel.getIds());
         mapper.writeValue(resp.getOutputStream(), deleteProductModel);
     }

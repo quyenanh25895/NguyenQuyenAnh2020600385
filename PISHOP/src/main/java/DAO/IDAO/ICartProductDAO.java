@@ -21,7 +21,7 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void update(CartProductModel updateCartProduct);
 
-    void submitCartProduct(Integer id, Integer status, Integer cartCode) ;
+    void submitCartProduct(Integer id, Integer status, Integer cartCode, Integer discount) ;
 
     void denyCartProduct(Integer id);
 
@@ -35,7 +35,7 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     Integer getTotalItem();
 
-    Integer getCartCount();
+    Integer getCartCount(Integer id);
 
     List<CartProductModel> findByCartID(Integer cartID, IPageble pageble);
 
@@ -43,7 +43,7 @@ public interface ICartProductDAO extends IGenericDAO<CartProductModel> {
 
     void submitOrder(Integer id);
 
-    void vnpayCode(Integer mdh, Integer id);
+    CartProductModel vnpayCode(Integer mdh, Integer id, Integer discount);
 
     List<CartProductModel> findByCartCode(Integer cartCode);
 

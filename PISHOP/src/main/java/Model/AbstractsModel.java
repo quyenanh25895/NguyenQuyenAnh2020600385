@@ -24,6 +24,8 @@ public class AbstractsModel<T> {
     private String type;
     private Integer[] cateIDs;
     private Integer[] brandIDs;
+    private Integer discount;
+    private String couponCode;
 
     public Integer getId() {
         return id;
@@ -167,5 +169,21 @@ public class AbstractsModel<T> {
 
     public void setBrandIDs(Integer[] brandIDs) {
         this.brandIDs = brandIDs;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
     }
 }

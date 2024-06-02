@@ -4,7 +4,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 
-
 <div id="sidebar" class="sidebar responsive ace-save-state" style="width: 200px !important;">
     <script type="text/javascript">
         try {
@@ -12,7 +11,6 @@
         } catch (e) {
         }
     </script>
-
 
 
     <div class="sidebar-shortcuts">
@@ -47,6 +45,13 @@
 
     <ul class="nav nav-list">
         <li>
+            <a href="<c:url value="/admin-statical?type=list&page=1&maxPageItem=5&sortName=productID&sortBy=asc"/>">
+                <i class="menu-icon fa fa-product-hunt"></i>
+                <span class="menu-text"></span>
+                Thống kê bán hàng
+            </a>
+        </li>
+        <li>
             <a href="<c:url value="/admin-user?type=list&page=1&maxPageItem=5&sortName=userID&sortBy=asc"/>">
                 <i class="menu-icon fa fa-user"></i>
                 <span class="menu-text"></span>
@@ -63,7 +68,7 @@
             </a>
         </li>
         <li>
-            <a href="<c:url value="/admin-cart?type=list&page=1&maxPageItem=5&sortBy=asc"/>">
+            <a href="<c:url value="/admin-cart?type=list&page=1&maxPageItem=5&sortName=createdDate&sortBy=desc"/>">
                 <i class="menu-icon fa fa-shopping-cart"></i>
                 <span class="menu-text"></span>
                 Danh sách đơn hàng
@@ -94,13 +99,6 @@
             </a>
         </li>
 
-        <li>
-            <a href="<c:url value="/admin-statical?type=list&page=1&maxPageItem=5&sortName=productID&sortBy=asc"/>">
-                <i class="menu-icon fa fa-product-hunt"></i>
-                <span class="menu-text"></span>
-                Danh sách sản phẩm
 
-            </a>
-        </li>
     </ul>
 </div>

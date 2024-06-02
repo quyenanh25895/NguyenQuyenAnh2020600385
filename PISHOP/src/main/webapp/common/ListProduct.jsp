@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <div class="container-fluid pt-5">
@@ -17,7 +18,8 @@
             </div>
             <div class="col-lg-2 col-sm-2 col-md-2 text-center">
                 <h5>
-                    <a href="<c:url value="/product-shop?type=list&cateID=${cateID}&cateIDs=${cateID}&page=1&maxPageItem=3&sortName=productID&sortBy=asc"/>">Xem thêm</a>
+                    <a href="<c:url value="/product-shop?type=list&cateID=${cateID}&cateIDs=${cateID}&page=1&maxPageItem=3&sortName=productID&sortBy=asc"/>">Xem
+                        thêm</a>
                 </h5>
             </div>
         </div>
@@ -26,13 +28,14 @@
             <c:forEach items="${products.listResult}" var="product">
                 <c:if test="${cateID == product.cateID && product.status == 1 && productCount < 6}">
                     <div class="col-lg-2 col-md-4 col-sm-6" style=" max-width: 300px">
-                        <div class="card product-item mb-4" style="border: solid black 1px; border-radius: 30px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);" >
+                        <div class="card product-item mb-4"
+                             style="border: solid darkgray 1px; border-radius: 30px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
-                                 style="max-height: 200px; width: auto; border-top-left-radius: 30px; border-top-right-radius: 30px">
+                                 style="height: 200px;max-height: 200px; width: auto; border-top-left-radius: 30px; border-top-right-radius: 30px">
                                 <c:set var="firstImageDisplayed" value="false"/>
                                 <c:forEach items="${images.listResult}" var="image">
                                     <c:if test="${!firstImageDisplayed && product.id == image.productID}">
-                                        <img class="img-fluid w-100"  src="${image.imageLink}" alt="">
+                                        <img class="img-fluid w-100" src="${image.imageLink}" alt="">
                                         <c:set var="firstImageDisplayed" value="true"/>
                                     </c:if>
                                 </c:forEach>
@@ -40,7 +43,7 @@
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3">${product.name}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>$ ${product.price}</h6>
+                                    <h6><fmt:formatNumber value="${product.price}" type="number" /> VND</h6>
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-center bg-light border"

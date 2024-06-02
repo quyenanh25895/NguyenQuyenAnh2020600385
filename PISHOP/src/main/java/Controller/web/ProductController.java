@@ -6,6 +6,7 @@ import Service.IService.*;
 import Sort.Sorter;
 import Utils.FormUtil;
 import Utils.MessageUtil;
+import Utils.SessionUtil;
 import paging.IPageble;
 import paging.PageRequest;
 
@@ -45,6 +46,18 @@ public class ProductController extends HttpServlet {
 
     @Inject
     private IBannerService bannerService;
+
+    @Inject
+    private ICartProductService cartProductService;
+
+    @Inject
+    private ICartService cartService;
+
+    @Inject
+    private IProductInformationService productInformationService;
+
+    @Inject
+    private IUserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -103,10 +116,6 @@ public class ProductController extends HttpServlet {
             } else {
                 IPageble pageable = new PageRequest();
                 productModels.setListResult(productService.findAll(pageable));
-//                productModels.setTotalItem(productService.getTotalItem());
-//                productModels.setTotalPage((int) Math.ceil((double) productModels.getTotalItem() / productModels.getMaxPageItem()));
-
-
             }
             imageModels.setListResult(imageService.findAll());
             req.setAttribute("products", productModels);
@@ -125,30 +134,36 @@ public class ProductController extends HttpServlet {
             imageModels.setListResult(imageService.findByProductId(id));
             commentModel.setListResult(commentService.findByProductID(id));
 
+            List<ImageModel> otherImage = imageService.findAll();
+            ImageModel imageModel = FormUtil.toModel(ImageModel.class, req);
+
+            imageModel.setListResult(imageService.findAll());
+
             List<ProductModel> otherProduct = new ArrayList<>();
             otherProduct = productService.findByCateIDAndBrandID(new PageRequest(), Collections.singletonList(productModels.getCateID()), Collections.singletonList(null));
-            List<ImageModel> otherImage = imageService.findAll();
+
             Random random = new Random();
             List<ProductModel> showProduct = new ArrayList<>();
 
             ProductModel productModel = FormUtil.toModel(ProductModel.class, req);
-            productModel.setListResult(productService.findAll(new PageRequest()));
-
-            ImageModel imageModel = FormUtil.toModel(ImageModel.class, req);
-            imageModel.setListResult(imageService.findAll());
+            productModel.setListResult(productService.findByCateIDAndBrandID(new PageRequest(), Collections.singletonList(productModels.getCateID()), Collections.singletonList(null)));
             int firstRandomIndex;
             int secondRandomIndex;
-            do{
+            do {
                 firstRandomIndex = random.nextInt(otherProduct.size());
                 do {
                     secondRandomIndex = random.nextInt(otherProduct.size());
                 } while (secondRandomIndex == firstRandomIndex);
-            }while (id == firstRandomIndex || id == secondRandomIndex);
+            } while (id == firstRandomIndex || id == secondRandomIndex);
 
             showProduct.add(otherProduct.get(firstRandomIndex));
             showProduct.add(otherProduct.get(secondRandomIndex));
             showProduct.get(0).setListResult(showProduct);
-
+            ProductInformationModel productInformationModel = FormUtil.toModel(ProductInformationModel.class, req);
+            productInformationModel = productInformationService.findOne(id);
+            UserModel userModel= new UserModel();
+             userModel.setListResult(userService.findAll(new PageRequest()));
+            req.setAttribute("productInformation", productInformationModel);
             req.setAttribute("image", imageModels);
             req.setAttribute("images", imageModel);
             req.setAttribute("colors", colorModel);
@@ -158,11 +173,21 @@ public class ProductController extends HttpServlet {
             req.setAttribute("comments", commentModel);
             req.setAttribute("otherProduct", showProduct.get(0));
             req.setAttribute("otherImage", otherImage);
+            req.setAttribute("userModels", userModel);
             view = "/views/web/Detail.jsp";
         } else {
             req.setAttribute("products", productModels);
             req.setAttribute("images", imageModels);
             view = "/views/web/ShopProduct.jsp";
+        }
+
+        UserModel user = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+
+        if (user != null) {
+
+            CartModel cartModel = cartService.findByUserID(user.getId());
+            Integer cartItem = cartProductService.countProduct(cartModel.getId());
+            req.setAttribute("cartItem", cartItem);
         }
 
         MessageUtil.showMessage(req);
@@ -173,7 +198,6 @@ public class ProductController extends HttpServlet {
         req.setAttribute("type", "shop");
         req.setAttribute("categories", cateModels);
         req.setAttribute("brands", brandModels);
-
         req.setAttribute("banners", bannerModels);
 
         RequestDispatcher rd = req.getRequestDispatcher(view);

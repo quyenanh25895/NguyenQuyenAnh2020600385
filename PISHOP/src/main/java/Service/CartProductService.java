@@ -1,5 +1,6 @@
 package Service;
 
+import DAO.CartProductDAO;
 import DAO.IDAO.ICartProductDAO;
 import DAO.IDAO.IProductDAO;
 import Model.CartProductModel;
@@ -98,9 +99,9 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public void submitProductToCart(Integer[] ids, Integer status, Integer cartCode) {
+    public void submitProductToCart(Integer[] ids, Integer status, Integer cartCode, Integer discount) {
         for (Integer id : ids) {
-            cartProductDAO.submitCartProduct(id, status, cartCode);
+            cartProductDAO.submitCartProduct(id, status, cartCode, discount);
         }
     }
 
@@ -138,9 +139,9 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public Integer countProduct() {
+    public Integer countProduct(Integer id) {
 
-        return cartProductDAO.getCartCount();
+        return cartProductDAO.getCartCount(id);
     }
 
     @Override
@@ -156,10 +157,12 @@ public class CartProductService implements ICartProductService {
     }
 
     @Override
-    public void vnpayCode(Integer mdh, Integer[] cartID) {
+    public List<CartProductModel> vnpayCode(Integer mdh, Integer[] cartID, Integer discount) {
+        List<CartProductModel> cartProductModels = new ArrayList<>();
         for (Integer id : cartID) {
-            cartProductDAO.vnpayCode(mdh, id);
+           cartProductModels.add(cartProductDAO.vnpayCode(mdh, id, discount));
         }
+        return cartProductDAO.findByCartCode(mdh);
     }
 
     @Override

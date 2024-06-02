@@ -8,6 +8,9 @@
     <mapping path="/cart" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/vnpay_return" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/news" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/information" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/order-detail" decorator="/WEB-INF/decorators/detail.jsp"/>
+    <mapping path="/contact" decorator="/WEB-INF/decorators/detail.jsp"/>
     <mapping path="/user" decorator="/WEB-INF/decorators/signup.jsp"/>
 
     <!-- Exclude path from decoration. -->

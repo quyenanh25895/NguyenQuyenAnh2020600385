@@ -125,14 +125,11 @@
                                 <strong>Welcome </strong>${USERMODEL.fullName}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" id="userMenu" aria-labelledby="user">
+                                <a  class="dropdown-item" href="<c:url value="/information?type=information" /> ">
+                                    Thông tin cá nhân
+                                </a>
                                 <a href="<c:url value='/logout?action=logout'/>" class="dropdown-item">
                                     Đăng Xuất <i class="fas fa-sign-out"></i>
-                                </a>
-                                <a id="SortByQuantity" class="dropdown-item" href="">
-                                    Sắp xếp theo số lượng
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    Best Rating
                                 </a>
                             </div>
                         </div>
@@ -173,7 +170,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link ${type == 'contact' ? 'active' : ''}">
+                        <a href="<c:url value="/contact?action=contact" />" class="nav-link ${type == 'contact' ? 'active' : ''}">
                             Liên hệ
                         </a>
                     </li>

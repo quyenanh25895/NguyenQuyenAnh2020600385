@@ -5,7 +5,7 @@
 <!DOCTYPE>
 <html>
 <head>
-    <title>Danh sách bài viết</title>
+    <title>Danh sách người dùng</title>
 </head>
 
 <body>
@@ -26,9 +26,16 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <c:if test="${not empty messageResponse}">
-                            <div class="alert alert-${alert}">
-                                    ${messageResponse}
-                            </div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    Swal.fire({
+                                        title: 'Thông báo',
+                                        text: "${messageResponse}",
+                                        icon: '${alert}',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                            </script>
                         </c:if>
 
                         <div class="widget-box table-filter">
@@ -37,7 +44,7 @@
                                     <div class="dt-buttons btn-overlap btn-group">
                                         <a flag="info"
                                            class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
-                                           data-toggle="tooltip" title='Thêm bài viết'
+                                           data-toggle="tooltip" title='Thêm người dùng'
                                            href='<c:url value="/admin-user?type=edit"/>'>
 												<span>
 													<i class="fa fa-plus-circle bigger-110 purple"></i>

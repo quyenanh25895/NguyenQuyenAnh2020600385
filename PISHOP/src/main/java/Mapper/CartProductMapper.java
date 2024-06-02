@@ -21,6 +21,7 @@ public class CartProductMapper implements ROWMapper<CartProductModel> {
             cartProductModel.setStatus(resultSet.getInt("status"));
             cartProductModel.setUserID(resultSet.getInt("userID"));
             cartProductModel.setCartCode(resultSet.getInt("cartCode"));
+            cartProductModel.setDiscount(resultSet.getInt("discount"));
             return cartProductModel;
         }catch (SQLException e){
             return null;

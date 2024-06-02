@@ -22,7 +22,7 @@ public interface ICartProductService {
 
     void deleteProductFromCart(Integer[] id);
 
-    void submitProductToCart(Integer[] ids, Integer status, Integer cartCode);
+    void submitProductToCart(Integer[] ids, Integer status, Integer cartCode, Integer discount);
 
     void denyProductFromCart(Integer[] ids);
 
@@ -34,13 +34,13 @@ public interface ICartProductService {
 
     Integer countItem();
 
-    Integer countProduct();
+    Integer countProduct(Integer id);
 
     void deleteByProductID(Integer[] productID);
 
     void submitOrder(Integer id);
 
-    void vnpayCode(Integer mdh, Integer[] cartID);
+    List<CartProductModel> vnpayCode(Integer mdh, Integer[] cartID, Integer discount);
 
     List<CartProductModel> findByCartCode(Integer cartCode);
 }
